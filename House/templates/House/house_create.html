@@ -1,0 +1,116 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+{% block content %}
+    <section class="content-header">
+        <h5 class="font-weight-normal">Новий Будинок</h5>
+        <ul class="breadcrumb">
+            <li><a href=""><i class="fa fa-home"></i>Головна</a></li>
+            <li style="">Будинки</li>
+            <li class="active" style="opacity: 65%;">Новий Будинок</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px; margin-top: 15px;">
+
+    <div class="box">
+        <div class="box-body">
+
+        <form id="w0" action="{% url 'house_create' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xs-12 col-lg-4">
+                    <div class="form-group field-houseform-name has-error has-feedback">
+                        <label class="control-label" for="{{ form.name_home.id_for_label }}">Назва</label>
+                        {{ form.name_home }}
+                        {{ home.as_p }}
+                    <div class="help-block">{{ form.name_home.errors }}</div>
+            </div>
+                <div class="form-group field-houseform-address has-error has-feedback">
+                    <label class="control-label" for="{{ form.address.id_for_label }}">Адреса</label>
+                    {{ form.address }}
+                    <div class="error help-block font-weight-bold">{{ form.address.errors }}</div>
+                </div>
+                    <div class="form-group field-houseform-image1">
+                        <label class="control-label" for="{{ form.image.id_for_label }}">Зображення #1. Розмір: (522x350)</label>
+                        {{ form.image }}
+                      <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-houseform-image2">
+                        <label class="control-label" for="houseform-image2">Зображення #2. Розмір: (248x160)</label>
+                        <input type="hidden" name="HouseForm[image2]" value=""><input type="file" id="houseform-image2" name="HouseForm[image2]" accept="image/*">
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-houseform-image3">
+                        <label class="control-label" for="houseform-image3">Зображення #3. Розмір: (248x160)</label>
+                        <input type="hidden" name="HouseForm[image3]" value=""><input type="file" id="houseform-image3" name="HouseForm[image3]" accept="image/*">
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-houseform-image4">
+                        <label class="control-label" for="houseform-image4">Зображення #4. Розмір: (248x160)</label>
+                        <input type="hidden" name="HouseForm[image4]" value=""><input type="file" id="houseform-image4" name="HouseForm[image4]" accept="image/*">
+                        <div class="help-block"></div>
+                        </div>
+                    <div class="form-group field-houseform-image5">
+                        <label class="control-label" for="houseform-image5">Зображення #5. Розмір: (248x160)</label>
+                        <input type="hidden" name="HouseForm[image5]" value=""><input type="file" id="houseform-image5" name="HouseForm[image5]" accept="image/*">
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+    <div class="col-xs-12 col-lg-8">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <img src="{% static 'dist/img/glide.jpeg' %}" class="img-responsive largeImg margin-bottom-30" alt="Зображення #1. Розмір: (522x350)">
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <img src="{% static 'dist/img/glide.jpeg' %}" class="img-responsive smallImg margin-bottom-30" alt="Зображення #2. Розмір: (248x160)">
+                <img src="{% static 'dist/img/glide.jpeg' %}" class="img-responsive smallImg margin-bottom-30" alt="Зображення #3. Розмір: (248x160)">
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <img src="{% static 'dist/img/glide.jpeg' %}" class="img-responsive smallImg margin-bottom-30" alt="Зображення #4. Розмір: (248x160)">
+                <img src="{% static 'dist/img/glide.jpeg' %}" class="img-responsive smallImg margin-bottom-30" alt="Зображення #5. Розмір: (248x160)">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12 col-lg-8">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-sections" data-toggle="tab" aria-expanded="true">Секції</a></li>
+                <li><a href="#tab-floors" data-toggle="tab" aria-expanded="false">Поверхи</a></li>
+                                <li><a href="#tab-houseuseradmins" data-toggle="tab" aria-expanded="false">Користувачі</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active clearfix" id="tab-sections">
+                    <div id="form-section-rows">
+                                            </div>
+                    <button class="btn btn-success pull-right form-row-add-section-btn" type="button">Додати</button>
+                </div>
+                <div class="tab-pane clearfix" id="tab-floors">
+                    <div id="form-floor-rows">
+                                            </div>
+                    <button class="btn btn-success pull-right form-row-add-floor-btn" type="button">Додати</button>
+                </div>
+                                <div class="tab-pane clearfix" id="tab-houseuseradmins">
+                    <div id="form-houseuseradmin-rows">
+                                            </div>
+                    <button class="btn btn-success pull-right form-row-add-houseuseradmin-btn" type="button">Додати</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 text-right">
+        <div class="form-group">
+            <a href="/admin/house/index" class="btn btn-default">Відмінити</a>
+            <button type="submit" class="btn btn-success">Зберегти</button>
+        </div>
+    </div>
+</div>
+</form>
+    </div>
+</div>
+    </section>
+
+{% endblock %}

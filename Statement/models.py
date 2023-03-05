@@ -7,5 +7,5 @@ class Statement(models.Model):
     status_perfom = models.BooleanField()
     comment = models.CharField(max_length=250)
     date_published = models.DateField()
-    user_manager = models.ForeignKey(User.objects.filter(role__manager=True), verbose_name='Менеджер', blank=True, on_delete=models.CASCADE)
-    ownerAppartemnt = models.ForeignKey(User, verbose_name='Володар квартири', blank=True, on_delete=models.CASCADE)
+    user_manager = models.ForeignKey(User, related_name='User_manager', verbose_name='Менеджер', blank=True, on_delete=models.CASCADE)
+    ownerAppartemnt = models.ForeignKey(User, related_name='Owner_appartament', verbose_name='ВолодарКвартири', blank=True, on_delete=models.CASCADE)

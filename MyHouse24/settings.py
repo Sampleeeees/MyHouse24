@@ -41,7 +41,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Front_pages.apps.FrontPagesConfig'
+    #apps
+    'Front_pages.apps.FrontPagesConfig',
+    'Appartament.apps.AppartamentConfig',
+    'Gallery.apps.GalleryConfig',
+    'Articles_and_detail_payments.apps.ArticlesAndDetailPaymentsConfig',
+    'House.apps.HouseConfig',
+    'Master_application.apps.MasterApplicationConfig',
+    'Messages.apps.MessagesConfig',
+    'Meters_data.apps.MetersDataConfig',
+    'Personal_book.apps.PersonalBookConfig',
+    'Receipt.apps.ReceiptConfig',
+    'Statement.apps.StatementConfig',
+    'Tarrif_and_services.apps.TarrifAndServicesConfig',
+    'User.apps.UserConfig'
 ]
 
 MIDDLEWARE = [

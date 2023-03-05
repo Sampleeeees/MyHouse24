@@ -15,5 +15,5 @@ class House(models.Model):
     address = models.CharField(max_length=250)
     floor = models.ForeignKey(Floor, verbose_name='Поверх', on_delete=models.CASCADE, blank=True)
     section = models.ForeignKey(Section, verbose_name='Секція', on_delete=models.CASCADE, blank=True)
-    staff = models.ManyToManyField('User', related_name='Працівники у будинку')
+    staff = models.ManyToManyField(User, related_name='ПрацівникиУБудинку', blank=True)
     gallery = models.ForeignKey(Gallery, verbose_name='Галерея', blank=True, on_delete=models.CASCADE)
