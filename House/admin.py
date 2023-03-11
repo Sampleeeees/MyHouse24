@@ -10,7 +10,7 @@ class SectionAdmin(admin.ModelAdmin):
     list_display = ('id', 'name_section')
 
 class HouseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name_home', 'floor', 'section', 'gallery')
+    list_display = ('id', 'name_home')
 
 admin.site.register(Floor, FloorAdmin)
 admin.site.register(Section, SectionAdmin)

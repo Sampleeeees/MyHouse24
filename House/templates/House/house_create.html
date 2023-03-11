@@ -14,59 +14,59 @@
     <div class="box">
         <div class="box-body">
 
-        <form id="w0" action="{% url 'house_create' %}" method="post" enctype="multipart/form-data">
+        <form id="house-create-form" action="{% url 'house_create' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
                 <div class="col-xs-12 col-lg-4">
-                    <div class="form-group field-houseform-name has-error has-feedback">
+                    <div class="form-group field-houseform-name">
                         <label class="control-label" for="{{ form.name_home.id_for_label }}">Назва</label>
                         {{ form.name_home }}
-                        {{ home.as_p }}
                     <div class="help-block">{{ form.name_home.errors }}</div>
             </div>
-                <div class="form-group field-houseform-address has-error has-feedback">
+                <div class="form-group">
                     <label class="control-label" for="{{ form.address.id_for_label }}">Адреса</label>
                     {{ form.address }}
                     <div class="error help-block font-weight-bold">{{ form.address.errors }}</div>
                 </div>
-                    <div class="form-group field-houseform-image1">
-                        <label class="control-label" for="{{ form.image.id_for_label }}">Зображення #1. Розмір: (522x350)</label>
-                        {{ form.image }}
+                    <div class="form-group">
+                        <label class="control-label d-block" id="label_block_for_image1">Зображення #1. Розмір: (522x350)</label>
+                        {{ form.image1 }}
                       <div class="help-block"></div>
                     </div>
-                    <div class="form-group field-houseform-image2">
-                        <label class="control-label" for="houseform-image2">Зображення #2. Розмір: (248x160)</label>
-                        <input type="hidden" name="HouseForm[image2]" value=""><input type="file" id="houseform-image2" name="HouseForm[image2]" accept="image/*">
+                    <div class="form-group">
+                        <label class="control-label d-block" id="label_block_for_image2">Зображення #2. Розмір: (248x160)</label>
+                        {{ form.image2 }}
                         <div class="help-block"></div>
                     </div>
-                    <div class="form-group field-houseform-image3">
-                        <label class="control-label" for="houseform-image3">Зображення #3. Розмір: (248x160)</label>
-                        <input type="hidden" name="HouseForm[image3]" value=""><input type="file" id="houseform-image3" name="HouseForm[image3]" accept="image/*">
+                    <div class="form-group">
+                        <label class="control-label d-block" id="label_block_for_image3">Зображення #3. Розмір: (248x160)</label>
+                        {{ form.image3 }}
                         <div class="help-block"></div>
                     </div>
-                    <div class="form-group field-houseform-image4">
-                        <label class="control-label" for="houseform-image4">Зображення #4. Розмір: (248x160)</label>
-                        <input type="hidden" name="HouseForm[image4]" value=""><input type="file" id="houseform-image4" name="HouseForm[image4]" accept="image/*">
+                    <div class="form-group">
+                        <label class="control-label d-block" id="label_block_for_image4">Зображення #4. Розмір: (248x160)</label>
+                        {{ form.image4 }}
                         <div class="help-block"></div>
                         </div>
-                    <div class="form-group field-houseform-image5">
-                        <label class="control-label" for="houseform-image5">Зображення #5. Розмір: (248x160)</label>
-                        <input type="hidden" name="HouseForm[image5]" value=""><input type="file" id="houseform-image5" name="HouseForm[image5]" accept="image/*">
+                    <div class="form-group">
+                        <label class="control-label d-block" id="label_block_for_image5">Зображення #5. Розмір: (248x160)</label>
+                        {{ form.image5 }}
                         <div class="help-block"></div>
                     </div>
+
                 </div>
     <div class="col-xs-12 col-lg-8">
         <div class="row">
             <div class="col-xs-12 col-md-6">
-                <img src="{% static 'dist/img/glide.jpeg' %}" class="img-responsive largeImg margin-bottom-30" alt="Зображення #1. Розмір: (522x350)">
+                <img src="{% static 'dist/img/glide.jpeg' %}" height="522px" width="350px" id="block_for_image1" class="img-responsive largeImg margin-bottom-30" alt="Зображення #1. Розмір: (522x350)">
             </div>
             <div class="col-xs-6 col-md-3">
-                <img src="{% static 'dist/img/glide.jpeg' %}" class="img-responsive smallImg margin-bottom-30" alt="Зображення #2. Розмір: (248x160)">
-                <img src="{% static 'dist/img/glide.jpeg' %}" class="img-responsive smallImg margin-bottom-30" alt="Зображення #3. Розмір: (248x160)">
+                <img src="{% static 'dist/img/glide.jpeg' %}" height="248px" width="160px" id="block_for_image2" class="img-responsive smallImg margin-bottom-30" alt="Зображення #2. Розмір: (248x160)">
+                <img src="{% static 'dist/img/glide.jpeg' %}" height="248px" width="160px" id="block_for_image3" class="img-responsive smallImg margin-bottom-30" alt="Зображення #3. Розмір: (248x160)">
             </div>
             <div class="col-xs-6 col-md-3">
-                <img src="{% static 'dist/img/glide.jpeg' %}" class="img-responsive smallImg margin-bottom-30" alt="Зображення #4. Розмір: (248x160)">
-                <img src="{% static 'dist/img/glide.jpeg' %}" class="img-responsive smallImg margin-bottom-30" alt="Зображення #5. Розмір: (248x160)">
+                <img src="{% static 'dist/img/glide.jpeg' %}" height="248px" width="160px" id="block_for_image4" class="img-responsive smallImg margin-bottom-30" alt="Зображення #4. Розмір: (248x160)">
+                <img src="{% static 'dist/img/glide.jpeg' %}" height="248px" width="160px" id="block_for_image5" class="img-responsive smallImg margin-bottom-30" alt="Зображення #5. Розмір: (248x160)">
             </div>
         </div>
     </div>
@@ -74,36 +74,61 @@
 
 <div class="row">
     <div class="col-xs-12 col-lg-8">
-        <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab-sections" data-toggle="tab" aria-expanded="true">Секції</a></li>
-                <li><a href="#tab-floors" data-toggle="tab" aria-expanded="false">Поверхи</a></li>
-                                <li><a href="#tab-houseuseradmins" data-toggle="tab" aria-expanded="false">Користувачі</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active clearfix" id="tab-sections">
-                    <div id="form-section-rows">
-                                            </div>
-                    <button class="btn btn-success pull-right form-row-add-section-btn" type="button">Додати</button>
-                </div>
-                <div class="tab-pane clearfix" id="tab-floors">
-                    <div id="form-floor-rows">
-                                            </div>
-                    <button class="btn btn-success pull-right form-row-add-floor-btn" type="button">Додати</button>
-                </div>
-                                <div class="tab-pane clearfix" id="tab-houseuseradmins">
-                    <div id="form-houseuseradmin-rows">
-                                            </div>
-                    <button class="btn btn-success pull-right form-row-add-houseuseradmin-btn" type="button">Додати</button>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active border-success border-2 border-left-0 border-right-0 border-bottom-0" id="section-tab" data-bs-toggle="tab" data-bs-target="#section-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Секції</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="floor-tab" data-bs-toggle="tab" data-bs-target="#floor-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Поверхи</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="staff-tab" data-bs-toggle="tab" data-bs-target="#staff-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Персонал</button>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            {% if formset_section %}
+                {{ formset_section.management_form }}
+          <div class="tab-pane fade show active" id="section-tab-pane" role="tabpanel" aria-labelledby="section-tab" tabindex="0">
+              <div class="mt-2 d-none" id="empty-section-form">
+                  <div class="d-none">
+                    {{ formset_section.empty_form }}
+                  </div>
+                  <label for="{{ formset_section.empty_form.name_section.id_for_label }}">Назва секції</label>
+                  <div class="input_section d-flex">
+                    {{ formset_section.empty_form.name_section }}
+                    <span class="input-group-btn">
+                        <button type="button" onclick="del_form('section-__prefix__')" class="btn btn-danger form-row-remove-btn"><i class="fa fa-trash"></i></button>
+                    </span>
+                  </div>
+              </div>
+          </div>
+                <button class="d-block btn mt-2 btn-success pull-right form-row-add-floor-btn" id="button-section" onclick="add_new_form()" type="button">Додати</button>
+            {% endif %}
+        {% if formset_floor %}
+            {{ formset_floor.management_form }}
+          <div class="tab-pane fade" id="floor-tab-pane" role="tabpanel" aria-labelledby="floor-tab" tabindex="0">
+            <div class="mt-2 d-none" id="empty-floor-form">
+              <label for="{{ formset_floor.empty_form.name_floor.id_for_label }}">Назва поверху</label>
+                <div class="input_floor d-flex">
+                    {{ formset_floor.empty_form.name_floor }}
+                    <span class="input-group-btn">
+                        <button type="button" onclick="del_form('floor-__prefix__')" class="btn btn-danger form-row-remove-btn"><i class="fa fa-trash"></i></button>
+                    </span>
                 </div>
             </div>
+          </div>
+            <button class="d-none btn mt-2 btn-success pull-right form-row-add-floor-btn" id="button-floor" onclick="add_new_floor_form()" type="button">Додати</button>
+        {% endif %}
+          <div class="tab-pane fade" id="staff-tab-pane" role="tabpanel" aria-labelledby="staff-tab" tabindex="0">
+          </div>
+            <button class="d-none btn mt-2 btn-success pull-right form-row-add-floor-btn" id="button-staff" onclick="add_new_form()" type="button">Додати</button>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12 text-right">
         <div class="form-group">
-            <a href="/admin/house/index" class="btn btn-default">Відмінити</a>
+            <a href="{% url 'house_create' %}" class="btn btn-default">Відмінити</a>
             <button type="submit" class="btn btn-success">Зберегти</button>
         </div>
     </div>
@@ -112,5 +137,31 @@
     </div>
 </div>
     </section>
-
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+    <script>
+    $('#section-tab').click(function (){
+        document.getElementById('section-tab').setAttribute('class', 'nav-link active border-success border-2 border-left-0 border-right-0 border-bottom-0')
+        document.getElementById('floor-tab').setAttribute('class', 'nav-link')
+        document.getElementById('staff-tab').setAttribute('class', 'nav-link')
+        document.getElementById('button-section').setAttribute('class', 'd-block btn mt-2 btn-success pull-right form-row-add-floor-btn')
+        document.getElementById('button-floor').setAttribute('class', 'd-none btn mt-2 btn-success pull-right form-row-add-floor-btn')
+        document.getElementById('button-staff').setAttribute('class', 'd-none btn mt-2 btn-success pull-right form-row-add-floor-btn')
+    })
+    $('#floor-tab').click(function (){
+        document.getElementById('section-tab').setAttribute('class', 'nav-link')
+        document.getElementById('floor-tab').setAttribute('class', 'nav-link active border-success border-2 border-left-0 border-right-0 border-bottom-0')
+        document.getElementById('staff-tab').setAttribute('class', 'nav-link')
+        document.getElementById('button-section').setAttribute('class', 'd-none btn mt-2 btn-success pull-right form-row-add-floor-btn')
+        document.getElementById('button-floor').setAttribute('class', 'd-block btn mt-2 btn-success pull-right form-row-add-floor-btn')
+        document.getElementById('button-staff').setAttribute('class', 'd-none btn mt-2 btn-success pull-right form-row-add-floor-btn')
+    })
+    $('#staff-tab').click(function (){
+        document.getElementById('section-tab').setAttribute('class', 'nav-link')
+        document.getElementById('floor-tab').setAttribute('class', 'nav-link')
+        document.getElementById('staff-tab').setAttribute('class', 'nav-link active border-success border-2 border-left-0 border-right-0 border-bottom-0')
+        document.getElementById('button-section').setAttribute('class', 'd-none btn mt-2 btn-success pull-right form-row-add-floor-btn')
+        document.getElementById('button-floor').setAttribute('class', 'd-none btn mt-2 btn-success pull-right form-row-add-floor-btn')
+        document.getElementById('button-staff').setAttribute('class', 'd-block btn mt-2 btn-success pull-right form-row-add-floor-btn')
+    })
+    </script>
 {% endblock %}

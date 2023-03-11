@@ -13,5 +13,5 @@ class ImageForm(ModelForm):
         model = Image
         fields = ['image']
         widgets = {
-            'image': forms.FileInput(attrs={})
+            'image': forms.FileInput(attrs={'class': 'd-block', 'id': 'image-__prefix__-House'})
         }

@@ -9,6 +9,8 @@ class SeoBlock(models.Model):
 
 class BlockAndServices(models.Model):
     image = models.ImageField(upload_to='blockAndServices')
+    title = models.CharField(max_length=50, blank=True)
+    description = models.CharField(max_length=250, blank=True)
 
 class GeneralPage(models.Model):
     title = models.CharField(max_length=70)

@@ -1,9 +1,12 @@
+import requests
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-from django.views.generic import View, CreateView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import View, CreateView, ListView, UpdateView, DetailView
 from .models import House, Floor, Section
-from .forms import HouseForm
+from .forms import HouseForm, FloorForm, SectionForm
 from Gallery.forms import GalleryForm, ImageForm
-from Gallery.models import Gallery
+from Gallery.models import Gallery, Image
+from django.forms import modelformset_factory
 # Create your views here.
 
 class HouseList(ListView):
@@ -11,41 +14,57 @@ class HouseList(ListView):
     template_name = 'House/house_list.html'
     queryset = House.objects.all()
 
+    def get_context_data(self, **kwargs):
+        context = super(HouseList, self).get_context_data(**kwargs)
+        context['count_house'] = House.objects.all().count()
+        return context
+
 class HouseCreate(CreateView):
     model = House
     template_name = 'House/house_create.html'
     form_class = HouseForm
-    context_object_name = 'home'
-    template_name_suffix = '_home'
-    template_name_field = 'home'
-    def form_valid(self, form):
-        print(form.cleaned_data)
-        print(form.error_class)
+    success_url = reverse_lazy('house_list')
+
+
+    def get_context_data(self, **kwargs):
+        context = super(HouseCreate, self).get_context_data(**kwargs)
+        SectionFormset = modelformset_factory(Section, form=SectionForm, extra=0, can_delete=True)
+        FloorFormset = modelformset_factory(Floor, form=FloorForm, extra=0, can_delete=True)
+        if self.request.POST:
+            context['formset_section'] = SectionFormset(self.request.POST, self.request.FILES, prefix='section', queryset=Section.objects.none())
+            context['formset_floor'] = FloorFormset(self.request.POST, self.request.FILES, prefix='floor', queryset=Floor.objects.none())
+        else:
+            context['formset_section'] = SectionFormset(prefix='section', queryset=Section.objects.none())
+            context['formset_floor'] = FloorFormset(prefix='floor', queryset=Section.objects.none())
+        return context
+
+
+    def form_valid(self, form, **kwargs):
+        print(form)
+        context = self.get_context_data(form=form, **kwargs)
+        house = form.save()
+        if context['formset_section'].is_valid() and context['formset_floor'].is_valid():
+            for section in context['formset_section']:
+                sec = section.save(commit=False)
+                sec.house_id = house.id
+                sec.save()
+            context['formset_section'].save()
+            for floor in context['formset_floor']:
+                fl = floor.save(commit=False)
+                fl.house_id = house.id
+                fl.save()
+            context['formset_floor'].save()
+        else:
+            print(context['formset_section'].errors)
+
+        # context['formset_section'].save()
         return super().form_valid(form)
 
-    def post(self, request, *args, **kwargs):
-        form = HouseForm(request.POST or None, request.FILES or None)
-        imageForm = ImageForm(request.POST or None, request.FILES or None)
-        if imageForm.is_valid() and form.is_valid():
-            house = form.save(commit=False)
-            print(imageForm.cleaned_data)
-            form = imageForm.save(commit=False)
-            gallery = Gallery.objects.create(text='House')
-            form.gallery = get_object_or_404(Gallery, pk=gallery.id)
-            house.gallery = get_object_or_404(Gallery, pk=gallery.id)
-            form.save()
-            house.save()
-            return redirect('house_list')
-        else:
-            print(form.errors, imageForm.errors)
-            return HttpResponse('not Valid')
 
-class FloorCreate(CreateView):
-    model = Floor
-    template_name = 'House/house_create.html'
-    fields = ['name_floor']
-    template_name_suffix = 'floor'
-    print(template_name_suffix)
+class HouseUpdate(UpdateView):
+    model = House
+    template_name = 'House/house_update.html'
+    form_class = HouseForm
 
 
 
