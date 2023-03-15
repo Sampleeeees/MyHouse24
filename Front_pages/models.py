@@ -1,4 +1,6 @@
 from django.db import models
+from django.urls import reverse
+
 from Gallery.models import Gallery
 # Create your models here.
 
@@ -18,14 +20,20 @@ class GeneralPage(models.Model):
     image1 = models.ImageField(upload_to='GeneralPage/image')
     image2 = models.ImageField(upload_to='GeneralPage/image')
     image3 = models.ImageField(upload_to='GeneralPage/image')
-    block = models.ForeignKey(BlockAndServices, verbose_name='Блок', on_delete=models.CASCADE, blank=True)
-    seo = models.ForeignKey(SeoBlock, verbose_name='СЕО Блок', on_delete=models.CASCADE, blank=True)
+    block = models.ForeignKey(BlockAndServices, verbose_name='Блок', on_delete=models.CASCADE, blank=True, null=True)
+    seo = models.ForeignKey(SeoBlock, verbose_name='СЕО Блок', on_delete=models.CASCADE, blank=True, null=True)
 
 class AboutUs(models.Model):
     title = models.CharField(max_length=70)
+    title_sec = models.CharField(max_length=70, blank=True)
     short_text = models.CharField(max_length=200)
-    image_director = models.ImageField(upload_to='aboutUs/')
-    gallery = models.ForeignKey(Gallery, verbose_name='Галерея', on_delete=models.CASCADE, blank=True)
+    short_text_sec = models.CharField(max_length=200, blank=True)
+    image_director = models.ImageField(upload_to='aboutUs/', blank=True, null=True)
+    gallery = models.ForeignKey(Gallery, verbose_name='Галерея', on_delete=models.CASCADE, blank=True, null=True)
+    seo = models.ForeignKey(SeoBlock, verbose_name='СЕО Блок', on_delete=models.CASCADE, blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse('aboutUs', kwargs={'pk': self.pk})
 
 class Contacts(models.Model):
     title = models.CharField(max_length=50)
@@ -37,4 +45,12 @@ class Contacts(models.Model):
     phone_number = models.IntegerField()
     email = models.EmailField()
     code_card = models.CharField(max_length=50)
-    seo = models.ForeignKey(SeoBlock, verbose_name='СЕО Блок', on_delete=models.CASCADE, blank=True)
+    seo = models.ForeignKey(SeoBlock, verbose_name='СЕО Блок', on_delete=models.CASCADE, blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse('contacts', kwargs={'pk': self.pk})
+
+class Document(models.Model):
+    document = models.FileField(upload_to='document/', blank=True)
+    text = models.CharField(max_length=100, blank=True)
+    page = models.ForeignKey(AboutUs, verbose_name='ПроНас', blank=True, null=True, on_delete=models.CASCADE)

@@ -9,7 +9,7 @@ class SectionForm(ModelForm):
         model = Section
         fields = ['name_section']
         widgets = {
-            'name_section': forms.TextInput(attrs={'class': 'form-control'})
+            'name_section': forms.TextInput(attrs={'class': 'form-control', 'value': 'Section __prefix__'})
         }
 
 class FloorForm(ModelForm):
@@ -17,7 +17,7 @@ class FloorForm(ModelForm):
         model = Floor
         fields = ['name_floor']
         widgets = {
-            'name_floor': forms.TextInput(attrs={'class': 'form-control'})
+            'name_floor': forms.TextInput(attrs={'class': 'form-control', 'value': 'Floor __prefix__'})
         }
 
 class HouseForm(ModelForm):

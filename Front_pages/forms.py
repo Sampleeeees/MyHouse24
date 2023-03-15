@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import GeneralPage, AboutUs, SeoBlock, BlockAndServices, Contacts
+from .models import GeneralPage, AboutUs, SeoBlock, BlockAndServices, Contacts, Document
 
 class SeoBlockForm(ModelForm):
     class Meta:
@@ -31,4 +31,41 @@ class GeneralPageForm(ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'short_text': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+class AboutUsForm(ModelForm):
+    class Meta:
+        model = AboutUs
+        fields = ['title', 'title_sec', 'short_text', 'short_text_sec', 'image_director']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'title_sec': forms.TextInput(attrs={'class': 'form-control'}),
+            'short_text': forms.Textarea(attrs={'class': 'form-control'}),
+            'short_text_sec': forms.Textarea(attrs={'class': 'form-control'}),
+            'image_director': forms.FileInput(attrs={'onchange': 'add_image(this, "DirectorImage")'})
+        }
+
+class DocumentForm(ModelForm):
+    class Meta:
+        model = Document
+        fields = ['document', 'text']
+        widgets = {
+            'document': forms.FileInput(),
+            'text': forms.TextInput(attrs={'class':'form-control'})
+        }
+
+class ContactsForm(ModelForm):
+    class Meta:
+        model = Contacts
+        fields = ['title', 'short_text', 'link', 'fio', 'email', 'location', 'phone_number', 'code_card', 'address']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'short_text': forms.Textarea(attrs={'class': 'form-control'}),
+            'fio': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'link': forms.URLInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'code_card': forms.NumberInput(attrs={'class': 'form-control'}),
         }

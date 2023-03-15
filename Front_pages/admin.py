@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AboutUs, GeneralPage, BlockAndServices, SeoBlock, Contacts
+from .models import AboutUs, GeneralPage, BlockAndServices, SeoBlock, Contacts, Document
 # Register your models here.
 
 class GeneralPageAdmin(admin.ModelAdmin):
@@ -20,3 +20,4 @@ admin.site.register(AboutUs, AboutUsAdmin)
 admin.site.register(SeoBlock, SeoBlockAdmin)
 admin.site.register(BlockAndServices)
 admin.site.register(Contacts, ContactsAdmin)
+admin.site.register(Document)

@@ -1,0 +1,155 @@
+{% extends 'Appartament/base.html'%}
+{% load static %}
+{% block title %}Контакти{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <h1>Редагування сторінки</h1>
+        <ul class="breadcrumb"><li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li class="active">Редагування сторінки</li>
+        </ul>
+    </section>
+    <section class="content">
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Редагування сторінки "Контакти"</h3>
+            </div>
+            <div class="box-body">
+                <form id="w0" action="{%url 'contacts' pk=contacts.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="d-flex">
+                                               <div class="col-xs-12 col-md-8">
+                                                    <h3 class="page-header">Контактна інформація</h3>
+                                                    <div class="form-group field-websitecontactform-contacttitle">
+                        <label class="control-label" for="websitecontactform-contacttitle">Заголовок</label>
+                        {{ form.title }}
+                        <div class="help-block"></div>
+                        </div>                            <div class="form-group field-websitecontactform-contactdescription">
+                        <label class="control-label" for="websitecontactform-contactdescription">Короткий текст</label>
+                        <ul class="wysihtml5-toolbar" style=""><li class="dropdown">
+                          <a class="btn btn-default dropdown-toggle btn-none" data-toggle="dropdown">
+
+                              <span class="fa fa-font"></span>
+
+                            <span class="current-font">Звичайний текст</span>
+                            <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu">
+                            <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p" tabindex="-1" href="javascript:;" unselectable="on">Обычный текст</a></li>
+                            <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 1</a></li>
+                            <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 2</a></li>
+                            <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 3</a></li>
+                            <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h4" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 4</a></li>
+                            <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h5" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 5</a></li>
+                            <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h6" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 6</a></li>
+                          </ul>
+                        </li>
+                        <li>
+                          <div class="btn-group">
+                            <a class="btn btn-none btn-default" data-wysihtml5-command="bold" title="CTRL+B" tabindex="-1" href="javascript:;" unselectable="on">Полужирный</a>
+                            <a class="btn btn-none btn-default" data-wysihtml5-command="italic" title="CTRL+I" tabindex="-1" href="javascript:;" unselectable="on">Курсив</a>
+                            <a class="btn btn-none btn-default" data-wysihtml5-command="underline" title="CTRL+U" tabindex="-1" href="javascript:;" unselectable="on">Подчёркнутый</a>
+
+                          </div>
+                        </li>
+                        <li>
+                          <div class="btn-group">
+                            <a class="btn btn-none btn-default" data-wysihtml5-command="insertUnorderedList" title="Маркированный список" tabindex="-1" href="javascript:;" unselectable="on">
+
+                              <span class="fa fa-list-ul"></span>
+
+                            </a>
+                            <a class="btn btn-none btn-default" data-wysihtml5-command="insertOrderedList" title="Нумерованный список" tabindex="-1" href="javascript:;" unselectable="on">
+
+                              <span class="fa fa-list-ol"></span>
+
+                            </a>
+                            <a class="btn btn-none btn-default" data-wysihtml5-command="Outdent" title="Уменьшить отступ" tabindex="-1" href="javascript:;" unselectable="on">
+
+                              <span class="fa fa-outdent"></span>
+
+                            </a>
+                            <a class="btn btn-none btn-default" data-wysihtml5-command="Indent" title="Увеличить отступ" tabindex="-1" href="javascript:;" unselectable="on">
+
+                              <span class="fa fa-indent"></span>
+
+                            </a>
+                          </div>
+                        </li>
+                        </ul>{{ form.short_text }}
+
+                        <div class="help-block"></div>
+                        </div>                            <div class="form-group field-websitecontactform-contacturlsite">
+                        <label class="control-label" for="websitecontactform-contacturlsite">Посилання на комерційний сайт</label>
+                        {{ form.link }}
+                        <div class="help-block"></div>
+                                               </div>                        </div>
+                                                <div class="col-xs-12 col-md-4">
+                                                    <h3 class="page-header">Контакти</h3>
+                                                    <div class="form-group field-websitecontactform-contactfullname">
+                        <label class="control-label" for="websitecontactform-contactfullname">ПІБ</label>
+                        {{ form.fio }}
+                        <div class="help-block"></div>
+                        </div>                            <div class="form-group field-websitecontactform-contactlocation">
+                        <label class="control-label" for="websitecontactform-contactlocation">Локація</label>
+                        {{ form.location }}
+                        <div class="help-block"></div>
+                        </div>                            <div class="form-group field-websitecontactform-contactaddress">
+                        <label class="control-label" for="websitecontactform-contactaddress">Адреса</label>
+                        {{ form.address }}
+                        <div class="help-block"></div>
+                        </div>                            <div class="form-group field-websitecontactform-contactphone">
+                        <label class="control-label" for="websitecontactform-contactphone">Телефон</label>
+                        {{ form.phone_number }}
+                        <div class="help-block"></div>
+                        </div>                            <div class="form-group field-websitecontactform-contactemail">
+                        <label class="control-label" for="websitecontactform-contactemail">E-mail</label>
+                        {{ form.email }}
+                        <div class="help-block"></div>
+                        </div>
+                                                </div>
+                    </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <h3 class="page-header">Карта</h3>
+                                                    <div class="form-group field-websitecontactform-contactmapembedcode">
+                        <label class="control-label" for="websitecontactform-contactmapembedcode">Код карти</label>
+                        {{ form.code_card }}
+
+                        <div class="help-block"></div>
+                        </div>                        </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h3 class="page-header">Налаштування SEO</h3>
+                                                    <div class="form-group field-websitecontactform-contactmetatitle">
+                        <label class="control-label" for="websitecontactform-contactmetatitle">Title</label>
+                                                        {{ seo.title_seo }}
+                        <div class="help-block"></div>
+                        </div>                            <div class="form-group field-websitecontactform-contactmetadescription">
+                        <label class="control-label" for="websitecontactform-contactmetadescription">Description</label>
+                        {{ seo.description_seo }}
+
+                        <div class="help-block"></div>
+                        </div>                            <div class="form-group field-websitecontactform-contactmetakeywords">
+                        <label class="control-label" for="websitecontactform-contactmetakeywords">Keywords</label>
+                        {{ seo.keywords_seo }}
+                        <div class="help-block"></div>
+                        </div>                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <div class="form-group">
+                                <a href="{% url 'contacts' pk=contacts.id %}" class="btn btn-default">Відмінити</a>
+                                <button type="submit" class="btn btn-success">Зберегти</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>            </div>
+        </div>
+    </div>
+</div>
+
+    </section>
+{% endblock %}

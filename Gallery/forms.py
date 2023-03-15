@@ -8,10 +8,9 @@ class GalleryForm(ModelForm):
         fields = ['text']
 
 class ImageForm(ModelForm):
-    prefix = 'Name_image'
     class Meta:
         model = Image
         fields = ['image']
         widgets = {
-            'image': forms.FileInput(attrs={'class': 'd-block', 'id': 'image-__prefix__-House'})
+            'image': forms.FileInput()
         }
