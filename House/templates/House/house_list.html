@@ -46,7 +46,7 @@
             <tbody>
                 {% for home in object_list %}
                 <tr data-href="" data-key="{{ home.id }}">
-                    <td>{{ home.id }}</td>
+                    <td>{{ forloop.counter}}</td>
                     <td>{{ home.name_home }}</td>
                     <td>{{ home.address }}</td>
                     <td>

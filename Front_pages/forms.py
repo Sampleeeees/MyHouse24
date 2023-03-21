@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import GeneralPage, AboutUs, SeoBlock, BlockAndServices, Contacts, Document
+from .models import GeneralPage, AboutUs, SeoBlock, BlockAndServices, Contacts, Document, Services, PageTarrif, TarrifForm
 
 class SeoBlockForm(ModelForm):
     class Meta:
@@ -18,10 +18,15 @@ class BlockAndServicesForm(ModelForm):
         model = BlockAndServices
         fields = ['image', 'title', 'description']
         widgets = {
-            'image': forms.FileInput(),
+            'image': forms.FileInput(attrs={'onchange': 'add_image(this, "img-block-__prefix__")'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control h-50'}),
         }
+
+class ServicesForm(ModelForm):
+    class Meta:
+        model = Services
+        fields = ['name']
 
 
 class GeneralPageForm(ModelForm):
@@ -31,6 +36,9 @@ class GeneralPageForm(ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'short_text': forms.Textarea(attrs={'class': 'form-control'}),
+            'image1': forms.FileInput(attrs={'onchange': 'add_image(this, "image-1-page")'}),
+            'image2': forms.FileInput(attrs={'onchange': 'add_image(this, "image-2-page")'}),
+            'image3': forms.FileInput(attrs={'onchange': 'add_image(this, "image-3-page")'}),
         }
 
 class AboutUsForm(ModelForm):
@@ -68,4 +76,21 @@ class ContactsForm(ModelForm):
             'location': forms.TextInput(attrs={'class': 'form-control'}),
             'phone_number': forms.NumberInput(attrs={'class': 'form-control'}),
             'code_card': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+class PageTarrifForm(ModelForm):
+    class Meta:
+        model = PageTarrif
+        fields = ['title', 'description']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'})
+        }
+class TarrifFormForm(ModelForm):
+    class Meta:
+        model = TarrifForm
+        fields = ['title', 'image']
+        widgets = {
+            'image': forms.FileInput(),
+            'title': forms.TextInput(attrs={'class': 'form-control'})
         }

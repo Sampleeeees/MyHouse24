@@ -16,7 +16,7 @@
                 <h3 class="box-title">Редагування сторінки "Контакти"</h3>
             </div>
             <div class="box-body">
-                <form id="w0" action="{%url 'contacts' pk=contacts.id %}" method="post">
+                <form id="w0" action="{%url 'contacts' %}" method="post">
                     {% csrf_token %}
                     <div class="d-flex">
                                                <div class="col-xs-12 col-md-8">
@@ -141,7 +141,7 @@
                     <div class="row">
                         <div class="col-xs-12 text-center">
                             <div class="form-group">
-                                <a href="{% url 'contacts' pk=contacts.id %}" class="btn btn-default">Відмінити</a>
+                                <a href="{% url 'contacts' %}" class="btn btn-default">Відмінити</a>
                                 <button type="submit" class="btn btn-success">Зберегти</button>
                             </div>
                         </div>

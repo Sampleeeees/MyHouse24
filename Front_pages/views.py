@@ -2,9 +2,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.forms import modelformset_factory, formset_factory
-from .models import GeneralPage, SeoBlock, BlockAndServices, AboutUs, Contacts, Document
-from .forms import GeneralPageForm, SeoBlockForm, BlockAndServicesForm, AboutUsForm, DocumentForm, ContactsForm
-from django.views.generic import UpdateView, View, CreateView
+from .models import GeneralPage, SeoBlock, BlockAndServices, AboutUs, Contacts, Document, Services, PageTarrif, TarrifForm
+from .forms import GeneralPageForm, SeoBlockForm, BlockAndServicesForm, AboutUsForm, DocumentForm, ContactsForm, ServicesForm, TarrifFormForm, PageTarrifForm
+from django.views.generic import UpdateView, View, CreateView, DeleteView
 from Gallery.models import Image, Gallery
 from Gallery.forms import ImageForm, GalleryForm
 
@@ -19,20 +19,51 @@ class GeneralUpdate(UpdateView):
     form_class = GeneralPageForm
     success_url = reverse_lazy('general_page')
 
+    def get_object(self, queryset=None):
+        return GeneralPage.objects.first()
 
     def get_context_data(self, **kwargs):
         context = super(GeneralUpdate, self).get_context_data(**kwargs)
+        print(context)
+        BlockFormset = modelformset_factory(BlockAndServices, form=BlockAndServicesForm, extra=0, can_delete=True)
+        if self.request.POST:
+            context['formset_block'] = BlockFormset(self.request.POST, self.request.FILES, prefix='block', queryset=BlockAndServices.objects.filter(generalPage=context['generalpage'].id))
+            context['seo'] = SeoBlockForm(self.request.POST, instance=context['generalpage'].seo)
+        else:
+            context['formset_block'] = BlockFormset(prefix='block', queryset=BlockAndServices.objects.filter(generalPage=context['generalpage'].id))
+            context['seo'] = SeoBlockForm(instance=context['generalpage'].seo)
         return context
+
+
+
+    def form_valid(self, form, **kwargs):
+        print('545456')
+        context = self.get_context_data(form=form, **kwargs)
+        print('--*-*-*-*', context)
+        form.save()
+        context['seo'].save()
+        if context['formset_block'].is_valid():
+            for block in context['formset_block']:
+                bl = block.save(commit=False)
+                bl.generalPage_id = context['generalpage'].id
+                bl.save()
+            context['formset_block'].save()
+        return super().form_valid(form)
+
+
 class AboutUsUpdate(UpdateView):
     model = AboutUs
     template_name = 'Front_pages/aboutUsUpdate.html'
     form_class = AboutUsForm
 
+    def get_object(self, queryset=None):
+        return AboutUs.objects.first()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         ImageFormset = modelformset_factory(Image, form=ImageForm, extra=0, can_delete=True)
         DocumentFormset = modelformset_factory(Document, form=DocumentForm, extra=0, can_delete=True)
-        context['aboutUsOther'] = AboutUs.objects.get(pk=3)
+        context['aboutUsOther'] = AboutUs.objects.get(pk=5)
         if self.request.POST:
             context['formset_image'] = ImageFormset(self.request.POST, self.request.FILES, prefix='general', queryset=Image.objects.filter(gallery=context['aboutus'].gallery.id))
             context['formset_image2'] = ImageFormset(self.request.POST, self.request.FILES, prefix='extra', queryset=Image.objects.filter(gallery=context['aboutUsOther'].gallery.id))
@@ -79,6 +110,9 @@ class ContactsUpdate(UpdateView):
     template_name = 'Front_pages/contacts_detail.html'
     form_class = ContactsForm
 
+    def get_object(self, queryset=None):
+        return Contacts.objects.first()
+
     def get_context_data(self, **kwargs):
         context = super(ContactsUpdate, self).get_context_data(**kwargs)
         if self.request.POST:
@@ -93,3 +127,75 @@ class ContactsUpdate(UpdateView):
         context['seo'].save()
         return super().form_valid(form)
 
+class ServicesUpdate(UpdateView):
+    model = Services
+    template_name = 'Front_pages/services_detail.html'
+    form_class = ServicesForm
+
+    def get_object(self, queryset=None):
+        return Services.objects.first()
+
+    def get_context_data(self, **kwargs):
+        context = super(ServicesUpdate, self).get_context_data(**kwargs)
+        ServiceFormset = modelformset_factory(BlockAndServices, form=BlockAndServicesForm, extra=0, can_delete=True)
+        if self.request.POST:
+            context['seo'] = SeoBlockForm(self.request.POST, instance=context['services'].seo)
+            context['formset_service'] = ServiceFormset(self.request.POST, self.request.FILES, prefix='service', queryset=BlockAndServices.objects.filter(services=context['services'].id))
+        else:
+            context['seo'] = SeoBlockForm(instance=context['services'].seo)
+            context['formset_service'] = ServiceFormset(prefix='service', queryset=BlockAndServices.objects.filter(services=context['services'].id))
+
+        return context
+
+    def form_valid(self, form, **kwargs):
+        context = self.get_context_data(form=form, **kwargs)
+        context['services'].save()
+        context['seo'].save()
+        for service in context['formset_service']:
+            ser = service.save(commit=False)
+            ser.services_id = context['services'].id
+            ser.save()
+        context['formset_service'].save()
+        return super().form_valid(form)
+    
+    
+class PageTarrifUpdate(UpdateView):
+    model = PageTarrif
+    template_name = 'Front_pages/tarrif_detail.html'
+    form_class = PageTarrifForm
+    
+    def get_object(self, queryset=None):
+        return PageTarrif.objects.first()
+    
+    def get_context_data(self, **kwargs):
+        context = super(PageTarrifUpdate, self).get_context_data(**kwargs)
+        TarrifFormset = modelformset_factory(TarrifForm, form=TarrifFormForm, extra=0, can_delete=True)
+        if self.request.POST:
+            context['formset_tarrif'] = TarrifFormset(self.request.POST, self.request.FILES, prefix='tarrif', queryset=TarrifForm.objects.filter(pageTarrif=context['object'].id))
+            context['seo'] = SeoBlockForm(self.request.POST, instance=context['object'].seo)
+        else:
+            context['formset_tarrif'] = TarrifFormset(prefix='tarrif', queryset=TarrifForm.objects.filter(pageTarrif=context['object'].id))
+            context['seo'] = SeoBlockForm(instance=context['object'].seo)
+        return context
+    
+    def form_valid(self, form):
+        return super().form_valid(form=form)
+    
+class ImageDelete(DeleteView):
+    model = Image
+    success_url = reverse_lazy('aboutUs')
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
+
+class DocumentDelete(DeleteView):
+    model = Document
+    success_url = reverse_lazy('aboutUs')
+
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
+
+class ServiceDelete(DeleteView):
+    model = BlockAndServices
+    success_url = '/admin/pages/services/1'
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, *kwargs)

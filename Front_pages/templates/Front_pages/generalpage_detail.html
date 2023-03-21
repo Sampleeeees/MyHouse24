@@ -19,44 +19,56 @@
                 </div>
             </div>
             <div class="box-body">
-                <form id="w0" action="/admin/website/home" method="post" enctype="multipart/form-data">
+                <form id="w0" action="{% url 'general_page' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row site-main-slider">
                         <div class="col-md-4">
                             <h4>Слайд 1</h4>
-                            <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2FWebsiteHomeSlide%2F1%2Fimage.jpg&amp;w=522&amp;h=300&amp;fit=crop" alt="" class="img-responsive margin-bottom-15">
+                            {% if generalpage.image1 %}
+                                <img src="{{ generalpage.image1.url }}" id="image-1-page" alt="" class="img-responsive margin-bottom-15">
+                            {% else %}
+                                <img src="{% static 'dist/img/glide.jpeg' %}" alt="" class="img-responsive margin-bottom-15">
+                            {% endif %}
                             <div class="form-group field-websitehomeslide-0-id">
                                 <input type="hidden" id="websitehomeslide-0-id" class="form-control" name="WebsiteHomeSlide[0][id]" value="1">
                                 <div class="help-block"></div>
                             </div>
                             <div class="form-group margin-bottom-30 field-websitehomeslide-0-imagefile">
-                                <label class="control-label" for="websitehomeslide-0-imagefile">Рекомендований розмір: (1920x800)</label>
+                                <label class="control-label" id="label_image-1-page" for="{{ form.image2.id_for_label }}">Рекомендований розмір: (1920x800)</label>
                                 {{ form.image1 }}
                                 <div class="help-block"></div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <h4>Слайд 2</h4>
-                            <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2FWebsiteHomeSlide%2F2%2Fimage.jpg&amp;w=522&amp;h=300&amp;fit=crop" alt="" class="img-responsive margin-bottom-15">
+                            {% if generalpage.image2 %}
+                                <img src="{{ generalpage.image2.url }}" id="image-2-page" alt="" class="img-responsive margin-bottom-15">
+                            {% else %}
+                                <img src="{% static 'dist/img/glide.jpeg' %}" alt="" class="img-responsive margin-bottom-15">
+                            {% endif %}
                             <div class="form-group field-websitehomeslide-1-id">
                                 <input type="hidden" id="websitehomeslide-1-id" class="form-control" name="WebsiteHomeSlide[1][id]" value="2">
                                 <div class="help-block"></div>
                             </div>
                             <div class="form-group margin-bottom-30 field-websitehomeslide-1-imagefile">
-                                <label class="control-label" for="websitehomeslide-1-imagefile">Рекомендований розмір: (1920x800)</label>
+                                <label class="control-label" id="label_image-2-page" for="{{ form.image2.id_for_label }}">Рекомендований розмір: (1920x800)</label>
                                 {{ form.image2 }}
                                 <div class="help-block"></div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <h4>Слайд 3</h4>
-                            <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2FWebsiteHomeSlide%2F3%2Fimage.jpg&amp;w=522&amp;h=300&amp;fit=crop" alt="" class="img-responsive margin-bottom-15">
+                            {% if generalpage.image3 %}
+                                <img src="{{ generalpage.image3.url }}" id="image-3-page" alt="" class="img-responsive margin-bottom-15">
+                            {% else %}
+                                <img src="{% static 'dist/img/glide.jpeg' %}" alt="" class="img-responsive margin-bottom-15">
+                            {% endif %}
                             <div class="form-group field-websitehomeslide-2-id">
                                 <input type="hidden" id="websitehomeslide-2-id" class="form-control" name="WebsiteHomeSlide[2][id]" value="3">
                                 <div class="help-block"></div>
                             </div>
                             <div class="form-group margin-bottom-30 field-websitehomeslide-2-imagefile">
-                                <label class="control-label" for="websitehomeslide-2-imagefile">Рекомендований розмір: (1920x800)</label>
+                                <label class="control-label" id="label_image-3-page" for="{{ form.image3.id_for_label }}">Рекомендований розмір: (1920x800)</label>
                                 {{ form.image3 }}
                                 <div class="help-block"></div>
                             </div>
@@ -123,32 +135,42 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row near-img">
+                    <div class="row near-img" id="block_rename">
                         <div class="col-xs-12">
                             <h3 class="page-header">Рядом с нами</h3>
                         </div>
-                        <div class="col-md-4">
-                            <h4>Блок 1</h4>
-                            <img src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2FWebsiteHomeFeature%2F1%2Fimage.jpeg&amp;w=1000&amp;h=600&amp;fit=crop" alt="" class="img-responsive margin-bottom-15">
+                        {% if formset_block %}
+                            {{ formset_block.management_form }}
+                            {% for block in formset_block %}
+                                <div class="d-none">
+                                {{ block }}
+                                </div>
+                        <div class="col-md-4" id={{ block.prefix }}>
+                            <h4>Блок {{ forloop.counter }}</h4>
+                            {% if block.image %}
+                                <img src="{{ block.instance.image.url }}" id="img-{{ block.prefix }}" alt="" class="img-responsive margin-bottom-15">
+                            {% else %}
+                                <img src="{% static 'dist/img/glide.jpeg' %}" alt="" class="img-responsive margin-bottom-15">
+                            {% endif %}
                             <div class="form-group field-websitehomefeature-0-id">
                                 <input type="hidden" id="websitehomefeature-0-id" class="form-control" name="WebsiteHomeFeature[0][id]" value="1">
                                 <div class="help-block"></div>
                             </div>
                             <div class="form-group field-websitehomefeature-0-imagefile">
-                                <label class="control-label" for="websitehomefeature-0-imagefile">Рекомендуемый размер: (1000x600)</label>
-                                {{ blockarea.image }}
+                                <label class="control-label" for="{{ block.image.id_for_label }}">Рекомендований розмір: (1000x600)</label>
+                                {{ block.image }}
                                 <div class="help-block"></div>
                             </div>
                             <div class="form-group field-websitehomefeature-0-title">
-                                <label class="control-label" for="websitehomefeature-0-title">Заголовок блока</label>
-                                {{ blockarea.title }}
+                                <label class="control-label" for="{{ block.title.id_for_label }}">Заголовок блока</label>
+                                {{ block.title }}
                                 <div class="help-block"></div>
                             </div>
                             <div class="form-group margin-bottom-30 field-websitehomefeature-0-description">
-                                <label class="control-label" for="websitehomefeature-0-description">Описание</label>
+                                <label class="control-label" for="{{ block.description.id_for_label }}">Опис</label>
                                 <ul class="wysihtml5-toolbar" style=""><li class="dropdown">
                                     <a class="btn btn-default dropdown-toggle btn-none" data-toggle="dropdown">
-                                        <span class="fa fa-font"></span><span class="current-font">Обычный текст</span>
+                                        <span class="fa fa-font"></span><span class="current-font">Звичайний текст</span>
                                         <b class="caret"></b>
                                     </a>
                                     <ul class="dropdown-menu">
@@ -185,14 +207,16 @@
                                     </div>
                                 </li>
                                 </ul>
-                                {{ blockarea.description }}
+                                {{ block.description }}
                                 <div class="help-block"></div>
                             </div>
                         </div>
+                            {% endfor %}
+                        {% endif %}
                      </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <h3 class="page-header">Настройки SEO</h3>
+                            <h3 class="page-header">Налаштування SEO</h3>
                             <div class="form-group field-websitehomeform-homemetatitle">
                                 <label class="control-label" for="websitehomeform-homemetatitle">Title</label>
                                 {{ seo.title_seo }}

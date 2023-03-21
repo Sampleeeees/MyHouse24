@@ -1,0 +1,218 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+{% block title %}Послуги{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <h1>Редагування сторінки</h1>
+        <ul class="breadcrumb"><li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li class="active">Редагування сторінки</li>
+        </ul>
+    </section>
+    <section class="content">
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Редагування сторінки "Послуги"</h3>
+                        </div>
+                        <div class="box-body">
+                            <form id="w0" action="{% url 'services' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row near-img">
+                        <div class="col-xs-12">
+                            <h3 class="page-header">Послуги</h3>
+                        </div>
+                            {% if formset_service %}
+                        <div id="form-{{ formset_service.prefix }}" class="row">
+                        {{ formset_service.management_form }}
+                        {% for service in formset_service %}
+                        <div id="{{ service.prefix }}" class="col-md-4">
+                                <h4>
+                                    Послуга {{ forloop.counter }}
+                                    <a href="{% url 'delete-service' pk=service.instance.id %}" class="pull-right text-red form-row-remove-btn"><i class="fa fa-trash"></i></a>
+                                </h4>
+                        <div class="d-none">
+                            {{ service }}
+                        </div>
+                            {% if service.image %}
+                                <img src="{{ service.instance.image.url }}" id="img-block-__prefix__" alt="" class="img-responsive margin-bottom-15">
+                            {% else %}
+                                <img src="{% static 'dist/img/glide.jpeg' %}" width="650px" height="300px" alt="" class="img-responsive margin-bottom-15">
+                            {% endif %}
+                                <input type="hidden" id="websiteservice-0-id" name="WebsiteService[0][id]">    <div class="form-group">
+                                    <label for="{{ service.image.id_for_label }}">Рекомендований розмір: (650x300)</label>
+                                    {{ service.image }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ service.title.id_for_label }}">Назва послуги</label>
+                                    {{ service.title }}
+                                </div>
+                                <div class="form-group margin-bottom-30">
+                                    <label for="{{ service.description.id_for_label}}">Опис послуги</label>
+                                    <ul class="wysihtml5-toolbar" style=""><li class="dropdown">
+                              <a class="btn btn-default dropdown-toggle btn-none" data-toggle="dropdown">
+
+                                  <span class="fa fa-font"></span>
+
+                                <span class="current-font">Звичайний текст</span>
+                                <b class="caret"></b>
+                              </a>
+                              <ul class="dropdown-menu">
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p" tabindex="-1" href="javascript:;" unselectable="on">Обычный текст</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 1</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 2</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 3</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h4" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 4</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h5" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 5</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h6" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 6</a></li>
+                              </ul>
+                            </li>
+                            <li>
+                              <div class="btn-group">
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="bold" title="CTRL+B" tabindex="-1" href="javascript:;" unselectable="on">Полужирный</a>
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="italic" title="CTRL+I" tabindex="-1" href="javascript:;" unselectable="on">Курсив</a>
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="underline" title="CTRL+U" tabindex="-1" href="javascript:;" unselectable="on">Подчёркнутый</a>
+
+                              </div>
+                            </li>
+                            <li>
+                              <div class="btn-group">
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="insertUnorderedList" title="Маркированный список" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                  <span class="fa fa-list-ul"></span>
+
+                                </a>
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="insertOrderedList" title="Нумерованный список" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                  <span class="fa fa-list-ol"></span>
+
+                                </a>
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="Outdent" title="Уменьшить отступ" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                  <span class="fa fa-outdent"></span>
+
+                                </a>
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="Indent" title="Увеличить отступ" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                  <span class="fa fa-indent"></span>
+
+                                </a>
+                              </div>
+                            </li>
+                            </ul>
+                                    {{ service.description }}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                                <div id="empty-service-form" class="d-none">
+                                <h4>
+                                    Послуга
+                                    <a href="{% url 'services' %}" class="pull-right text-red form-row-remove-btn"><i class="fa fa-trash"></i></a>
+                                </h4>
+                        <div class="d-none">
+                            {{ formset_service.empty_form }}
+                        </div>
+                                <img src="{% static 'dist/img/glide.jpeg' %}" id="img-block-__prefix__" width="650px" height="300px" alt="" class="img-responsive margin-bottom-15">
+                                    <div class="form-group">
+                                    <label for="{{ formset_service.empty_form.image.id_for_label }}">Рекомендований розмір: (650x300)</label>
+                                    {{ formset_service.empty_form.image }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ formset_service.empty_form.title.id_for_label }}">Назва послуги</label>
+                                    {{ formset_service.empty_form.title }}
+                                </div>
+                                <div class="form-group margin-bottom-30">
+                                    <label for="{{ formset_service.empty_form.description.id_for_label}}">Опис послуги</label>
+                                    <ul class="wysihtml5-toolbar" style=""><li class="dropdown">
+                              <a class="btn btn-default dropdown-toggle btn-none" data-toggle="dropdown">
+
+                                  <span class="fa fa-font"></span>
+
+                                <span class="current-font">Звичайний текст</span>
+                                <b class="caret"></b>
+                              </a>
+                              <ul class="dropdown-menu">
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p" tabindex="-1" href="javascript:;" unselectable="on">Обычный текст</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 1</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 2</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 3</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h4" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 4</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h5" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 5</a></li>
+                                <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h6" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 6</a></li>
+                              </ul>
+                            </li>
+                            <li>
+                              <div class="btn-group">
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="bold" title="CTRL+B" tabindex="-1" href="javascript:;" unselectable="on">Полужирный</a>
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="italic" title="CTRL+I" tabindex="-1" href="javascript:;" unselectable="on">Курсив</a>
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="underline" title="CTRL+U" tabindex="-1" href="javascript:;" unselectable="on">Подчёркнутый</a>
+
+                              </div>
+                            </li>
+                            <li>
+                              <div class="btn-group">
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="insertUnorderedList" title="Маркированный список" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                  <span class="fa fa-list-ul"></span>
+
+                                </a>
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="insertOrderedList" title="Нумерованный список" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                  <span class="fa fa-list-ol"></span>
+
+                                </a>
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="Outdent" title="Уменьшить отступ" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                  <span class="fa fa-outdent"></span>
+
+                                </a>
+                                <a class="btn btn-none btn-default" data-wysihtml5-command="Indent" title="Увеличить отступ" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                  <span class="fa fa-indent"></span>
+
+                                </a>
+                              </div>
+                            </li>
+                            </ul>
+                                    {{ formset_service.empty_form.description }}
+                                </div>
+                            </div>
+
+                        </div>
+                            {% endif %}
+                    </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h3 class="page-header">Налаштувння SEO</h3>
+                                        <div class="form-group field-{{ seo.title_seo.name }}">
+            <label class="control-label" for="{{ seo.title_seo.id_for_label }}">Title</label>
+            {{ seo.title_seo }}
+            <div class="help-block"></div>
+            </div>                            <div class="form-group field-{{ seo.description_seo.name }}">
+            <label class="control-label" for="{{ seo.title_seo.id_for_label }}">Description</label>
+            {{ seo.description_seo }}
+            <div class="help-block"></div>
+            </div>                            <div class="form-group field-{{ seo.keywords_seo.name }}">
+            <label class="control-label" for="{{ seo.title_seo.id_for_label }}">Keywords</label>
+            {{ seo.keywords_seo }}
+            <div class="help-block"></div>
+            </div>                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <div class="form-group">
+                                <a href="{% url 'services' %}" class="btn btn-default">Відмінити</a>
+                                <button type="button" role="button" onclick="add_new_service_form()" class="btn btn-success bg-green-active form-row-add-websiteservice-btn">Додати послугу</button>
+                                <button type="submit" class="btn btn-success">Зберегти</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>            </div>
+        </div>
+    </div>
+</div>
+
+    </section>
+{% endblock %}
