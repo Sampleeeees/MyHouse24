@@ -91,6 +91,6 @@ class TarrifFormForm(ModelForm):
         model = TarrifForm
         fields = ['title', 'image']
         widgets = {
-            'image': forms.FileInput(),
+            'image': forms.FileInput(attrs={'onchange': 'add_image(this, "img-block-__prefix__")'}),
             'title': forms.TextInput(attrs={'class': 'form-control'})
         }

@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/pages/', include('Front_pages.urls')),
     path('admin/', include('Appartament.urls')),
     path('user/', include('User.urls')),
-    path('admin/house/', include('House.urls'))
+    path('admin/house/', include('House.urls')),
+    path('admin/setting/', include('Tarrif_and_services.urls'))
 ]
 
 if bool(settings.DEBUG):

@@ -80,40 +80,59 @@
                         </div>                        </div>
                                             </div>
                         {% if formset_tarrif %}
-                                            <div class="row near-img">
-                                            {{ formset_tarrif.management_form }}
-                                                <div class="col-xs-12">
-                                                    <h3 class="page-header">Изображения</h3>
-                                                </div>
-                                                <div id="form-websitetariff-rows">
+                            <div class="row near-img">
+                                {{ formset_tarrif.management_form }}
+                                <div class="col-xs-12">
+                                    <h3 class="page-header">Изображения</h3>
+                                </div>
+                                <div id="form-tarrif-rows" class="row">
                         {% for tarrif in formset_tarrif %}
-                        <div id="form-{{ tarrif.prefix}}" class="col-md-4 form-{{ formset_tarrif.html_name }}">
+                        <div id="{{ tarrif.prefix}}" class="col-md-4">
+                            <div class="d-none">
+                                {{ tarrif }}
+                            </div>
                             <h4>
                                 Тариф {{ forloop.counter }}
-                                <a href="/admin/website/delete-tariff/5" class="pull-right text-red" data-confirm="Удалить?"><i class="fa fa-trash"></i></a>
+                                <a href="{% url 'delete-tarrif' tarrif.instance.id %}" class="pull-right text-red" data-confirm="Удалить?"><i class="fa fa-trash"></i></a>
                                     </h4>
                             {% if tarrif.image %}
-                                <img src="{{ tarrif.instance.image.url }}" alt="">
+                                <img src="{{ tarrif.instance.image.url }}" id="img-block-__prefix__" alt="">
                             {% else %}
                                 <img src="{% static 'dist/img/glide.jpeg' %}" alt="">
                             {% endif %}
-                            <input type="hidden" id="{{ tarrif.prefix }}-id"  value="5">
                             <div class="form-group">
                                 <label for="{{ tarrif.image.id_for_label }}">Файл</label>
                                 {{ tarrif.image }}
                             </div>
                             <div class="form-group">
-                                <label for="{{ tarrif.description.id_for_label }}">Подпись</label>
-                                {{ tarrif.description }}
+                                <label for="{{ tarrif.title.id_for_label }}">Подпись</label>
+                                {{ tarrif.title }}
                                     </div>
                         </div>
                         {% endfor %}
+                               <div id="empty-tarrif-form" class="d-none">
+                                <div class="d-none">
+                                    {{ formset_tarrif.empty_form }}
+                                </div>
+                                <h4> Новий Тариф
+                                <a href="#" onclick="hide_tarrif_form(this)" class="pull-right text-red" data-confirm="Удалить?"><i class="fa fa-trash"></i></a>
+                                    </h4>
+                                <img src="{% static 'dist/img/glide.jpeg' %}" id="img-block-__prefix__" alt="">
+                            <div class="form-group">
+                                <label for="{{ formset_tarrif.empty_form.image.if_for_label }}">Файл</label>
+                                {{ formset_tarrif.empty_form.image }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ formset_tarrif.empty_form.title.if_for_label }}">Подпись</label>
+                                {{ formset_tarrif.empty_form.title }}
+                            </div>
+                        </div>
                                                 </div>
                                             </div>
                         {% endif %}
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h3 class="page-header">Настройки SEO</h3>
+                                                    <h3 class="page-header">Налаштування SEO</h3>
                                                     <div class="form-group field-{{ seo.title_seo.html_name }}">
                         <label class="control-label" for="{{ seo.title_seo.id_for_label }}">Title</label>
                         {{ seo.title_seo }}
@@ -135,8 +154,8 @@
                     <div class="row">
                         <div class="col-xs-12 text-center">
                             <div class="form-group">
-                                <a href="/admin/website/tariffs" class="btn btn-default">Отменить</a>
-                                <button type="button" role="button" class="btn btn-success bg-green-active form-row-add-websitetariff-btn">Добавить тариф</button>
+                                <a href="{% url 'pageTarrif' %}" class="btn btn-default">Отменить</a>
+                                <button type="button" role="button" onclick="add_new_tarrif()" class="btn btn-success bg-green-active form-row-add-websitetariff-btn">Добавить тариф</button>
                                 <button type="submit" class="btn btn-success">Сохранить</button>
                             </div>
                         </div>

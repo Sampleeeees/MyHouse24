@@ -1,0 +1,148 @@
+{% extends 'Appartament/base.html' %}
+{% block title %}Створити тариф{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <h3>Новий тариф </h3>
+        <ul class="breadcrumb"><li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="{% url 'tarrifList' %}">Тарифи</a></li>
+            <li class="active">Новий тариф</li>
+        </ul>
+    </section>
+    <section class="content">
+
+        <div class="box">
+            <div class="box-body">
+
+            <form id="w0" action="{% url 'tarrifCreate' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                <div class="col-xs-12 col-lg-7">
+                    <div class="form-group field-tariff-name">
+                        <label class="control-label" for="{{ form.name_tarrif.id_for_label }}">Назва тарифу</label>
+                        {{ form.name_tarrif }}
+                        <div class="help-block"></div>
+            </div>
+                    <div class="form-group field-tariff-description">
+                        <label class="control-label" for="{{ form.desription_tarrif }}">Опис тарифу</label>
+                        {{ form.description_tarrif }}
+
+            <div class="help-block"></div>
+            </div>
+                </div>
+                    {% if formset_service_price %}
+                <div class="col-xs-12 col-lg-7">
+                    {{ formset_service_price.management_form }}
+                    <div id="form-{{ formset_service_price.prefix }}-rows">
+                        {% for service in formset_service_price %}
+                            <div id="{{ service.prefix }}" class="row {{ service.name }}">
+                                <div class="d-none">
+                                    {{ service }}
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                           <div class="form-group">
+                                        <label for="{{ service.service.id_for_label }}">Послуга</label>
+                                               {{ service.service }}
+                                  </div>
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    <div class="form-group">
+                                        <label for="{{ service.amount.id_for_label }}">Ціна</label>
+                                        {{ service.amount }}
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-2">
+                                    <div class="form-group">
+                                        <label for="{{ service.prefix }}-currency-code">Валюта</label>
+                                        <input type="text" id="0-currency-code" class="form-control" name="[0]currency_code" value="грн" disabled="">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    <div class="form-group">
+                                        <label for="{{ service.tarrif.id_for_label }}">Ед. изм.</label>
+                                        {{ service.tarrif }}
+                                        <div class="input-group">
+                                                         <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default form-row-remove-btn"><i class="fa fa-trash"></i></button>                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div id="empty-{{ formset_service_price.prefix }}-form" class="d-none">
+                            <div class="d-none">
+                                    {{ formset_service_price.empty_form }}
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                           <div class="form-group">
+                                        <label for="{{ formset_service_price.empty_form.service.id_for_label }}">Послуга</label>
+                                               {{ formset_service_price.empty_form.service }}
+                                  </div>
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    <div class="form-group">
+                                        <label for="{{ formset_service_price.empty_form.amount.id_for_label }}">Ціна</label>
+                                        {{ formset_service_price.empty_form.amount }}
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-2">
+                                    <div class="form-group">
+                                        <label for="{{ formset_service_price.empty_form.prefix }}-currency-code">Валюта</label>
+                                        <input type="text" id="0-currency-code" class="form-control" name="[0]currency_code" value="грн" disabled="">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    <div class="form-group">
+                                        <label for="{{ formset_service_price.empty_form.service.measure.id_for_label }}">Ед. изм.</label>
+                                        {{ formset_service_price.empty_form }}
+                                        <div class="input-group">
+                                                         <span class="input-group-btn">
+                                                <button onclick="add_new_setting('{{ formset_service_price.prefix }}')" type="button" class="btn btn-default form-row-remove-btn"><i class="fa fa-trash"></i></button>                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                                </div>
+                    <button type="button" onclick="add_new_setting('{{ formset_service_price.prefix }}')" class="btn btn-default btn-hover-change pull-left margin-bottom-15 form-row-add-tariffservice-btn">Добавить услугу</button>
+                </div>
+                    {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-lg-7 text-right">
+                    <div class="form-group">
+                        <a href="/admin/tariff/index" class="btn btn-default">Отменить</a>
+                        <button type="submit" class="btn btn-success">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+</form>    </div>
+</div>
+    </section>
+    <script>
+    function select_measure(service_name){
+        console.log(service_name)
+        console.log(service_name.options[service_name.selectedIndex].value)
+        $.ajax({
+            url: '{% url 'checkMeasure' %}',
+            type: 'GET',
+            data: {
+                'service_id': service_name.options[service_name.selectedIndex].value
+            },
+            success: function (response){
+                console.log('Hello')
+                console.log(JSON.parse(response['measure']))
+                console.log(JSON.parse(response['all_measure']))
+                let current_service = JSON.parse(response['measure'])
+                let all_measure = JSON.parse(response['all_measure'])
+                console.log(current_service[0]['fields']['measure'])
+                for(let i=0; i< all_measure.length; i++){
+                    console.log(all_measure[i]['pk'])
+                    if(all_measure[i]['pk'] === current_service[0]['fields']['measure']){
+                        console.log('Hellowsasa')
+                        break;
+                    }
+                }
+            }
+        })
+    }
+    </script>
+{% endblock %}

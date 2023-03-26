@@ -179,6 +179,15 @@ class PageTarrifUpdate(UpdateView):
         return context
     
     def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        context['object'].save()
+        context['seo'].save()
+        if context['formset_tarrif'].is_valid():
+            for tarrif in context['formset_tarrif']:
+                tar = tarrif.save(commit=False)
+                tar.pageTarrif_id = context['object'].id
+                tar.save()
+            context['formset_tarrif'].save()
         return super().form_valid(form=form)
     
 class ImageDelete(DeleteView):
@@ -196,6 +205,13 @@ class DocumentDelete(DeleteView):
 
 class ServiceDelete(DeleteView):
     model = BlockAndServices
-    success_url = '/admin/pages/services/1'
+    success_url = 'admin/pages/services/1'
     def get(self, request, *args, **kwargs):
         return self.delete(request, *args, *kwargs)
+
+class TarrifDelete(DeleteView):
+    model = TarrifForm
+    success_url = reverse_lazy('pageTarrif')
+
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)

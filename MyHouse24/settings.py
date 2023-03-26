@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'Receipt.apps.ReceiptConfig',
     'Statement.apps.StatementConfig',
     'Tarrif_and_services.apps.TarrifAndServicesConfig',
-    'User.apps.UserConfig'
+    'User.apps.UserConfig',
 ]
 
 MIDDLEWARE = [

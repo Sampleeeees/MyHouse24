@@ -72,6 +72,10 @@ class PageTarrif(models.Model):
     description = models.CharField(max_length=320)
     seo = models.ForeignKey(SeoBlock, verbose_name='СЕО Блок', on_delete=models.CASCADE, blank=True, null=True)
 
+    def get_absolute_url(self):
+        return reverse('pageTarrif')
+
+
 class TarrifForm(models.Model):
     image = models.ImageField(upload_to='tarrif/', blank=True)
     title = models.CharField(max_length=50)
