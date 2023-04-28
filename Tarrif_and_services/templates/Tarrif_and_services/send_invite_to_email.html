@@ -1,0 +1,8 @@
+{% autoescape off %}
+Вас запошують підключитись до системи MyHouse24 з рівнем доступу: {{ user.role.name }}.
+
+Ваш логін: {{ user.email }}
+Щоб дізнатися пароль напишіть адміністрації.
+
+Посилання для входу: http://{{ domain }}{% url 'login_admin' %}
+{% endautoescape %}

@@ -1,7 +1,10 @@
 import requests
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic import View, CreateView, ListView, UpdateView, DeleteView
+from django.views.generic import View, CreateView, ListView, UpdateView, DeleteView, DetailView
 from .models import House, Floor, Section
 from .forms import HouseForm, FloorForm, SectionForm
 from Gallery.forms import GalleryForm, ImageForm
@@ -99,9 +102,70 @@ class HouseUpdate(UpdateView):
 
         return super().form_valid(form)
 
+
+class HouseDetail(DetailView):
+    model = House
+    template_name = 'House/house_detail.html'
+
+
+    def get_context_data(self, **kwargs):
+        context = super(HouseDetail, self).get_context_data(**kwargs)
+        context['sections'] = Section.objects.filter(house_id=context['object'].id).count()
+        context['floors'] = Floor.objects.filter(house_id=context['object'].id).count()
+        return context
+
 def delete_item(request, pk):
     House.objects.filter(pk=pk).delete()
     return redirect('house_list')
 
 
+def house_list(request):
+    houses = House.objects.all()
+
+    search_name_home = request.GET.get('search_name_home')
+    search_address = request.GET.get('search_home_address')
+
+    print(search_address, search_name_home)
+
+    filter_name_home = request.GET.get('filter_name_home')
+    filter_home_address = request.GET.get('filter_home_address')
+
+    print(filter_home_address, filter_home_address)
+
+    query = Q()
+
+    if search_name_home:
+        query &= Q(name_home__icontains=search_name_home)
+
+    if search_address:
+        query &= Q(address__icontains=search_address)
+
+    houses = houses.filter(query)
+
+
+    start = int(request.GET.get('start', 0))
+    length = int(request.GET.get('length', 10))
+
+
+    paginator = Paginator(houses, length)
+    houses = paginator.get_page(start // length + 1)
+
+    data = []
+
+    for house in houses:
+        data.append({
+            'id': house.id,
+            'name_home': house.name_home,
+            'address': house.address
+        })
+
+
+    response = {
+        'draw': request.GET.get('draw'),
+        'recordsTotal': House.objects.count(),
+        'recordsFiltered': houses.paginator.count,
+        'data': data
+    }
+
+    return JsonResponse(response)
 

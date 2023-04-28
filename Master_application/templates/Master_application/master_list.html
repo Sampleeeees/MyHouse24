@@ -1,0 +1,219 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+{% block title %}Заявки майстра{% endblock %}
+{% block content %}
+    <section class="content-header" style="font-size: 12px;">
+        <h3>Заявки виклику майстра </h3>
+        <ul class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li class="active">Заявки виклику майстра</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="pull-right margin-bottom">
+                    <a class="btn btn-success mt-2" style="font-size: 12px;" href="{% url 'master_create' %}">Додати заявку</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"></h3>
+                        <div class="box-tools">
+                            <a href="/admin/master-request/index" class="btn btn-default btn-sm">
+                                <span class="hidden-xs">Очистити</span><i class="fa fa-eraser visible-xs" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="w0" class="grid-view">
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-bordered table-hover table-striped linkedRow">
+                                <thead>
+                                <tr>
+                                    <th style="width: 100px; min-width: 100px">
+                                        <a class="desc" href="/admin/master-request/index?sort=id" data-sort="id">№ заявки</a>
+                                    </th>
+                                    <th style="width: 135px; min-width: 135px">
+                                        <a href="/admin/master-request/index?sort=searchDateRequest" data-sort="searchDateRequest">Зручний час</a>
+                                    </th>
+                                    <th style="min-width: 125px">
+                                        <a href="/admin/master-request/index?sort=type" data-sort="type">Тип майстра</a>
+                                    </th>
+                                    <th style="min-width: 250px">Опис</th>
+                                    <th style="min-width: 100px">Квартира</th>
+                                    <th style="min-width: 200px">Власник</th>
+                                    <th style="min-width: 100px">Телефон</th>
+                                    <th style="min-width: 150px">Майстер</th>
+                                    <th style="width: 115px; min-width: 115px">Статус</th>
+                                    <th style="width: 80px; min-width: 80px">&nbsp;</th>
+                                </tr>
+                                <tr id="w0-filters" class="filters">
+                                    <td><input type="text" class="form-control" name="master_num" id="master_num"></td>
+                                    <td>
+                                        <input type="text" id="master_time" class="form-control" name="master_time" data-krajee-daterangepicker="daterangepicker_c8dff207">
+                                    </td>
+                                    <td>
+                                        <select id="master_type" class="w-100" name="master_type">
+                                            <option value=""></option>
+                                            <option value="Сантехник">Сантехник</option>
+                                            <option value="Електрик">Електрик</option>
+                                            <option value="Слюсар">Слюсар</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="form-control" name="master_description" id="master_description">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="master_flat" id="master_flat">
+                                    </td>
+                                    <td>
+                                        <select id="master_owner" class="form-control" name="master_owner">
+                                            <option value=""></option>
+                                            {% for owner in owners %}
+                                                <option value="{{ owner.id }}">{{ owner.get_full_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="form-control" name="master_phone" id="master_phone">
+                                    </td>
+                                    <td>
+                                        <select id="master_name" class="form-control" name="master_name">
+                                            <option value=""></option>
+                                            {% for master in masters %}
+                                                <option value="{{ master.id }}">{{ master.role.name }} - {{ master.get_full_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select id="masterrequestsearch-status" class="form-control select2-hidden-accessible" name="MasterRequestSearch[status]" data-s2-options="s2options_7ebc6538" data-krajee-select2="select2_0d896465" style="display:none" tabindex="-1" aria-hidden="true">
+                                            <option value=""></option>
+                                            <option value="1">Новое</option>
+
+                                        </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-masterrequestsearch-status-container"><span class="select2-selection__rendered" id="select2-masterrequestsearch-status-container"><span class="select2-selection__placeholder"></span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="box-footer clearfix">
+                            <ul class="pagination pagination-sm no-margin pull-right">
+                                <li class="prev disabled"><span>«</span></li>
+                                <li class="active">
+                                    <a href="/admin/master-request/index?page=1&amp;per-page=50" data-page="0">1</a>
+                                </li>
+                                <li><a href="/admin/master-request/index?page=2&amp;per-page=50" data-page="1">2</a>
+                                </li>
+                                <li class="next">
+                                    <a href="/admin/master-request/index?page=2&amp;per-page=50" data-page="1">»</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+    $(document).ready(function (){
+
+        $('#master_type').select2({
+            placeholder: '',
+            theme: 'classic',
+            allowClear: true
+        });
+
+        $('#master_owner').select2({theme: 'classic'});
+
+        $('#master_name').select2({theme: 'classic'});
+
+        $('#master_status').select2({theme: 'classic'});
+
+        let dataTable = $('.linkedRow').DataTable({
+                'serverSide': true,
+                'searching': false,
+                'autoWidth': false,
+                'ordering': true,
+                'lengthChange': false,
+                'ajax': {
+                    'url': "{% url 'master_appartaments_list' %}",
+                    'type': 'GET',
+                    'data': function(d) {
+                        d.master_num = $('#master_num').val();
+                        d.master_time = $('#master_time').val();
+                        d.master_type = $('#master_type').val();
+                        d.master_description = $('#master_description').val();
+                        d.master_flat = $('#master_flat').val();
+                        d.master_owner = $('#master_owner').val();
+                        d.master_phone = $('#master_phone').val();
+                        d.master_name = $('#master_name').val();
+                        d.master_status = $('master_status').val();
+                    }
+                },
+                'columns': [
+                        {'data': 'id', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if(data != ''){
+                                return data
+                            }else{
+                                return '(не вказано)'
+                            }
+                            }},
+                        {'data': 'time', 'className': 'sortable', 'orderable': true},
+                        {'data': 'type', 'className': 'sortable', 'orderable': true},
+                        {'data': 'description', 'className': 'sortable', 'orderable': true},
+                        {'data': 'flat', 'className': 'sortable', 'orderable': true},
+                        {'data': 'owner', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if(data != ''){
+                                return data
+                            }else{
+                                return '(не вказано)'
+                            }
+                            }},
+                        {'data': 'phone', 'className': 'sortable', 'orderable': true},
+                        {'data': 'master', 'className': 'sortable', 'orderable': true},
+                        {'data': 'status', 'className': 'sortable', 'orderable': true},
+                        {'data': null, 'orderable': false, 'searchable': false, 'render': function(data, type, row, meta) {
+                            // Додаткові іконки для видалення та редагування
+                            return `<div class="btn-group">\
+                                      <a class="btn btn-default btn-sm" href="appartament/update/${data.id}" title="Редагувавти" data-toggle="tooltip"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">\
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>\
+                                    </svg></a>\
+                                      <a class="btn btn-default btn-sm" onclick="check_value('/admin/appartament/delete/${data.id}')" title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+                                    </svg></a>
+                                    </div>`;
+                          }}
+                    ],
+                'language': {
+                    'lengthMenu': '_MENU_ записів на сторінку',
+                    'zeroRecords': 'Нічого не знайдено',
+                    'info': 'Показано _START_ - _END_ з _TOTAL_ записів',
+                    'infoEmpty': 'Показано 0 записів',
+                    'infoFiltered': '(знайдено з _MAX_ записів)',
+                    'pagingType': 'full_numbers',
+                    'paginate': {
+                        'first': 'Перша',
+                        'last': 'Остання',
+                        "next": "&raquo;",
+                        "previous": "&laquo;"
+                    },
+                },
+            });
+
+
+
+         $('#master_num, #master_description, #master_flat, #master_phone').keyup(function() {
+             dataTable.draw();
+         });
+
+         $('#master_type, #master_flat, #master_owner, #master_name, #master_status').on('change', function (){
+             dataTable.draw();
+         })
+    })
+    </script>
+{% endblock %}

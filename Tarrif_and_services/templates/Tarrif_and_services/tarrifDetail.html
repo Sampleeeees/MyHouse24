@@ -1,4 +1,69 @@
 {% extends 'Appartament/base.html' %}
 {% block title %}Тарифи{% endblock %}
 {% block content %}
+    <section class="content-header">
+        <h4>Тариф: {{ tarrif.name_tarrif }}</h4>
+        <ul class="breadcrumb"><li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="{% url 'tarrifList' %}">Тарифи</a></li>
+            <li><a href="">Тариф: {{ tarrif.name_tarrif }}</a></li>
+            <li class="active opacity-50">Редагування</li>
+        </ul>
+    </section>
+    <section class="content">
+
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title"></h3>
+        <div class="box-tools">
+            <a href="{% url 'tarrifUpdate' tarrif.id %}" class="btn btn-primary btn-sm">
+                <span style="font-size: 12px; font-style: normal;" class="hidden-xs">Редагувати тариф</span>
+            </a>
+        </div>
+    </div>
+    <div class="box-body">
+        <table class="table table-light table-bordered table-striped table-view" style="font-size: 12px;">
+            <tbody>
+                <tr>
+                    <td>Назва тарифу</td>
+                    <td>
+                        222
+                    </td>
+                </tr>
+                <tr>
+                    <td>Опис</td>
+                    <td>222</td>
+                </tr>
+                <tr>
+                    <td>Дата редагування</td>
+                    <td>25.09.2022 - 11:09</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="table-responsive no-padding margin-top-15">
+            <table class="table table-light table-bordered table-striped" style="font-size: 12px;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Послуга</th>
+                        <th>Од. вим.</th>
+                        <th>Ціна за од., грн</th>
+                        <th>Валюта</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in service_list %}
+                    <tr role="row">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ service.service.service }}</td>
+                            <td>{{ service.service.measure }}</td>
+                            <td>{{ service.price }}</td>
+                            <td>грн</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    </section>
 {% endblock %}

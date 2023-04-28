@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 class Tarrif(models.Model):
     name_tarrif = models.CharField(max_length=250)
     description_tarrif = models.CharField(max_length=300)
+    published = models.DateTimeField(blank=True, null=True)
 
 class Measure(models.Model):
     name_measure = models.CharField(max_length=100)
@@ -27,5 +28,5 @@ class Service(models.Model):
 
 class ServiceforTariif(models.Model):
     service = models.ForeignKey(Service, verbose_name='Послуга', blank=True, on_delete=models.CASCADE)
-    amount = models.FloatField()
+    price = models.IntegerField(blank=True, null=True)
     tarrif = models.ForeignKey(Tarrif, verbose_name='Тариф', blank=True, on_delete=models.CASCADE)

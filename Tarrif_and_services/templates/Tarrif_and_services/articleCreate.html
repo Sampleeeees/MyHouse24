@@ -1,4 +1,41 @@
 {% extends 'Appartament/base.html' %}
 {% block title %}Створити статтю{% endblock %}
 {% block content %}
+    <section class="content-header">
+        <h4>Нова стаття</h4>
+        <ul class="breadcrumb"><li><a href="/admin/"><i class="fa fa-home"></i> Головна</a></li>
+            <li><a href="/admin/transaction-purpose/index">Статті приходів/розходів</a></li>
+            <li class="active">Нова стаття</li>
+        </ul>
+    </section>
+    <section class="content">
+
+<div class="box">
+    <div class="box-body">
+            <form id="w0" action="{% url 'articleCreate' %}" method="post">
+                {% csrf_token %}
+                <div class="col-xs-12 col-lg-7">
+                    <div class="form-group required">
+            <label class="control-label" for="{{ form.name_article.if_for_label }}">Назва</label>
+            {{ form.name_article }}
+
+            <div class="help-block"></div>
+            </div>
+                    <div class="form-group field-{{ form.name }}">
+            <label class="control-label" for="{{ form.type.id_for_label }}">Приход/расход</label>
+            {{ form.type }}
+
+            <div class="help-block"></div>
+            </div>    </div>
+            <div class="row">
+                <div class="col-xs-12 text-right">
+                    <div class="form-group">
+                        <a href="{% url 'articleCreate' %}" class="btn btn-default">Відмінити</a>
+                        <button type="submit" class="btn btn-success">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+            </form>    </div>
+            </div>
+    </section>
 {% endblock %}

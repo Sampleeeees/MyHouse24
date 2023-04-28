@@ -1,0 +1,92 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+{% block title %}Деталі будинку{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <h3>{{ object.name_home }}</h3>
+        <ul class="breadcrumb"><li><a href=""><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="{% url 'house_list' %}">Будинки</a></li>
+            <li class="active">{{ object.name_home }}</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title"></h3>
+        <div class="box-tools">
+            <a href="{% url 'house_update' object.id %}" class="btn btn-primary btn-sm">
+                <span class="hidden-xs" style="font-size: 12px;">Редагувати будинок</span><i class="fa fa-pencil visible-xs" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <table class="table table-bordered table-striped table-view">
+                    <tbody>
+                        <tr>
+                            <td>Назва</td>
+                            <td>{{ object.name_home }}</td>
+                        </tr>
+                        <tr>
+                            <td>Адреса</td>
+                            <td>{{ object.address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Секції</td>
+                            <td>{{ sections }}</td>
+                        </tr>
+                        <tr>
+                            <td>Поверхи</td>
+                            <td>{{ floors }}</td>
+                        </tr>
+                                                <tr>
+                            <td>Користувачі</td>
+                            <td>
+                                <p class="no-margin">Не назначені</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-12 col-lg-8">
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                {% if house.image1 %}
+                    <img src="{{ house.image1.url }}" height="522px" width="350px" id="block_for_image1" class="img-responsive largeImg margin-bottom-30" alt="Зображення #1. Розмір: (522x350)">
+                {% else %}
+                    <img src="{% static 'dist/img/glide.jpeg' %}" height="522px" width="350px" id="block_for_image1" class="img-responsive largeImg margin-bottom-30" alt="Зображення #1. Розмір: (522x350)">
+                {% endif %}
+            </div>
+            <div class="col-xs-6 col-md-3">
+                {% if house.image2 %}
+                    <img src="{{ house.image2.url}}" height="248px" width="160px" id="block_for_image2" class="img-responsive smallImg margin-bottom-30" alt="Зображення #2. Розмір: (248x160)">
+                {% else %}
+                    <img src="{% static 'dist/img/glide.jpeg' %}" height="248px" width="160px" id="block_for_image2" class="img-responsive smallImg margin-bottom-30" alt="Зображення #2. Розмір: (248x160)">
+                {% endif %}
+            {% if house.image3 %}
+                <img src="{{ house.image3.url }}" height="248px" width="160px" id="block_for_image3" class="img-responsive smallImg margin-bottom-30" alt="Зображення #3. Розмір: (248x160)">
+            {% else %}
+                <img src="{% static 'dist/img/glide.jpeg' %}" height="248px" width="160px" id="block_for_image3" class="img-responsive smallImg margin-bottom-30" alt="Зображення #3. Розмір: (248x160)">
+            {% endif %}
+            </div>
+            <div class="col-xs-6 col-md-3">
+                {% if house.image4 %}
+                   <img src="{{ house.image4.url }}" height="248px" width="160px" id="block_for_image4" class="img-responsive smallImg margin-bottom-30" alt="Зображення #4. Розмір: (248x160)">
+                {% else %}
+                    <img src="{% static 'dist/img/glide.jpeg' %}" height="248px" width="160px" id="block_for_image4" class="img-responsive smallImg margin-bottom-30" alt="Зображення #4. Розмір: (248x160)">
+                {% endif %}
+                {% if house.image5 %}
+                    <img src="{{ house.image5.url }}" height="248px" width="160px" id="block_for_image5" class="img-responsive smallImg margin-bottom-30" alt="Зображення #5. Розмір: (248x160)">
+                {% else %}
+                    <img src="{% static 'dist/img/glide.jpeg' %}" height="248px" width="160px" id="block_for_image5" class="img-responsive smallImg margin-bottom-30" alt="Зображення #5. Розмір: (248x160)">
+                {% endif %}
+            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </section>
+{% endblock %}

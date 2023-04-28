@@ -1,0 +1,64 @@
+{% extends 'Appartament/base.html' %}
+{% block title %}{% endblock %}
+{%  block content %}
+    <section class="content-header">
+        <h3>Користувач </h3>
+        <ul class="breadcrumb"><li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="{% url 'usersList' %}">Користувачі</a></li>
+            <li class="active">Користувач</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+
+<div class="box">
+        <div class="box-header with-border">
+        <h3 class="box-title"></h3>
+        <div class="box-tools mb-2">
+            <a href="{% url 'userUpdate' user.id %}" class="btn btn-primary btn-sm">
+                <span class="hidden-xs" style="font-size: 12px;">Редагувати користувача</span><i class="fa fa-pencil visible-xs" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+        <div class="box-body">
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <table class="table table-bordered table-striped table-view">
+                    <tbody>
+                        <tr>
+                            <td>Користувач</td>
+                            <td>{{ object.first_name }} {{ object.middle_name }} {{ object.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Роль</td>
+                            <td>{{ object.role.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Телефон</td>
+                            <td>{% if object.phone_number %}+38{{ object.phone_number }}{% else %}{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>Email(логін)</td>
+                            <td>{{ object.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Статус</td>
+                            <td>
+                                {% if object.get_status_display == 'Активний' %}
+                                    <small class="label label-success p-1 rounded text-bold">{{ object.get_status_display}}</small>
+                                    {% elif object.get_status_display == 'Новий' %}
+                                    <small class="label label-warning p-1 rounded text-bold">{{ object.get_status_display}}</small>
+                                    {% elif object.get_status_display == 'Неактивний' %}
+                                    <small class="label label-danger p-1 rounded text-bold">{{ object.get_status_display}}</small>
+                                    {% else %}
+                                 {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+    </section>
+
+{%  endblock %}

@@ -1,4 +1,5 @@
 {% extends 'Appartament/base.html' %}
+{% load static %}
 {% block content %}
     <section class="content-header">
         <h5 class="font-weight-normal">Будинки</h5>
@@ -12,7 +13,7 @@
     <div class="col-xs-12">
 
         <div class="pull-right margin-bottom">
-            <a class="btn btn-success size-button" href="{% url 'house_create' %}">Добавить дом</a>
+            <a class="btn btn-success mt-2" style="font-size: 12px;" href="{% url 'house_create' %}">Додати будинок</a>
         </div>
     </div>
 </div>
@@ -22,8 +23,8 @@
             <div class="box-header with-border">
                 <h3 class="box-title"></h3>
                 <div class="box-tools">
-                    <a href="{% url 'house_list' %}" class="btn btn-default btn-sm" style="background: lightgray; width: 90px; font-size: 12px;">
-                        <span class="hidden-xs">Очистить </span><i class="fa fa-eraser visible-xs" aria-hidden="true"></i>
+                    <a href="{% url 'house_list' %}" class="btn btn-default btn-sm" style="background: lightgray; width: 100%; font-size: 12px;">
+                        <span class="hidden-xs">Очистити </span><i class="fa fa-eraser visible-xs" aria-hidden="true"></i>
                     </a>
                 </div>
             </div>
@@ -31,40 +32,21 @@
             <div id="w0" class="grid-view"><div class="box-body table-responsive no-padding">
                 <table class="table table-bordered table-light table-striped linkedRow" style="font-size: 12px; box-shadow: none;"><thead>
                     <tr>
-                        <th style="width: 40px; min-width: 40px">#</th><th><a href="/admin/house/index?sort=name" class="text-decoration-none" data-sort="name">Название</a></th>
-                        <th><a href="/admin/house/index?sort=address" data-sort="address" class="text-decoration-none">Адрес</a></th>
-                        <th style="width: 100px; min-width: 80px">&nbsp;</th>
+                        <th style="width: 40px; min-width: 40px">#</th>
+                        <th id="filter_home_address" data-sort="name_home">Назва</th>
+                        <th id="filter_name_home" data-sort="address">Адреса</th>
+                        <th style="width: 60px; min-width: 50px">&nbsp;</th>
                     </tr>
-                    <tr id="w0-filters" class="filters">
+                    <tr id="searchingRow">
                         <td>&nbsp;</td>
-                        <td><input type="text" class="form-control" name="HouseSearch[name]"></td>
-                        <td><input type="text" class="form-control" name="HouseSearch[address]">
+                        <td><input class="form-control" type="text" id="search_name_home" name="search_name_home"></td>
+                        <td><input class="form-control" type="text" id="search_home_address" name="search_home_address">
                         </td>
                         <td>&nbsp;</td>
                     </tr>
             </thead>
             <tbody>
-                {% for home in object_list %}
-                <tr data-href="" data-key="{{ home.id }}">
-                    <td>{{ forloop.counter}}</td>
-                    <td>{{ home.name_home }}</td>
-                    <td>{{ home.address }}</td>
-                    <td>
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-default btn-sm" href="{% url 'house_update' pk=home.id %}" title="Редактировать" data-toggle="tooltip">
-                                <svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-                                </svg>
-                            </a>
-                            <a class="btn btn-default btn-sm" name="delete-item" href="{% url 'house_delete' pk=home.id %}" title="Удалить" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
-                                <svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                </svg>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
+
             </tbody>
                 </table>
             </div>
@@ -76,4 +58,61 @@
     </div>
 </div>
     </section>
+    <script>
+        $(document).ready(function() {
+            console.log($('#filter_home_address')[0].className)
+            let dataTable = $('.linkedRow').DataTable({
+                'serverSide': true,
+                'searching': false,
+                'autoWidth': false,
+                'ordering': true,
+                'lengthChange': false,
+                'ajax': {
+                    'url': "{% url 'dataTableHouse' %}",
+                    'type': 'GET',
+                    'data': function(d) {
+                        d.search_name_home = $('#search_name_home').val();
+                        d.search_home_address = $('#search_home_address').val();
+                        d.filter_home_address = $('#filter_home_address')[0].className;
+                        d.filter_name_home = $('#filter_name_home')[0].className;
+                    }
+                },
+                'columns': [
+                    {'data': 'id'},
+                    {'data': 'name_home', 'className': 'sortable', 'orderable': true},
+                    {'data': 'address', 'className': 'sortable', 'orderable': true},
+                    {'data': null, 'orderable': false, 'searchable': false, 'render': function(data, type, row, meta) {
+                        // Додаткові іконки для видалення та редагування
+                        return `<div class="btn-group">\
+                                  <a class="btn btn-default btn-sm" href="update/${data.id}" title="Редагувавти" data-toggle="tooltip"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">\
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>\
+                                </svg></a>\
+                                  <a class="btn btn-default btn-sm" onclick="check_value('delete/${data.id}')" title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+                                </svg></a>
+                                </div>`;
+                      }}
+                ],
+                'language': {
+                    'lengthMenu': '_MENU_ записів на сторінку',
+                    'zeroRecords': 'Нічого не знайдено',
+                    'info': 'Показано _START_ - _END_ з _TOTAL_ записів',
+                    'infoEmpty': 'Показано 0 записів',
+                    'infoFiltered': '(знайдено з _MAX_ записів)',
+                    'pagingType': 'full_numbers',
+                    'paginate': {
+                        'first': 'Перша',
+                        'last': 'Остання',
+                        "next": "&raquo;",
+                        "previous": "&laquo;"
+                    },
+                },
+            });
+
+            $('#search_name_home, #search_home_address').keyup(function() {
+                dataTable.draw();
+            });
+
+        });
+    </script>
 {% endblock %}

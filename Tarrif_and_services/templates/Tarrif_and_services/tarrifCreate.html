@@ -80,8 +80,8 @@
                                 </div>
                                 <div class="col-xs-6 col-md-3">
                                     <div class="form-group">
-                                        <label for="{{ formset_service_price.empty_form.amount.id_for_label }}">Ціна</label>
-                                        {{ formset_service_price.empty_form.amount }}
+                                        <label for="{{ formset_service_price.empty_form.price.id_for_label }}">Ціна</label>
+                                        {{ formset_service_price.empty_form.price }}
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-md-2">
@@ -93,10 +93,14 @@
                                 <div class="col-xs-6 col-md-3">
                                     <div class="form-group">
                                         <label for="{{ formset_service_price.empty_form.service.measure.id_for_label }}">Ед. изм.</label>
-                                        {{ formset_service_price.empty_form }}
+                                        <select name="measure_select" id="id_measure_{{ formset_service_price.empty_form.prefix }}" class="form-select" disabled>
+                                            <option value="" >Оберіть...</option>
+                                        </select>
                                         <div class="input-group">
                                                          <span class="input-group-btn">
-                                                <button onclick="add_new_setting('{{ formset_service_price.prefix }}')" type="button" class="btn btn-default form-row-remove-btn"><i class="fa fa-trash"></i></button>                </span>
+                                                             <a href="{% url 'tarrifCreate'%}">
+                                                <button  type="button" class="btn btn-default form-row-remove-btn"><i class="fa fa-trash"></i></button>                </span>
+                                                                </a>
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +113,7 @@
             <div class="row">
                 <div class="col-xs-12 col-lg-7 text-right">
                     <div class="form-group">
-                        <a href="/admin/tariff/index" class="btn btn-default">Отменить</a>
+                        <a href="{% url 'tarrifCreate'%}" class="btn btn-default">Отменить</a>
                         <button type="submit" class="btn btn-success">Сохранить</button>
                     </div>
                 </div>
@@ -119,8 +123,6 @@
     </section>
     <script>
     function select_measure(service_name){
-        console.log(service_name)
-        console.log(service_name.options[service_name.selectedIndex].value)
         $.ajax({
             url: '{% url 'checkMeasure' %}',
             type: 'GET',
@@ -128,19 +130,19 @@
                 'service_id': service_name.options[service_name.selectedIndex].value
             },
             success: function (response){
-                console.log('Hello')
-                console.log(JSON.parse(response['measure']))
-                console.log(JSON.parse(response['all_measure']))
+                let div_parrent = service_name.parentElement.parentElement.parentElement
                 let current_service = JSON.parse(response['measure'])
                 let all_measure = JSON.parse(response['all_measure'])
-                console.log(current_service[0]['fields']['measure'])
+                console.log(current_service)
+                if(current_service === 0){
+                    document.getElementById('id_measure_'+div_parrent.id).innerHTML = '<option value="">Оберіть...</option>'
+                }else{
                 for(let i=0; i< all_measure.length; i++){
-                    console.log(all_measure[i]['pk'])
                     if(all_measure[i]['pk'] === current_service[0]['fields']['measure']){
-                        console.log('Hellowsasa')
+                        document.getElementById('id_measure_'+div_parrent.id).innerHTML = '<option value="">'+ all_measure[i]['fields']['name_measure'] +'</option>'
                         break;
                     }
-                }
+                }}
             }
         })
     }

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tarrif, Service, Measure
+from .models import Tarrif, Service, Measure, ServiceforTariif
 # Register your models here.
 
 class TarrifAdmin(admin.ModelAdmin):
@@ -15,3 +15,4 @@ class MeasureAdmin(admin.ModelAdmin):
 admin.site.register(Tarrif, TarrifAdmin)
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(Measure, MeasureAdmin)
+admin.site.register(ServiceforTariif)

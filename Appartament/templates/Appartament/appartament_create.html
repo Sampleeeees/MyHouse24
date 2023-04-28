@@ -1,0 +1,154 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+{% block title %}Створити квартиру{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <h3>Нова квартира</h3>
+        <ul class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-home"></i>Головна</a>
+            </li><li><a href="{% url 'appartament_list' %}">Квартири</a></li>
+            <li class="active">Нова квартира</li>
+        </ul>
+    </section>
+    <section class="content">
+        <div class="box">
+            <div class="box-body">
+            <form id="w0" action="{% url 'appartament_create' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                <div class="col-xs-12 col-sm-6 col-sm-pull-6">
+                    <input type="hidden" id="flatform-id" name="FlatForm[id]">
+                    <div class="form-group field-flatform-flat required">
+                        <label class="control-label" for={{ form.number_appartament.id_for_label }}>Номер квартиры</label>
+                        {{ form.number_appartament }}
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-flatform-square">
+                        <label class="control-label" for="{{ form.area.id_for_label }}">Площадь (кв.м.)</label>
+                        {{ form.area }}
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-flatform-house_id required">
+                        <label class="control-label" for="{{ form.house.id_for_label }}">Дом</label>
+                        {{ form.house }}
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-flatform-section_id">
+                        <label class="control-label" for="{{ form.section.id_for_label }}">Секція</label>
+                        {{ form.section }}
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-flatform-floor_id">
+                        <label class="control-label" for="{{ form.floor.id_for_label }}">Поверх</label>
+                        {{ form.floor }}
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-flatform-user_id">
+                        <label class="control-label" for="{{ form.owner.id_for_label }}">Власник</label>
+                        {{ form.owner }}
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-flatform-tariff_id">
+                        <label class="control-label" for="{{ form.tarrif.id_for_label }}">Тариф</label>
+                        {{ form.tarrif }}
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-sm-push-6">
+                            <div class="form-group field-flatform-account_uid ">
+                                <label class="control-label" for="flatform-account_uid">Лицевой счет</label>
+
+                                <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;">
+                                    <span class="selection">
+                                        <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-account_uid-container">
+                                            <span class="select2-selection__rendered" id="select2-account_uid-container">
+                                                <span class="select2-selection__placeholder">или выберите из списка...</span>
+                                            </span>
+                                            <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                        </span>
+                                    </span>
+                                    <span class="dropdown-wrapper" aria-hidden="true"></span>
+                                </span>
+                                <div class="help-block"></div>
+                            </div>
+                </div>
+                </div>
+            <div class="row">
+                <div class="col-xs-12 text-right">
+                    <div class="form-group">
+                        <a href="{% url 'appartament_create' %}" class="btn btn-default margin-bottom-15">Відмінити</a>
+                        <input type="submit" class="btn btn-success margin-bottom-15" name="action_save" value="Зберегти">
+                        <input type="submit" class="btn btn-success margin-bottom-15 bg-green-active" name="action_save_add" value="Зберегти та додати нову">                    </div>
+                </div>
+            </div>
+            </form>
+            </div>
+        </div>
+    </section>
+    <script>
+    $('#number_appartament_id').on('keyup', function (){
+        console.log($('#number_appartament_id').val())
+    })
+    $("#id_house_select").on('change', (function (){
+        let house_id = $('#id_house_select').find('option:selected').val()
+        console.log(house_id)
+        if (house_id != '') {
+            document.getElementById('id_section_select').removeAttribute('disabled');
+            document.getElementById('id_floor_select').removeAttribute('disabled');
+            document.getElementById('number_appartament_id').removeAttribute('disabled');
+            console.log(document.getElementById('id_section_select'))
+            console.log('Hello')
+            $.get({
+                url: '{% url 'filter_house' %}',
+                data: {
+                    'house_id': house_id
+                },
+                success: function (response){
+                    console.log(JSON.parse(response['sections']));
+                    console.log(JSON.parse(response['all_appartament']))
+                    let sections = JSON.parse(response['sections']);
+                    let floors = JSON.parse(response['floors']);
+                    let all_appartament = JSON.parse(response['all_appartament']);
+                    //Створення select секцій від обраного дому
+                    document.getElementById('id_section_select').innerText = '';
+                    document.getElementById('id_section_select').innerHTML = '<option value="">Оберіть...</option>';
+                    for(let i=0; i<sections.length; i++){
+                        document.getElementById('id_section_select').innerHTML += '<option value="'+ sections[i]["pk"] +'">'+ sections[i]["fields"]["name_section"] +'</option>'
+                    }
+                    //****//
+                    // Стоврення select поверхів від обраного дому
+                    document.getElementById('id_floor_select').innerText = '';
+                    document.getElementById('id_floor_select').innerHTML = '<option value="">Оберіть...</option>';
+                    for(let j=0; j<floors.length; j++){
+                        document.getElementById('id_floor_select').innerHTML += '<option value="'+ floors[j]["pk"] +'">'+ floors[j]["fields"]["name_floor"] +'</option>'
+                    }
+                    //****//
+                    //Перевірка номеру квартиру від обраного будинку
+                    $('#number_appartament_id').on('keyup', function (){
+                        for(let k=0; k<all_appartament.length; k++){
+                                if( all_appartament[k]['fields']['number_appartament'] != $('#number_appartament_id').val()){
+                                } else{
+                                    console.log('Зайнятий')
+                                    document.getElementById('#number_appartament_id').
+                                    break;
+                                }
+                        }
+                    })
+                    //****//
+
+                }
+            })
+        } else {
+            console.log('Bye');
+            document.getElementById('id_section_select').setAttribute('disabled', '');
+            console.log(document.getElementById('id_section_select').options[0])
+            document.getElementById('id_section_select').options[0].selected = true;
+            document.getElementById('id_floor_select').setAttribute('disabled', '');
+            document.getElementById('id_floor_select').options[0].selected = true;
+            document.getElementById('number_appartament_id').setAttribute('disabled', '');
+            document.getElementById('number_appartament_id').setAttribute('value', '');
+
+        }
+    }))
+    </script>
+{% endblock %}

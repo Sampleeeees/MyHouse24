@@ -8,23 +8,25 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="icon" type="image/png" href="{% static 'dist/img/favicon.png' %}">
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
     <link rel="icon" type="image/png" href="{% static 'dist/css/dataTables.bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/fontawesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
     <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" safe>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.bootstrap5.min.css" safe>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" safe>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" safe integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="{% static 'dist/css/style.css' %}" rel="stylesheet" type="text/css">
 <!-- AdminLTE App -->
 <script src="{% static 'dist/js/adminlte.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.2/chart.min.js" integrity="sha512-fYE9wAJg2PYbpJPxyGcuzDSiMuWJiw58rKa9MWQICkAqEO+xeJ5hg5qPihF8kqa7tbgJxsmgY0Yp51+IMrSEVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
 
 
     <title>{% block title %}Вхід{% endblock %}</title>
-    <link href="{% static 'dist/css/style.css' %}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="wrapper">
@@ -75,21 +77,21 @@
                         <a href="#" style="text-decoration: none;" class="dropdown-toggle text-dark" data-toggle="dropdown">
                             <!--<img src="/admin/dist/img/user2-160x160.jpg" class="user-image" alt="Elon Musk">-->
                             <i class="fa fa-user-circle text-purple" ></i>
-                            <span class="hidden-xs text-dark bg-white">Elon Musk</span>
+                            <span class="hidden-xs text-dark bg-white">{{ request.user.first_name }}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
                                 <!--<img src="/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="Elon Musk">-->
                                 <span><i class="fa fa-user-circle text-purple bg-gray-light img-circle"></i></span>
-                                <p class="text-white">Elon Musk (Директор)</p>
+                                <p class="text-white">{{ request.user.first_name }}{% if request.user.role %}({{ request.user.role }}){% else %}{% endif %}</p>
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a class="btn btn-default btn-flat" href="/admin/user-admin/update-my">Профиль</a>                                </div>
+                                    <a class="btn btn-default btn-flat" href="{% url 'userUpdate' request.user.id %}">Профіль</a>                                </div>
                                 <div class="pull-right">
-                                    <a class="btn btn-default btn-flat" href="/admin/site/logout" data-method="post">Выход</a>                                </div>
+                                    <a class="btn btn-default btn-flat" href="/admin/site/logout" data-method="post">Вихід</a>                                </div>
                             </li>
                         </ul>
                     </li>
@@ -145,7 +147,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a href="" class="nav-link w-100">
+              <a href="{% url 'appartament_list' %}" class="nav-link w-100">
                   <svg height="20px" width="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
                   </svg>
@@ -153,7 +155,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a href="" class="nav-link w-100">
+              <a href="{%  url 'ownerAppartamentsList' %}" class="nav-link w-100">
                   <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
                   </svg>
@@ -169,7 +171,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a href="" class="nav-link w-100">
+              <a href="{% url 'message_list' %}" class="nav-link w-100">
                   <svg height="20px" width="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                   </svg>
@@ -177,7 +179,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a href="" class="nav-link w-100">
+              <a href="{% url 'master_list' %}" class="nav-link w-100">
                   <svg height="20px" width="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z" />
                   </svg>
@@ -260,7 +262,7 @@
                 <p class="opacity-50 font-weight-normal ml-2 p">Тарифи</p></a>
               </li>
               <li class="nav-item">
-                <a href="" class="nav-link w-100 m-0 pt-0 pb-1">
+                <a href="{% url 'usersList' %}" class="nav-link w-100 m-0 pt-0 pb-1">
                     <svg width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-1">
   <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
 </svg>
@@ -274,7 +276,7 @@
                     <p class="opacity-50 font-weight-normal ml-2 p">Платіжні реквізити</p></a>
               </li>
               <li class="nav-item">
-                <a href="" class="nav-link w-100 m-0 pt-0 pb-1">
+                <a href="{% url 'articleList' %}" class="nav-link w-100 m-0 pt-0 pb-1">
                     <svg width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-1">
   <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
 </svg>
@@ -314,22 +316,34 @@
 </body>
 <!-- jQuery -->
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
-<!-- Bootstrap 4 -->
-<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<!-- AdminLTE App -->
-<script src="{% static 'dist/js/adminlte.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.2/chart.min.js" integrity="sha512-fYE9wAJg2PYbpJPxyGcuzDSiMuWJiw58rKa9MWQICkAqEO+xeJ5hg5qPihF8kqa7tbgJxsmgY0Yp51+IMrSEVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="{% static 'plugins/bootstrap/js/Chart.min.js'%}"> </script>
-<script src="{% static 'plugins/bootstrap/js/moment.js' %}"></script>
-<script src="{% static 'dist/js/dataTables.bootstrap.min.js' %}"></script>
-<script src="{% static 'dist/js/dataTables.min.js' %}"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Script -->
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" safe></script>
 <script src="{% static 'dist/js/jquery-ui.js' %}"></script>
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'dist/js/main.js' %}"></script>
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.2/chart.min.js " safe integrity="sha512-fYE9wAJg2PYbpJPxyGcuzDSiMuWJiw58rKa9MWQICkAqEO+xeJ5hg5qPihF8kqa7tbgJxsmgY0Yp51+IMrSEVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'plugins/bootstrap/js/Chart.min.js'%}"> </script>
+<script src="{% static 'plugins/bootstrap/js/moment.js' %}"></script>
+<script src="{% static 'dist/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'dist/js/dataTables.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" safe></script>
+
+<!--JS DataTable-->
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js" safe></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js" safe></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js" safe></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.bootstrap5.min.js" safe></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" safe></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js" safe></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" safe></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js" safe></script>
+
+<!-- Script -->
+
 </html>

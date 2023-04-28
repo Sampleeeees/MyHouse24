@@ -1,0 +1,157 @@
+{# Підєднуємо базовий шаблон  #}
+{% extends 'Appartament/base.html' %}
+
+{# Завантажуємо статику #}
+{% load static %}
+
+{# Назва сторінки #}
+{% block title %}{% endblock %}
+
+{# Вміст сторінки #}
+{% block content %}
+{# Секція з заголовком сторінки  #}
+<section class="content-header" style="font-size: 12px;">
+        <h3>Новий власник</h3>
+        <ul class="breadcrumb">
+            <li><a href=""><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="{% url 'ownerAppartamentsList' %}">Власники квартир</a></li>
+            <li class="active">Новий власник</li>
+        </ul>
+</section>
+
+<section class="content">
+
+    <div class="box">
+        <div class="box-body">
+            <form id="w0" action="{% url 'add_owner_appartament' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" id="is_new_record" value="1">
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="userAvatar {{ form.logo.name }}">
+                        <img width="160px" height="160px" id="new_owner_logo" class="img-circle pull-left img-responsive" src="http://myhouse24.avada-media.ua/site/glide?path=%2Fupload%2Fplaceholder.jpg&amp;w=160&amp;h=160&amp;fit=crop">
+                        <div class="form-group ">
+                            <label class="control-label" for="{{ form.logo.id_for_label }}">Змінити зображення</label>
+                            {{ form.logo }}
+
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group field-{{ form.status.name }}">
+                        <label class="control-label" for="{{ form.status.id_for_label }}">Статус</label>
+                        {{ form.status }}
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-{{ form.id.name }}">
+                        <label class="control-label" for="{{ form.id.id_for_label }}">ID</label>
+                        {{ form.id }}
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group field-{{ form.middle_name.name }}">
+                        <label class="control-label" for="{{ form.middle_name.id_for_label }}">Прізвище</label>
+                        {{ form.middle_name }}
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-{{ form.first_name.name }}">
+                        <label class="control-label" for="{{ form.first_name.id_for_label }}">Ім'я</label>
+                        {{ form.first_name }}
+
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-{{ form.last_name.name }}">
+                        <label class="control-label" for="{{ form.last_name.name }}">По-батькові</label>
+                        {{ form.last_name }}
+
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-{{ form.birthday.name }}">
+                        <label class="control-label" for="{{ form.birthday.id_for_label }}">Дата народження</label>
+                        {{ form.birthday }}
+
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group field-{{ form.about_user.name }}">
+                        <label class="control-label" for="{{ form.about_user.id_for_label }}">Про власника (замітки)</label>
+                        {{ form.about_user }}
+
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <h2 class="page-header">Контактні дані</h2>
+                    <div class="form-group field-{{ form.phone_number.name }}">
+                        <label class="control-label" for="{{ form.phone_number.id_for_label }}">Телефон</label>
+                        {{ form.phone_number }}
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-{{ form.viber.name }}">
+                        <label class="control-label" for="{{ form.viber.id_for_label }}">Viber</label>
+                        {{ form.viber }}
+
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-{{ form.telegram.name }}">
+                        <label class="control-label" for="{{ form.telegram.id_for_label }}">Telegram</label>
+                        {{ form.telegram }}
+
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-{{ form.email.name }} required">
+                        <label class="control-label" for="{{ form.email.id_for_label }}">Email (логин)</label>
+                        {{ form.email }}
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <h2 class="page-header">Змінити пароль</h2>
+                    <div class="form-group field-{{ form.password1.name }}">
+                        <label class="control-label" for="{{ form.password1.id_for_label }}">Пароль</label>
+                        <div class="input-group">
+                            {{ form.password1 }}
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" onclick="generatePassword('.pass-value')">
+                                    Згенерувати
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="showPassword(this)">
+                                    <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="form-group field-{{ form.password2.name }}">
+                        <label class="control-label" for="{{ form.password2.id_for_label }}">Повторити пароль</label>
+                        {{ form.password2 }}
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-right">
+                    <a href="{% url 'add_owner_appartament' %}" class="btn btn-default">Відмінити</a>
+                    <button type="submit" class="btn btn-success">Зберегти</button>
+                </div>
+            </div>
+            </form>
+            <script>
+                function generatePassword(targetSelector) {
+                    var pass = Math.random().toString(36).substring(4);
+                    $('input'+targetSelector).val(pass);
+                    $('span'+targetSelector).text(pass);
+                }
+            </script>
+        </div>
+    </div>
+</section>
+{% endblock %}

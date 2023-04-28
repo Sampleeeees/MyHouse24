@@ -1,8 +1,6 @@
 from django import forms
 from django.forms import ModelForm
 from .models import House, Section, Floor
-from Gallery.forms import GalleryForm, ImageForm
-from User.forms import UserForm
 
 class SectionForm(ModelForm):
     class Meta:

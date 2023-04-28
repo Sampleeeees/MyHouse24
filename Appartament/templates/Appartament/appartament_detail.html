@@ -1,0 +1,120 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+{% block title %}Квартири{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <h3>Квартира №{{ appartament.number_appartament }}, {{ appartament.house.name_home }}</h3>
+        <ul class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="{% url 'appartament_list' %}">Квартири</a></li>
+            <li class="active">Квартира №{{ appartament.number_appartament }}, {{ appartament.house.name_home }}</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Перегляд квартири</h3>
+        <div class="box-tools">
+                            <button class="btn btn-default btn-sm disabled" style="font-size: 12px;" data-confirm="Лицевой счет неактивен"><span class="hidden-xs"><i class="fa fa-dollar"></i> Прийняти платіж</span><i class="fa fa-pencil visible-xs" aria-hidden="true"></i></button>
+                <button class="btn btn-default btn-sm disabled" style="font-size: 12px;" data-confirm="Лицевой счет неактивен"><span class="hidden-xs"><i class="fa fa-files-o"></i> Оформити квитанцію</span><i class="fa fa-pencil visible-xs" aria-hidden="true"></i></button>
+                        <a href="" class="btn btn-primary btn-sm">
+                <span class="hidden-xs" style="font-size: 12px;">Редагувати квартиру</span><i class="fa fa-pencil visible-xs" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-light table-bordered  table-striped table-view">
+                    <tbody>
+                        <tr>
+                            <td>Особовий рахунок</td>
+                            <td>
+                                не вказано
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Номер квартири</td>
+                            <td>{% if appartament.number_appartament  %}
+                                    {{ appartament.number_appartament }}
+                                {% else %}
+                                    (не вказано)
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Площа</td>
+                            <td>
+                                {% if appartament.area %}
+                                    {{ appartament.area }}м<sup>2</sup>
+                                {% else %}
+                                    (не вказано)
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Будинок</td>
+                            <td>
+                                {% if appartament.house %}
+                                <a class="text-decoration-none" href="{% url 'house_detail' appartament.house.id %}">
+                                    {{ appartament.house.name_home }}
+                                </a>
+                                {% else %}
+                                    (не вказано)
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Секція</td>
+                            <td>
+                                {% if appartament.section %}
+                                    {{ appartament.section.name_section }}
+                                {% else %}
+                                    (не вказано)
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Поверх</td>
+                            <td>
+                                {%  if appartament.floor %}
+                                    {{ appartament.floor.name_floor }}
+                                {% else %}
+                                    (не вказано)
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Власник</td>
+                            <td>
+                                {% if appartament.owner %}
+                                    {{ appartament.owner.first_name }} {{ appartament.owner.middle_name }} {{ appartament.owner.last_name }}
+                                {% else %}
+                                    (не вказано)
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Тариф</td>
+                            <td>
+                                {% if appartament.tarrif %}
+                                    <a class="text-decoration-none" href="{% url 'tarrifDetail' appartament.tarrif.id %}">{{ appartament.tarrif.name_tarrif }}</a>
+                                {% else %}
+                                    (не вказано)
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <p><a class="text-decoration-none" href="">Посмотреть показания счетчиков</a></p>
+                    <p><a class="text-decoration-none" href="">Посмотреть приходы</a></p>
+                    <p><a class="text-decoration-none" href="">Посмотреть квитанции</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </section>
+{% endblock %}

@@ -1,13 +1,25 @@
+import datetime
+from django.utils import timezone
 from django.core import serializers
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.forms import modelformset_factory, formset_factory
-from django.views.generic import UpdateView, DeleteView, TemplateView, View, ListView, CreateView
+from django.views.generic import UpdateView, DeleteView, TemplateView, View, ListView, CreateView, DetailView
 from .models import Measure, Service, Tarrif, ServiceforTariif
-from .forms import ServiceForm, MeasureForm, TarrifForm, ServiceforTariifForm
+from .forms import ServiceForm, MeasureForm, TarrifForm, ServiceforTariifForm, UserForm
 from Articles_and_detail_payments.models import PaymentDetail, Article
 from Articles_and_detail_payments.forms import PaymentForm, ArticleForm
+from User.models import User, Role
+from django.contrib.auth import login
+from django.contrib.auth import get_user_model
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+UserModel = get_user_model()
 from django.db.models import Q
 
 class SettingServiceUpdate(View):
@@ -67,7 +79,7 @@ class PaymentUpdate(UpdateView):
 
     def form_valid(self, form):
         context = self.get_context_data(form=form)
-        context['object'].save()
+        form.save()
         return super().form_valid(form=form)
 
 class TarrifList(ListView):
@@ -79,9 +91,11 @@ class TarrifCreate(CreateView):
     model = Tarrif
     template_name = 'Tarrif_and_services/tarrifCreate.html'
     form_class = TarrifForm
+    success_url = reverse_lazy('tarrifList')
 
     def get_context_data(self, **kwargs):
         context =super(TarrifCreate, self).get_context_data(**kwargs)
+        print(context)
         ServiceForTarrifFormset = modelformset_factory(ServiceforTariif, form=ServiceforTariifForm, extra=0, can_delete=True)
         if self.request.POST:
             context['formset_service_price'] = ServiceForTarrifFormset(self.request.POST, prefix='service-amount', queryset=ServiceforTariif.objects.none())
@@ -91,7 +105,183 @@ class TarrifCreate(CreateView):
 
     def form_valid(self, form):
         context = self.get_context_data(form=form)
+        terrif = form.save(commit=False)
+        terrif.published = timezone.now()
+        terrif.save()
+        print(terrif)
+        if context['formset_service_price'].is_valid:
+            for service_price in context['formset_service_price']:
+                price = service_price.save(commit=False)
+                price.tarrif_id = terrif.id
+                price.save()
+            context['formset_service_price'].save()
+        return super().form_valid(form=form)
+
+class TarrifUpdate(UpdateView):
+    model = Tarrif
+    template_name = 'Tarrif_and_services/tarrifUpdate.html'
+    form_class = TarrifForm
+    success_url = reverse_lazy('tarrifList')
+
+
+    def get_context_data(self, **kwargs):
+        context = super(TarrifUpdate, self).get_context_data(**kwargs)
+        ServiceForTarrifFormset = modelformset_factory(ServiceforTariif, form=ServiceforTariifForm, extra=0, can_delete=True)
+        if self.request.POST:
+            context['formset_service_price'] = ServiceForTarrifFormset(self.request.POST, prefix='service-amount', queryset=ServiceforTariif.objects.filter(tarrif_id=context['tarrif'].id))
+        else:
+            context['formset_service_price'] = ServiceForTarrifFormset(prefix='service-amount', queryset=ServiceforTariif.objects.filter(tarrif_id=context['tarrif'].id))
+        return context
+
+    def form_valid(self, form):
+        context =self.get_context_data(form=form)
+        tarrif = form.save(commit=False)
+        tarrif.published = timezone.now()
+        tarrif.save()
+        if context['formset_service_price'].is_valid():
+            for service in context['formset_service_price']:
+                servi = service.save(commit=False)
+                servi.tarrif_id = tarrif.id
+                servi.save()
+            context['formset_service_price'].save()
         return super().form_valid(form)
+
+
+class TarrifDetail(DeleteView):
+    model = Tarrif
+    template_name = 'Tarrif_and_services/tarrifDetail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ServiceForTarrifFormset = modelformset_factory(ServiceforTariif, form=ServiceforTariifForm, extra=0, can_delete=True)
+        context['formset_service_price'] = ServiceForTarrifFormset(prefix='service-amount', queryset=ServiceforTariif.objects.filter(tarrif_id=context['object'].id))
+        context['service_list'] = ServiceforTariif.objects.filter(tarrif_id=context['object'].id)
+        return context
+
+class ArticleList(ListView):
+    model = Article
+    template_name = 'Tarrif_and_services/articleList.html'
+    queryset = Article.objects.all()
+
+
+class ArticleCreate(CreateView):
+    model = Article
+    template_name = 'Tarrif_and_services/articleCreate.html'
+    form_class = ArticleForm
+    success_url = reverse_lazy('articleList')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+class ArticleUpdate(UpdateView):
+    model = Article
+    template_name = 'Tarrif_and_services/articleUpdate.html'
+    form_class = ArticleForm
+    success_url = reverse_lazy('articleList')
+
+
+
+class UsersList(ListView):
+    model = User
+    template_name = 'Tarrif_and_services/usersList.html'
+    queryset = User.objects.all()
+
+
+class UserDetail(DetailView):
+    model = User
+    template_name = 'Tarrif_and_services/user_detail.html'
+
+
+class UserCreate(CreateView):
+    model = User
+    template_name = 'Tarrif_and_services/user_create.html'
+    form_class = UserForm
+    success_url = reverse_lazy('usersList')
+
+    def get_context_data(self, **kwargs):
+        context = super(UserCreate, self).get_context_data(**kwargs)
+        return context
+
+    def form_valid(self, form):
+        print(form.errors)
+        if form.is_valid():
+            form.save()
+            login(self.request, self.request.user, backend='User.backends.EmailBackend')
+        else:
+            print(form.errors)
+        return super().form_valid(form=form)
+
+class UserUpdate(UpdateView):
+    model = User
+    template_name = 'Tarrif_and_services/usersEdit.html'
+    form_class = UserForm
+    success_url = reverse_lazy('usersList')
+
+    def get_context_data(self, **kwargs):
+        context = super(UserUpdate, self).get_context_data(**kwargs)
+        print(context['object'].id)
+        print(self.request.user)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        print(form.cleaned_data)
+        if form.cleaned_data.get('password1') == form.cleaned_data.get('password2') and form.cleaned_data.get('password1') != '':
+            print('We here!')
+            user = User.objects.get(pk=context['object'].id)
+            user.set_password(form.cleaned_data.get('password1'))
+            user.save()
+            login(self.request, self.request.user, backend='User.backends.EmailBackend')
+        else:
+            print('else')
+            form.save()
+        return super().form_valid(form=form)
+
+
+
+class UserDelete(DeleteView):
+    model = User
+    success_url = reverse_lazy('usersList')
+
+    def get(self, request, *args, **kwargs):
+        return self.delete(self, request, *args, **kwargs)
+
+class UserSend(View):
+    def get(self, request, user_id, *args, **kwargs):
+        print('Hello')
+        print(self.request)
+        if self.request:
+            print(user_id)
+            user = User.objects.get(pk=user_id)
+            current_site = get_current_site(self.request)
+            mail_subject = 'Вас запросили до MyHouse24.'
+            message = render_to_string('Tarrif_and_services/send_invite_to_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': default_token_generator.make_token(user),
+            })
+            to_email = user.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+            print('Sending')
+            return redirect('usersList')
+        else:
+            print(self.request.user.id)
+            print(user_id)
+            return HttpResponse('Not working')
+
+
+class ArticleDelete(DeleteView):
+    model = Article
+    success_url = reverse_lazy('articleList')
+
+    def get(self, request, *args, **kwargs):
+        return self.delete(self, request, *args, **kwargs)
+
 
 
 
@@ -109,6 +299,14 @@ class ServiceDelete(DeleteView):
     def get(self, request, *args, **kwargs):
         return self.delete(self, request, *args, **kwargs)
 
+class TarrifDelete(DeleteView):
+    model = Tarrif
+    success_url = reverse_lazy('tarrifList')
+
+    def get(self, request, *args, **kwargs):
+        return self.delete(self, request, *args, **kwargs)
+
+
 def check_measure(request):
     print(request.GET.get('service_id'))
     if request.GET.get('service_id') != '' and request.GET.get('service_id') is not None:
@@ -116,3 +314,6 @@ def check_measure(request):
         measure = serializers.serialize('json', Service.objects.filter(pk=request.GET.get('service_id')))
         all_measure = serializers.serialize('json', Measure.objects.all())
         return JsonResponse({'measure': measure, 'all_measure': all_measure}, status=200)
+    else:
+        print('Zero to hero')
+        return JsonResponse({'measure': 0, 'all_measure': 0}, status=200)

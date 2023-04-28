@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+{% load static %}
+<style class="adjust-screen-brightness" media="screen">html::before {
+  content: " ";
+  z-index: 2147483647;
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.1);
+}</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Вхід{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap/css/bootstrap-datepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
+
+</head>
+<body class="login-page">
+<div class="login-box">
+    <div class="login-logo">
+        <a href="http://myhouse24.avada-media.ua/">
+            <img src="http://myhouse24.avada-media.ua/logo.svg" alt="logo">
+        </a>
+    </div>
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li><a href="{% url 'login_view' %}" data-toggle="tab" aria-expanded="true">Для мешканця</a></li>
+            <li class="active"><a href="{% url 'login_admin' %}">Для адміністрації</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
+                <div class="login-box-body">
+
+
+
+                    <p class="login-box-msg">Вхід в особистий кабінет</p>
+
+                    <form id="login-form" action="{% url 'login_admin' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group has-feedback field-loginform-username required">
+                            {{ login_form.email }}
+                            <span class="fa fa-envelope form-control-feedback"></span>
+</div>                        <div class="form-group has-feedback field-loginform-password required">
+                            {{ login_form.password }}
+                        <span class="fa fa-lock form-control-feedback"></span>
+</div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="checkbox icheck">
+                                    <input type="hidden" name="LoginForm[rememberMe]" value="0"><label class=""><div class="icheckbox_flat-blue checked" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" id="loginform-rememberme" name="LoginForm[rememberMe]" value="1" checked="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div> Запомнить меня</label>                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <button type="submit" class="btn btn-primary btn-block" name="login-button">Вхід</button>                            </div>
+                        </div>
+
+                    </form>
+                                    </div>
+            </div>
+
+                    </div>
+    </div>
+</div>
+</body>
+
+
+<script href="{% static 'plugins/jquery/jquery.js' %}"></script>
+<script href="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<script href="{% static 'plugins/bootstrap/js/bootstrap-datepicker.min.js' %}"></script>
+<script href="{% static 'dist/js/adminlte.min.js' %}"></script>
+<script href="{% static 'dist/js/main.js' %}"></script>
+<script>
+    function check_text(id){
+    if (id.value !== ''){
+        id.parentElement.setAttribute('class', 'form-group has-success')
+    }else{
+        id.parentElement.setAttribute('class', 'form-group has-error')
+    }
+}
+</script>
+</html>

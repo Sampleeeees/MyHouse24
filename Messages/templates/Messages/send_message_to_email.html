@@ -1,0 +1,7 @@
+{% autoescape off %}
+    Вам написали повідомлення:
+    {{ form.instance.description_mess }}
+
+
+    Посилання для входу: http://{{ domain }}{% url 'login_admin' %}
+{% endautoescape %}

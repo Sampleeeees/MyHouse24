@@ -1,0 +1,249 @@
+{% extends 'Appartament/base.html' %}
+{% block title %}{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <h3>Квартири</h3>
+        <ul class="breadcrumb"><li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li class="active">Квартири</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="pull-right margin-bottom">
+            <a class="btn btn-success mt-2" style="font-size: 12px;" href="{% url 'appartament_create' %}">Додати квартиру</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title"></h3>
+                <div class="box-tools">
+                    <a href="" class="btn btn-default btn-sm">
+                        <span class="hidden-xs">Очистити</span><i class="fa fa-eraser visible-xs" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div id="w0" class="grid-view">
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-light table-bordered table-hover table-striped linkedRow">
+                        <thead>
+                        <tr>
+                            <th style="width: 120px; min-width: 120px"><a href="/admin/flat/index?sort=flat" class="text-decoration-none" data-sort="flat">№ квартири</a></th>
+                            <th style="min-width: 200px"><a href="/admin/flat/index?sort=house_id" class="text-decoration-none" data-sort="house_id">Будинок</a></th>
+                            <th style="width: 160px; min-width: 65px"><a href="/admin/flat/index?sort=section_id" class="text-decoration-none" data-sort="section_id">Секція</a></th>
+                            <th style="width: 160px; min-width: 65px"><a href="/admin/flat/index?sort=floor_id" class="text-decoration-none" data-sort="floor_id">Поверх</a></th>
+                            <th style="min-width: 200px"><a href="/admin/flat/index?sort=user_id" class="text-decoration-none" data-sort="user_id">Власник</a></th>
+                            <th style="width: 120px; min-width: 120px">Залишок (грн)</th>
+                            <th style="width: 80px; min-width: 80px">&nbsp;</th>
+                        </tr>
+                        <tr id="w0-filters" class="filters">
+                            <td><input type="text" class="form-control" id="flat_number" name="flat_number" data-sort="number"></td>
+                            <td>
+                                <select id="flat_home"  class="w-100" name="flat_home">
+                                    <option value=""></option>
+                                    {% for home in houses %}
+                                        <option value="{{ home.id }}">{{ home.name_home }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select name="flat_section" disabled data-placeholder="Оберіть будинок" class="w-100" id="flat_section">
+                                    <option value=""></option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="flat_floor" disabled data-placeholder="Оберіть будинок" class="w-100" id="flat_floor">
+                                    <option value=""></option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="flat_owner" id="flat_owner">
+                                    <option value=""></option>
+                                    {% for user in owners %}
+                                        <option value="{{ user.id }}">{{ user.get_full_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select id="flatsearch-searchhasdebt" class="form-control select2-hidden-accessible" name="FlatSearch[searchHasDebt]" data-s2-options="s2options_7ebc6538" data-krajee-select2="select2_0d896465" style="display:none" tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="1">Есть долг</option>
+                                    <option value="0">Нет долга</option>
+                                </select>
+                                <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;">
+                                    <span class="selection">
+                                        <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-flatsearch-searchhasdebt-container">
+                                            <span class="select2-selection__rendered" id="select2-flatsearch-searchhasdebt-container">
+                                                <span class="select2-selection__placeholder"></span>
+                                            </span>
+                                            <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                        </span>
+                                    </span>
+                                    <span class="dropdown-wrapper" aria-hidden="true"></span>
+                                </span>
+                            </td>
+                            <td>&nbsp;</td>
+                        </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="box-footer">
+                <div>Кількість квартир: <span class="text-bold">{{ object_list.count }}</span></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+    </section>
+    <script>
+     $(document).ready(function () {
+
+         $('#flat_home').select2({
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#flat_section').select2({
+             placeholder: 'Оберіть будинок',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#flat_floor').select2({
+             placeholder: 'Оберіть будинок',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#flat_owner').select2({
+             theme: 'classic'
+         })
+
+         $('#flat_home').on('change', function (){
+             if ($('#flat_home').find('option:selected').val() === '') {
+                 $('#flat_section')[0].setAttribute('disabled', '');
+                 $('#flat_floor')[0].setAttribute('disabled', '');
+                 $('#flat_section')[0].options[0].selected = true;
+                 $('#flat_floor')[0].options[0].selected = true;
+
+             } else {
+                 $.get({
+                url: '{% url 'filter_house' %}',
+                data: {
+                    'house_id': $('#flat_home').find('option:selected').val()
+                },
+                success: function (response){
+                    console.log(JSON.parse(response['sections']));
+                    console.log(JSON.parse(response['all_appartament']))
+                    let sections = JSON.parse(response['sections']);
+                    let floors = JSON.parse(response['floors']);
+                    let all_appartament = JSON.parse(response['all_appartament']);
+                    //Створення select секцій від обраного дому
+                    document.getElementById('flat_section').innerText = '';
+                    document.getElementById('flat_section').innerHTML = '<option value="">Оберіть...</option>';
+                    for(let i=0; i<sections.length; i++){
+                        document.getElementById('flat_section').innerHTML += '<option value="'+ sections[i]["pk"] +'">'+ sections[i]["fields"]["name_section"] +'</option>'
+                    }
+                    //****//
+                    // Стоврення select поверхів від обраного дому
+                    document.getElementById('flat_floor').innerText = '';
+                    document.getElementById('flat_floor').innerHTML = '<option value="">Оберіть...</option>';
+                    for(let j=0; j<floors.length; j++){
+                        document.getElementById('flat_floor').innerHTML += '<option value="'+ floors[j]["pk"] +'">'+ floors[j]["fields"]["name_floor"] +'</option>'
+                    }
+                    //****//
+
+                }
+            })
+                 $('#flat_section')[0].removeAttribute('disabled', 'data-placeholder');
+                 $('#flat_floor')[0].removeAttribute('disabled');
+                 console.log($('#flat_section')[0])
+             }
+         })
+
+        let dataTable = $('.linkedRow').DataTable({
+                'serverSide': true,
+                'searching': false,
+                'autoWidth': false,
+                'ordering': true,
+                'lengthChange': false,
+                'ajax': {
+                    'url': "{% url 'appartament_list_dataTable' %}",
+                    'type': 'GET',
+                    'data': function(d) {
+                        d.flat_numebr = $('#flat_number').val();
+                        d.flat_home = $('#flat_home').val();
+                        d.flat_section = $('#flat_section').val();
+                        d.flat_floor = $('#flat_floor').val();
+                        d.flat_owner = $('#flat_owner').val();
+                    }
+                },
+                'columns': [
+                        {'data': 'number', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if(data != ''){
+                                return data
+                            }else{
+                                return '(не вказано)'
+                            }
+                            }},
+                        {'data': 'home', 'className': 'sortable', 'orderable': true},
+                        {'data': 'section', 'className': 'sortable', 'orderable': true},
+                        {'data': 'floor', 'className': 'sortable', 'orderable': true},
+                        {'data': 'owner', 'className': 'sortable', 'orderable': true},
+                        {'data': 'residual', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if(data != ''){
+                                return data
+                            }else{
+                                return '(не вказано)'
+                            }
+                            }},
+                        {'data': null, 'orderable': false, 'searchable': false, 'render': function(data, type, row, meta) {
+                            // Додаткові іконки для видалення та редагування
+                            return `<div class="btn-group">\
+                                      <a class="btn btn-default btn-sm" href="appartament/update/${data.id}" title="Редагувавти" data-toggle="tooltip"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">\
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>\
+                                    </svg></a>\
+                                      <a class="btn btn-default btn-sm" onclick="check_value('/admin/appartament/delete/${data.id}')" title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+                                    </svg></a>
+                                    </div>`;
+                          }}
+                    ],
+                'language': {
+                    'lengthMenu': '_MENU_ записів на сторінку',
+                    'zeroRecords': 'Нічого не знайдено',
+                    'info': 'Показано _START_ - _END_ з _TOTAL_ записів',
+                    'infoEmpty': 'Показано 0 записів',
+                    'infoFiltered': '(знайдено з _MAX_ записів)',
+                    'pagingType': 'full_numbers',
+                    'paginate': {
+                        'first': 'Перша',
+                        'last': 'Остання',
+                        "next": "&raquo;",
+                        "previous": "&laquo;"
+                    },
+                },
+            });
+
+
+
+         $('#flat_number').keyup(function() {
+             dataTable.draw();
+         });
+
+         $('#flat_home, #flat_section, #flat_floor, #flat_owner').on('change', function (){
+             dataTable.draw();
+         })
+    });
+    </script>
+{% endblock %}

@@ -1,4 +1,125 @@
 {% extends 'Appartament/base.html' %}
 {% block title %}Користувачі{% endblock %}
 {% block content %}
+    <section class="content-header">
+        <h3>Користувачі</h3>
+        <ul class="breadcrumb"><li><a href=""><i class="fa fa-home"></i>Головна</a></li>
+            <li class="active">Користувачі</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px">
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="pull-right margin-bottom">
+            <a class="btn btn-success mt-2" href="{% url 'userCreate' %}" style="font-size: 12px;">Створити користувача</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title"></h3>
+                <div class="box-tools">
+                    <a href="{% url 'usersList' %}" class="btn btn-default btn-sm">
+                        <span class="hidden-xs">Очистити</span><i class="fa fa-eraser visible-xs" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div id="w0" class="grid-view"><div class="box-body table-responsive no-padding">
+                <table class="table table-light table-bordered table-hover table-striped linkedRow">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Користувач</th>
+                        <th>Роль</th>
+                        <th>Телефон</th>
+                        <th>Email (логін)</th>
+                        <th>Статус</th>
+                        <th style="width: 114px; min-width: 114px">&nbsp;</th>
+                    </tr>
+                    <tr id="w0-filters" class="filters">
+                        <td>&nbsp;</td>
+                        <td><input type="text" class="form-control" name="UserAdminSearch[searchFullname]"></td>
+                        <td><select id="useradminsearch-role" class="form-control select2-hidden-accessible" name="UserAdminSearch[role]" data-s2-options="s2options_7ebc6538" data-krajee-select2="select2_0d896465" style="display:none" tabindex="-1" aria-hidden="true">
+                            <option value=""></option>
+                            <option value="admin">Директор</option>
+                            <option value="manager">Керуючий</option>
+                            <option value="accountant">Бухгалтер</option>
+                            <option value="electrician">Електрик</option>
+                            <option value="plumber">Сантехник</option>
+                            </select>
+                            <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;">
+                                <span class="selection">
+                                    <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-useradminsearch-role-container">
+                                    <span class="select2-selection__rendered" id="select2-useradminsearch-role-container"><span class="select2-selection__placeholder"></span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                    </span>
+                                </span>
+                                <span class="dropdown-wrapper" aria-hidden="true"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="UserAdminSearch[phone]">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="UserAdminSearch[email]">
+                        </td>
+                        <td>
+                            <select id="useradminsearch-status" class="form-control select2-hidden-accessible" name="UserAdminSearch[status]" data-s2-options="s2options_7ebc6538" data-krajee-select2="select2_0d896465" style="display:none" tabindex="-1" aria-hidden="true">
+                            <option value=""></option>
+                            <option value="10">Активний</option>
+                            <option value="5">Новий</option>
+                            <option value="0">Неактивний</option>
+                            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-useradminsearch-status-container"><span class="select2-selection__rendered" id="select2-useradminsearch-status-container"><span class="select2-selection__placeholder"></span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span></td><td>&nbsp;</td></tr>
+                </thead>
+                <tbody>
+                {% for user in object_list %}
+                <tr data-href="{% url 'userDetail' user.id %}" data-key="{{ user.id }}">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ user.first_name }} {{ user.middle_name }}</td>
+                    <td>{{ user.role.name }}</td>
+                    <td>{% if user.phone_number %}+38{{ user.phone_number }}{% else %}{% endif %}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if user.get_status_display == 'Активний' %}
+                        <small class="label label-success p-1 rounded text-bold">{{ user.get_status_display}}</small>
+                        {% elif user.get_status_display == 'Новий' %}
+                        <small class="label label-warning p-1 rounded text-bold">{{ user.get_status_display}}</small>
+                        {% elif user.get_status_display == 'Неактивний' %}
+                        <small class="label label-danger p-1 rounded text-bold">{{ user.get_status_display}}</small>
+                        {% else %}
+                        {% endif %}
+
+                    </td>
+                    <td>
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-default btn-sm" href="{% url 'send_invite_to_email' user.id %}" title="Відправити запрошення" data-toggle="tooltip">
+                                <svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                                </svg>
+                            </a>
+                            <a class="btn btn-default btn-sm" href="{% url 'userUpdate' user.id %}" title="Редагувавти" data-toggle="tooltip"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                                </svg></a>
+                            <a class="btn btn-default btn-sm"  onclick="check_value('{% url 'userDelete' user.id %}')"  title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                </svg></a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody></table></div>
+            <div class="box-footer clearfix"><ul class="pagination pagination-sm no-margin pull-right"><li class="prev disabled"><span>«</span></li>
+            <li class="active"><a href="/admin/user-admin/index?page=1&amp;per-page=50" data-page="0">1</a></li>
+            <li><a href="/admin/user-admin/index?page=2&amp;per-page=50" data-page="1">2</a></li>
+            <li class="next"><a href="/admin/user-admin/index?page=2&amp;per-page=50" data-page="1">»</a></li></ul></div></div>
+        </div>
+    </div>
+</div>
+    </section>
+
 {% endblock %}

@@ -24,7 +24,9 @@ urlpatterns = [
     path('admin/', include('Appartament.urls')),
     path('user/', include('User.urls')),
     path('admin/house/', include('House.urls')),
-    path('admin/setting/', include('Tarrif_and_services.urls'))
+    path('admin/setting/', include('Tarrif_and_services.urls')),
+    path('admin/messages/', include('Messages.urls')),
+    path('admin/master_appliactions/', include('Master_application.urls')),
 ]
 
 if bool(settings.DEBUG):

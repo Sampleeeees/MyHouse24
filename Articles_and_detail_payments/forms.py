@@ -11,15 +11,12 @@ class PaymentForm(ModelForm):
             'information': forms.Textarea(attrs={'class': 'form-control', 'style': 'font-size: 14px;'})
         }
 
-Type_choice = {
-    (None, 'Прихід'),
-    (1000, 'Розхід')
-}
 class ArticleForm(ModelForm):
     class Meta:
         model = Article
         fields = ['name_article', 'type']
         widgets = {
-            'name_article': forms.TextInput(attrs={'class': 'form-control', 'style': 'font-size: 14px;'}),\
-            'type': forms.ChoiceField(choices=Type_choice)
+            'name_article': forms.TextInput(attrs={'class': 'form-control', 'style': 'font-size: 14px;'}),
+            'type': forms.Select(attrs={'class': 'form-select'})
         }
+
