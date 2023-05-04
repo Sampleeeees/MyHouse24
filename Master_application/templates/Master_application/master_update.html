@@ -1,0 +1,295 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <h1>Заявка№{{ object.id }}</h1>
+        <ul class="breadcrumb"><li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="{% url 'master_list' %}">Заявка виклику майстра</a></li>
+            <li><a href="">Заявка№{{ object.id }}</a></li>
+            <li class="active">Редагування</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+        <form id="w0" action="{% url 'master_update' pk=object.id %}" method="post">
+            {% csrf_token %}
+            <div class="row mt-2">
+                <div class="col-xs-12 col-md-7 col-lg-6">
+                    <div class="page-header-spec">
+                        <div class="form-group field-masterrequest-date_request ">
+                            <div id="masterrequest-date_request-kvdate" class="input-group  date">
+                               {{ form.date_master }}
+                                <svg width="33px" height="33px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+                                </svg>
+
+
+                            </div>
+                        </div>
+                        <span class="label-mid">от</span>
+                        <div class="form-group field-masterrequest-time_request has-success">
+
+                            <div class="input-group bootstrap-timepicker">
+                                <div class="bootstrap-timepicker-widget dropdown-menu">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <a href="#" data-action="incrementHour"><i class="glyphicon glyphicon-chevron-up"></i></a>
+                                            </td>
+                                            <td class="separator">&nbsp;</td>
+                                            <td>
+                                                <a href="#" data-action="incrementMinute"><i class="glyphicon glyphicon-chevron-up"></i></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="bootstrap-timepicker-hour">21</span></td>
+                                            <td class="separator">:</td>
+                                            <td><span class="bootstrap-timepicker-minute">30</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a href="#" data-action="decrementHour"><i class="glyphicon glyphicon-chevron-down"></i></a>
+                                            </td>
+                                            <td class="separator"></td>
+                                            <td>
+                                                <a href="#" data-action="decrementMinute"><i class="glyphicon glyphicon-chevron-down"></i></a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <input type="text" id="masterrequest-time_request" class="form-control" name="MasterRequest[time_request]" aria-invalid="false">
+
+
+                                    <svg width="33px" height="33px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-body">
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-6">
+                            <div class="form-group">
+                                <label for="{{ form.ownerAppartament.id_for_label }}">Власник квартири</label>
+                                {{ form.ownerAppartament }}
+                            </div>
+                        </div>
+
+
+                        <div class="col-xs-12 col-md-6">
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="form-group field-{{ form.description_problem.name }} required">
+                                <label class="control-label" for="{{ form.description_problem.id_for_label }}">Опис проблеми</label>
+                               {{ form.description_problem }}
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="form-group field-{{ form.appartament.name }} required ">
+                                <label class="control-label" for="{{ form.appartament.id_for_label }}">Квартира</label>
+                                {{ form.appartament }}
+                            </div>
+                            <div class="form-group field-{{ form.typeMaster.name }}">
+                                <label class="control-label" for="{{ form.typeMaster.id_for_label }}">Тип майстра</label>
+                                {{ form.typeMaster }}
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group field-{{ form.status.name }} required">
+                                <label class="control-label" for="{{ form.status.id_for_label }}">Статус</label>
+                                {{ form.status }}
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group field-{{ form.name_master.name }}">
+                                <label class="control-label" for="{{ form.name_master.id_for_label }}">Майстер</label>
+                                {{ form.name_master }}
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group field-{{ form.comment.name }}">
+                                <label class="control-label" for="{{ form.comment.id_for_label }}">Коментар</label>
+                                <ul class="wysihtml5-toolbar" style="">
+                                    <li class="dropdown">
+                                        <a class="btn btn-default dropdown-toggle btn-none" data-toggle="dropdown">
+
+                                            <span class="fa fa-font"></span>
+
+                                            <span class="current-font">Звичайний текст</span>
+                                            <b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p" tabindex="-1" href="javascript:;" unselectable="on">Обычный текст</a>
+                                            </li>
+                                            <li>
+                                                <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 1</a>
+                                            </li>
+                                            <li>
+                                                <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 2</a>
+                                            </li>
+                                            <li>
+                                                <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 3</a>
+                                            </li>
+                                            <li>
+                                                <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h4" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 4</a>
+                                            </li>
+                                            <li>
+                                                <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h5" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 5</a>
+                                            </li>
+                                            <li>
+                                                <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h6" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 6</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <div class="btn-group">
+                                            <a class="btn btn-none btn-default" data-wysihtml5-command="bold" title="CTRL+B" tabindex="-1" href="javascript:;" unselectable="on">Полужирный</a>
+                                            <a class="btn btn-none btn-default" data-wysihtml5-command="italic" title="CTRL+I" tabindex="-1" href="javascript:;" unselectable="on">Курсив</a>
+                                            <a class="btn btn-none btn-default" data-wysihtml5-command="underline" title="CTRL+U" tabindex="-1" href="javascript:;" unselectable="on">Подчёркнутый</a>
+
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="btn-group">
+                                            <a class="btn btn-none btn-default" data-wysihtml5-command="insertUnorderedList" title="Маркированный список" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                                <span class="fa fa-list-ul"></span>
+
+                                            </a>
+                                            <a class="btn btn-none btn-default" data-wysihtml5-command="insertOrderedList" title="Нумерованный список" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                                <span class="fa fa-list-ol"></span>
+
+                                            </a>
+                                            <a class="btn btn-none btn-default" data-wysihtml5-command="Outdent" title="Уменьшить отступ" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                                <span class="fa fa-outdent"></span>
+
+                                            </a>
+                                            <a class="btn btn-none btn-default" data-wysihtml5-command="Indent" title="Увеличить отступ" tabindex="-1" href="javascript:;" unselectable="on">
+
+                                                <span class="fa fa-indent"></span>
+
+                                            </a>
+                                        </div>
+                                    </li>
+                                </ul>
+                               {{ form.comment }}
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            <div class="form-group">
+                                <a href="{% url 'master_create' %}" class="btn btn-default">Відмінити</a>
+                                <button type="submit" class="btn btn-success">Зберегти</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+    <script>
+    $('#id_ownerAppartament').on('change', function (){
+        let appartament = $('#id_appartament')[0];
+        let ownerAppart = $('#id_ownerAppartament')[0];
+        if($('#id_ownerAppartament').find('option:selected').val() !== ''){
+            appartament.removeAttribute('disabled');
+            appartament.removeAttribute('title');
+            appartament.classList.add('has-select-wait')
+            ownerAppart.classList.add('has-select-success')
+            ownerAppart.classList.remove('has-select-error', 'has-select-wait')
+            $.get({
+                url: '{% url 'filter_master_appartament' %}',
+                data: {
+                    'owner_id': $('#id_ownerAppartament').find('option:selected').val()
+                },
+                success: function (response){
+                    let appartaments = JSON.parse(response['appartaments'])
+                    let houses = JSON.parse(response['houses'])
+                    console.log(appartaments)
+                    console.log(houses)
+                    document.getElementById('id_appartament').innerText = '';
+                    document.getElementById('id_appartament').innerHTML = '<option value="">Оберіть...</option>';
+                    for (let i=0; i<appartaments.length; i++){
+                        for (let j=0; j<houses.length; j++){
+                            if(appartaments[i]['fields']['house'] === houses[j]['pk']){
+                                document.getElementById('id_appartament').innerHTML += '<option value="'+ appartaments[i]["pk"] +'">'+ appartaments[i]["fields"]["number_appartament"] + ', ' + houses[j]['fields']['name_home'] +'</option>'
+                            }
+                        }
+                    }
+                }
+            })
+        }else{
+            appartament.setAttribute('disabled', '')
+            appartament.options[0].selected = true;
+            ownerAppart.classList.add('has-select-error')
+            ownerAppart.classList.remove('has-select-success', 'has-select-wait')
+            appartament.setAttribute('title', 'Спочатку оберіть власника квартири')
+            appartament.classList.remove('has-select-wait', 'has-select-success', 'has-select-error')
+        }
+    })
+
+    $('#id_typeMaster').on('change', function (){
+        let typeMaster = $('#id_typeMaster')[0];
+        console.log(typeMaster)
+        if ($('#id_typeMaster').find('option:selected').val() !== ''){
+            typeMaster.classList.add('has-select-success')
+            typeMaster.classList.remove('has-select-wait')
+        }else{
+            typeMaster.classList.add('has-select-wait')
+            typeMaster.classList.remove('has-select-success')
+        }
+    })
+
+    $('#id_status').on('change', function (){
+        let status = $('#id_status')[0];
+        status.classList.add('has-select-success')
+    })
+
+    $('#id_appartament').on('change', function (){
+        let appart = $('#id_appartament')[0];
+        appart.classList.remove('has-select-wait')
+        if($('#id_appartament').find('option:selected').val() != ''){
+            appart.classList.add('has-select-success');
+            appart.classList.remove('has-select-error', 'has-select-wait')
+        }else{
+             appart.classList.add('has-select-error');
+            appart.classList.remove('has-select-success', 'has-select-wait')
+        }
+    })
+
+    $('#id_name_master').on('change', function (){
+        let name_master = $('#id_name_master')[0]
+        name_master.classList.remove('has-select-wait')
+        if($('#id_name_master').find('option:selected').val() !== ''){
+            name_master.classList.remove('has-select-error', 'has-select-wait')
+            name_master.classList.add('has-select-success')
+        }else{
+            name_master.classList.remove('has-select-success', 'has-select-wait')
+            name_master.classList.add('has-select-error')
+        }
+    })
+
+
+    </script>
+{% endblock %}

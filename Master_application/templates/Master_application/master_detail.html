@@ -1,0 +1,122 @@
+{% extends 'Appartament/base.html' %}
+
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <section class="content-header" style="font-size: 12px;">
+        <h1>Заявка№{{ object.id }}</h1>
+        <ul class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-home"></i> Главная</a></li>
+            <li><a href="/admin/master-request/index">Заявки вызова мастера</a></li>
+            <li class="active">Заявка№{{ object.id }}</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+
+        <div class="row">
+            <div class="col-xs-12 col-md-7 col-lg-6">
+                <div class="page-header-spec">
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </div>
+                            <div class="form-control pull-right">23.04.2023</div>
+                        </div>
+                    </div>
+                    <span class="label-mid">от</span>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-time"></i>
+                            </div>
+                            <div class="form-control pull-right">20:03</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"></h3>
+                        <div class="box-tools">
+                            <a href="{% url 'master_update' pk=object.id %}" class="btn btn-primary btn-sm">
+                                <span class="hidden-xs" style="font-size: 12px;">Редактировать заявку</span><i class="fa fa-pencil visible-xs" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-light table-bordered table-striped table-view">
+                            <tbody>
+                            <tr>
+                                <td>Статус</td>
+                                <td>
+                                    {% if object.status == 'Нове' %}
+                                    <small class="label label-primary rounded text-bold p-1">{{ object.status }}</small>
+                                    {% elif object.status == 'В роботі' %}
+                                    <small class="label label-warning rounded text-bold p-1">{{ object.status }}</small>
+                                    {% elif object.status == 'Виконано' %}
+                                    <small class="label label-success rounded text-bold p-1">{{ object.status }}</small>
+                                    {% else %}
+                                        <small>(не вказано)</small>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Владелец</td>
+                                <td>
+                                    <a href="{% url 'owner_appartament_update' pk=object.ownerAppartament.id %}">
+                                        {{ object.ownerAppartament.get_full_name }} </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Телефон</td>
+                                <td>{% if object.ownerAppartament.phone_number != None or object.ownerAppartament.phone_number != '' %}
+                                    +{{ object.ownerAppartament.phone_number }}
+                                {% else %}
+                                    (не вказано)
+                                {% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Квартира</td>
+                                <td>
+                                    <a href="{% url 'appartament_detail' pk=object.appartament.id %}">
+                                        №{{ object.appartament.number_appartament }}, {{ object.appartament.house.name_home }} </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Тип мастера</td>
+                                <td>{{ object.typeMaster.name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Мастер</td>
+                                <td>
+                                    {% if object.name_master != '' %}
+                                        {{ object.name_master.role.name }} - {{ object.name_master.get_full_name }}
+                                    {% else %}
+                                        (не вказано)
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Описание</td>
+                                <td>
+                                    {{ object.description_problem }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Добавлено</td>
+                                <td>26.04.2023 - 20:03</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

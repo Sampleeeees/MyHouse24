@@ -32,6 +32,29 @@ class MasterCreate(CreateView):
         context = super(MasterCreate, self).get_context_data(**kwargs)
         return context
 
+class MasterUpdate(UpdateView):
+    form_class = MasterForm
+    model = MatsterApplication
+    template_name = 'Master_application/master_update.html'
+    success_url = reverse_lazy('master_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(MasterUpdate, self).get_context_data(**kwargs)
+        return context
+
+    def form_valid(self, form):
+        return super().form_valid(form=form)
+
+class MasterDetail(DetailView):
+    model = MatsterApplication
+    template_name = 'Master_application/master_detail.html'
+
+class MasterDelete(DeleteView):
+    model = MatsterApplication
+    success_url = reverse_lazy('master_list')
+
+    def get(self, request, *args, **kwags):
+        return self.delete(self, request, *args, *kwags)
 
 def filter_master_appartament(request):
     print(request.GET.get('owner_id'))
