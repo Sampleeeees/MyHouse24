@@ -1,117 +1,104 @@
 {% extends 'Appartament/base.html' %}
 {% load static %}
-
 {% block title %}{% endblock %}
-
 {% block content %}
-    <section class="content-header">
-        <h1>Новий показаник </h1>
+    <section class="content-header" style="font-size: 12px;">
+        <h1>Новий особовий рахунок </h1>
         <ul class="breadcrumb">
-            <li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
-            <li><a href="/admin/counter-data/counters">Лічильники</a></li>
-            <li class="active">Новий показник</li>
+            <li><a href=""><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="">Особові рахунки</a></li>
+            <li class="active">Новий особовий рахунок</li>
         </ul>
     </section>
     <section class="content">
 
 
-        <form id="w0" action="{% url 'Meter_data_create' %}" method="post">
+        <form id="w0" action="{% url 'PersonalUpdate' pk=object.id %}" method="post" style="font-size: 12px;">
             {% csrf_token %}
             <div class="row">
                 <div class="col-xs-12 col-md-7 col-lg-6">
                     <div class="page-header-spec">
-                        <div class="form-group field-counterdata-uid required">
-                            <div class="input-group mt-2">
-                                <div class="input-group-addon" style="align-self: center;">
+                        <div class="form-group field-account-uid required mt-2 ml-2">
+                            <div class="input-group">
+                                <div class="input-group-addon" style="align-self: center; font-size: 14px;">
                                     №
                                 </div>
                                 {{ form.uid }}
                             </div>
-                        </div>
-                        <span class="label-mid">від</span>
-                        <div class="form-group field-counterdata-uid_date mt-2">
-                            {{ form.date_published }}
+                                    {% if form.uid.errors %}
+                                        <style>
+                                          #id_uid::placeholder {
+                                            color: red;
+                                          }
+                                        </style>
+                                        <script>
+                                            console.log($('#id_uid'))
+                                        $('#id_uid')[0].value = '';
+                                        $('#id_uid')[0].placeholder= '{{ form.uid.errors.0 }}';
+                                        </script>
+                                        <p>{{ form.uid.error }}</p>
+                                    {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="box">
                 <div class="box-body">
-                    <input type="hidden" id="counterdata-id" name="CounterData[id]">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-6">
-                            <div class="form-group">
-                                <label for="{{ form.house.id_for_label }}">Будинок</label>
-                                {{ form.house }}
-                                </div>
-                            <div class="form-group">
-                                <label for="{{ form.section.id_for_label }}">Секція</label>
-                                {{ form.section }}</div>
-                            <div class="form-group required">
-                                <label class="control-label" for="{{ form.appartament.id_for_label }}">Квартира</label>
-                                {{ form.appartament }}
-
-                                <div class="help-block"></div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="{{ form.meter.id_for_label }}">Лічильник</label>
-                                {{ form.meter }}
-
-                                <div class="help-block"></div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label" for="counterdata-status">Статус</label>
+                        <div class="col-xs-12">
+                            <div class="form-group field-account-status">
+                                <label class="control-label" for="account-status">Статус</label>
                                 {{ form.status }}
 
-                                <div class="help-block"></div>
+                                <div class="help-block">
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" for="{{ form.meters_data.id_for_label }}">Показник лічильника</label>
-                                {{ form.meters_data }}
-
-                                <div class="help-block"></div>
+                                <label for="house_id">Будинок</label>
+                                {{ form.house }}
                             </div>
+                            <div class="form-group">
+                                <label for="section_id">Секція</label>
+                                {{ form.section }}
+                            </div>
+                            <div class="form-group field-account-flat_id">
+                                <label class="control-label" for="account-flat_id">Квартира</label>
+                                {{ form.appartament }}
+
+                                <div class="help-block">
+                                    {% if form.appartament.errors %}
+                                        <p class=" mt-2 text-red" style="font-size: 13px; font-weight: bold;">{{ form.appartament.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <p><b>Власник:</b> <span id="user-fullname">не обраний</span></p>
+                            <p><b>Телефон:</b> <span id="user-phone">не обраний</span></p>
                         </div>
                     </div>
                     <div class="row">
-                        {% if form.errors %}
-                            {{ form.errors }}
-                        {% endif %}
                         <div class="col-xs-12 text-right">
                             <div class="form-group">
-                                <a href="{% url 'Meter_data_create' %}" class="btn btn-default margin-bottom-15">Відмінити</a>
-                                <input type="submit" class="btn btn-success margin-bottom-15" name="action_save" value="Зберегти">
-                                <input type="submit" class="btn btn-success margin-bottom-15 bg-green-active" name="action_save_add" value="Зберегти та додати новий показник">
+                                <a href="{% url 'PersonalCreate' %}" class="btn btn-default">Відмінити</a>
+                                <button type="submit" class="btn btn-success">Зберегти</button>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
-    </section>
+    </section>\>
     <script>
-    $(document).ready(function (){
-        $('#id_status')[0][0].setAttribute('value', '');
-        $('#id_meter')[0][0].setAttribute('value', '');
-
-        $('#id_meter').change(function (){
-            if($('#id_meter').find('option:selected').val() !== ''){
-                     $('#id_meter')[0].classList.add('has-select-success')
-                     $('#id_meter')[0].classList.remove("has-select-error", 'has-select-wait')
-                 }else{
-                     $('#id_meter')[0].classList.add('has-select-error')
-                     $('#id_meter')[0].classList.remove('has-select-success', 'has-select-error')
-                 }
-        })
+         $(document).ready(function (){
+             document.getElementById('id_section_select').removeAttribute('disabled');
+             document.getElementById('id_appartament_select').removeAttribute('disabled');
              $('#id_status').change(function (){
                  if($('#id_status').find('option:selected').val() !== ''){
-                     $('#id_status')[0].classList.add('has-select-success')
-                     $('#id_status')[0].classList.remove("has-select-error", 'has-select-wait')
+                     $('#id_status').classList.add('has-select-success')
+                     $('#id_status').classList.remove("has-select-error", 'has-select-wait')
                  }else{
-                     $('#id_status')[0].classList.add('has-select-error')
-                     $('#id_status')[0].classList.remove('has-select-success', 'has-select-error')
+                     $('#id_status').classList.add('has-select-error')
+                     $('#id_status').classList.remove('has-select-success', 'has-select-error')
                  }
              })
              $("#id_house_select").on('change', (function (){

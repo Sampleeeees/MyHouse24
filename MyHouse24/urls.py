@@ -28,7 +28,7 @@ urlpatterns = [
     path('admin/messages/', include('Messages.urls')),
     path('admin/master_appliactions/', include('Master_application.urls')),
     path('admin/meter_data/', include('Meters_data.urls')),
-    path('admin/personal_book', include('Personal_book.urls'))
+    path('admin/personal_book/', include('Personal_book.urls'))
 ]
 
 if bool(settings.DEBUG):

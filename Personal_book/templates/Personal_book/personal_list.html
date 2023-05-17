@@ -57,8 +57,8 @@
                         Оберіть дію <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="text-decoration-none dropdown-item" href="">Додати особистий рахунок</a></li>
-                        <li><a class="text-decoration-none dropdown-item" href="">Вигрузити в Exel</a></li>
+                        <li><a class="text-decoration-none dropdown-item" href="{% url 'PersonalCreate' %}">Додати особистий рахунок</a></li>
+                        <li><a class="text-decoration-none dropdown-item" href="" onclick="exportToExcel()">Вигрузити в Exel</a></li>
                     </ul>
                 </div>
             </div>
@@ -98,7 +98,7 @@
                                             <option value="Неактивний">Неактивний</option>
                                         </select>
                                     </td>
-                                    <td><input type="text" class="form-control w-100" name="personal_flat"></td>
+                                    <td><input type="text" class="form-control w-100" id="personal_flat" name="personal_flat"></td>
                                     <td>
                                         <select name="personal_house" class="w-100" id="personal_house">
                                             <option value=""></option>
@@ -130,7 +130,7 @@
                                     <td>&nbsp;</td>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody name="tbody">
                                 </tbody>
                             </table>
                         </div>
@@ -236,7 +236,15 @@
                                 return '(не вказано)'
                             }
                             }},
-                        {'data': 'status', 'className': 'sortable', 'orderable': true},
+                        {'data': 'status', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if(data === 'Активний'){
+                             return '<small class="label label-success p-1 rounded text-bold">'+data+'</small>'
+                            }else if(data === 'Неактивний'){
+                                return '<small class="label label-danger p-1 rounded text-bold">'+data+'</small>'
+                            }else{
+                                return 'Помилка'
+                            }
+                            }},
                         {'data': 'flat', 'className': 'sortable', 'orderable': true},
                         {'data': 'house', 'className': 'sortable', 'orderable': true},
                         {'data': 'section', 'className': 'sortable', 'orderable': true},
@@ -251,10 +259,10 @@
                         {'data': null, 'orderable': false, 'searchable': false, 'render': function(data, type, row, meta) {
                             // Додаткові іконки для видалення та редагування
                             return `<div class="btn-group">\
-                                      <a class="btn btn-default btn-sm" href="appartament/update/${data.id}" title="Редагувавти" data-toggle="tooltip"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">\
+                                      <a class="btn btn-default btn-sm" href="update/${data.id}" title="Редагувавти" data-toggle="tooltip"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">\
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>\
                                     </svg></a>\
-                                      <a class="btn btn-default btn-sm" onclick="check_value('/admin/appartament/delete/${data.id}')" title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                      <a class="btn btn-default btn-sm" onclick="check_value('delete/${data.id}')" title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                       <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
                                     </svg></a>
                                     </div>`;
@@ -285,6 +293,8 @@
          $('#personal_status, #personal_section, #personal_owner, #personal_house, #personal_residual').on('change', function (){
              dataTable.draw();
          })
+
     });
+
     </script>
 {% endblock %}

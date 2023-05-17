@@ -11,6 +11,11 @@ class House(models.Model):
     image4 = models.ImageField(upload_to='house/image/', blank=True, null=True)
     image5 = models.ImageField(upload_to='house/image/', blank=True, null=True)
     staff = models.ManyToManyField(User, related_name='ПрацівникиУБудинку', blank=True, null=True)
+    def __str__(self):
+        return self.name_home
+
+    def natural_key(self):
+        return self.name_home
 
 class Floor(models.Model):
     name_floor = models.CharField(max_length=100)

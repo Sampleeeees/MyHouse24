@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'Statement.apps.StatementConfig',
     'Tarrif_and_services.apps.TarrifAndServicesConfig',
     'User.apps.UserConfig',
+    'openpyxl'
 ]
 
 MIDDLEWARE = [

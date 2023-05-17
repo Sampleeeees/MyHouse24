@@ -2,7 +2,8 @@ from django.core.paginator import Paginator
 from django.core.serializers import serialize
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import render
+from .forms import MeterForm
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from House.models import House, Section
 from Tarrif_and_services.models import Service
@@ -28,18 +29,31 @@ class MeterDataCreate(CreateView):
     model = MetersData
     template_name = 'Meters_data/meter_data_create.html'
     success_url = reverse_lazy('Meter_data_list')
+    form_class = MeterForm
 
     def get_context_data(self, **kwargs):
         context = super(MeterDataCreate, self).get_context_data(**kwargs)
+        context['houses'] = House.objects.all()
+        context['meters'] = Service.objects.filter(status_view=True)
         return context
 
     def form_valid(self, form):
-        return super().form_valid(form=form)
-
+        checking = self.request.POST == 'action_save_add'
+        print(checking)
+        if self.request.POST.get('action_save'):
+            form.save()
+            print('Action save')
+            return redirect('Meter_data_list')
+        elif self.request.POST.get('action_save_add'):
+            form.save()
+            print('Action add save')
+            return redirect('Meter_data_create')
 
 class MeterDataDetail(DetailView):
     model = MetersData
     template_name = 'Meters_data/meter_data_detail.html'
+
+
 
 
 
