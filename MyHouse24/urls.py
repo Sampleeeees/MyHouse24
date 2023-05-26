@@ -34,5 +34,5 @@ urlpatterns = [
     path('admin/statement/', include('Statement.urls'))
 ]
 
-if bool(settings.DEBUG):
+if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
