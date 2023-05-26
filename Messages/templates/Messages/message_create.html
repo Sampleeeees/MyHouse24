@@ -1,0 +1,278 @@
+{# Базовий шаблон #}
+{% extends 'Appartament/base.html' %}
+
+{# Загружаємо статику #}
+{% load static %}
+
+{# Назва сторінки #}
+{% block title %}Створити повідомлення{% endblock %}
+
+{# Вміст сторінки #}
+{% block content %}
+    <section class="content-header">
+        <h3>Нове повідомлення</h3>
+        <ul class="breadcrumb"><li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="{% url 'message_list' %}">Повідомлення</a></li>
+            <li class="active">Нове повідомлення</li>
+        </ul>
+    </section>
+    <section class="content">
+        <div class="box">
+            <form id="w0" action="{% url 'message_create' %}" method="post">
+                {% csrf_token %}
+                <div class="box-header with-border">
+        <h3 class="box-title"></h3>
+    </div>
+    <div class="box-body">
+
+        <div class="form-group field-message-name required">
+            {{ form.title_mess }}
+
+<div class="help-block"></div>
+</div>        <div class="form-group field-message-description required has-error">
+<ul class="wysihtml5-toolbar" style=""><li class="dropdown">
+  <a class="btn btn-default dropdown-toggle btn-none" data-toggle="dropdown">
+
+      <span class="fa fa-font"></span>
+
+    <span class="current-font">Обычный текст</span>
+    <b class="caret"></b>
+  </a>
+  <ul class="dropdown-menu">
+    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p" tabindex="-1" href="javascript:;" unselectable="on">Обычный текст</a></li>
+    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 1</a></li>
+    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 2</a></li>
+    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 3</a></li>
+    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h4" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 4</a></li>
+    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h5" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 5</a></li>
+    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h6" tabindex="-1" href="javascript:;" unselectable="on">Заголовок 6</a></li>
+  </ul>
+</li>
+<li>
+  <div class="btn-group">
+    <a class="btn btn-none btn-default" data-wysihtml5-command="bold" title="CTRL+B" tabindex="-1" href="javascript:;" unselectable="on">Полужирный</a>
+    <a class="btn btn-none btn-default" data-wysihtml5-command="italic" title="CTRL+I" tabindex="-1" href="javascript:;" unselectable="on">Курсив</a>
+    <a class="btn btn-none btn-default" data-wysihtml5-command="underline" title="CTRL+U" tabindex="-1" href="javascript:;" unselectable="on">Подчёркнутый</a>
+
+  </div>
+</li>
+<li>
+  <div class="btn-group">
+    <a class="btn btn-none btn-default" data-wysihtml5-command="insertUnorderedList" title="Маркированный список" tabindex="-1" href="javascript:;" unselectable="on">
+
+      <span class="fa fa-list-ul"></span>
+
+    </a>
+    <a class="btn btn-none btn-default" data-wysihtml5-command="insertOrderedList" title="Нумерованный список" tabindex="-1" href="javascript:;" unselectable="on">
+
+      <span class="fa fa-list-ol"></span>
+
+    </a>
+    <a class="btn btn-none btn-default" data-wysihtml5-command="Outdent" title="Уменьшить отступ" tabindex="-1" href="javascript:;" unselectable="on">
+
+      <span class="fa fa-outdent"></span>
+
+    </a>
+    <a class="btn btn-none btn-default" data-wysihtml5-command="Indent" title="Увеличить отступ" tabindex="-1" href="javascript:;" unselectable="on">
+
+      <span class="fa fa-indent"></span>
+
+    </a>
+  </div>
+</li>
+</ul>
+      {{ form.description_mess }}
+</div>
+        <div class="row">
+
+            <div class="col-xs-12 col-md-6">
+                <h4>Кому отправить:</h4>
+
+
+                    <div class="form-group field-messageaddress-user_has_debt">
+
+<input type="hidden" name="MessageAddress[user_has_debt]" value="0"><label><input type="checkbox" id="messageaddress-user_has_debt" class="" name="MessageAddress[user_has_debt]" value="1"> Владельцам с задолженностями</label>
+
+<div class="help-block"></div>
+</div>
+                    <div class="form-group field-messageaddress-house_id">
+<label class="control-label" for="messageaddress-house_id">ЖК</label>
+{{ form.house }}
+
+<div class="help-block"></div>
+</div>
+                    <div class="form-group field-messageaddress-section_id">
+<label class="control-label" for="messageaddress-section_id">Секция</label>
+{{ form.section }}
+
+<div class="help-block"></div>
+</div>
+                                        <div class="form-group field-messageaddress-floor_id">
+<label class="control-label" for="messageaddress-floor_id">Этаж</label>
+{{ form.floor }}
+
+<div class="help-block"></div>
+</div>
+                    <div class="form-group field-messageaddress-flat_id">
+<label class="control-label" for="messageaddress-flat_id">Квартира</label>
+{{ form.appartament }}
+
+<div class="help-block"></div>
+</div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="box-footer">
+        <div class="pull-right">
+            <button type="submit" class="btn btn-success">
+                <svg height="20px" width="20px" xmlns="http://www.w3.org/2000/svg" class="mb-1" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+                Отправить</button>
+        </div>
+    </div>
+</form>
+</div>
+    </section>
+    <script>
+
+
+    $('#id_house_select').on('change', function (){
+        let house_id = $('#id_house_select').find('option:selected').val()
+        console.log(house_id)
+        let house_object = $('#id_house_select')[0];
+        let section_wait = $('#id_section_select')[0];
+        let floor_wait = $('#id_floor_select')[0];
+        let appartament_wait = $('#id_appartament_select')[0];
+        if(house_id != ''){
+            //Кольори обводки полів селект//
+            house_object.classList.add('has-select-success');
+            house_object.classList.remove('has-select-error');
+
+            section_wait.classList.add('has-select-wait');
+            floor_wait.classList.add('has-select-wait');
+            //****//
+            document.getElementById('id_section_select').removeAttribute('disabled');
+            document.getElementById('id_floor_select').removeAttribute('disabled');
+            $.get({
+                url: '{% url 'filter_messages' %}',
+                data: {
+                    'house_id': house_id,
+                },
+                success: function (response){
+                    console.log(JSON.parse(response['sections']));
+                    console.log(JSON.parse(response['floors']));
+                    let section_id = $('#id_section_select').find('option:selected').val()
+                    let floor_id = $('#id_floor_select').find('option:selected').val()
+                    let sections = JSON.parse(response['sections']);
+                    let floors = JSON.parse(response['floors']);
+
+                    document.getElementById('id_section_select').innerText = '';
+                    document.getElementById('id_section_select').innerHTML = '<option value="">Оберіть...</option>';
+                    for (let i=0; i<sections.length; i++){
+                        document.getElementById('id_section_select').innerHTML += '<option value="'+ sections[i]["pk"] +'">'+ sections[i]["fields"]["name_section"] +'</option>'
+                    }
+
+
+                    document.getElementById('id_floor_select').innerText = '';
+                    document.getElementById('id_floor_select').innerHTML = '<option value="">Оберіть...</option>';
+                    for(let j=0; j<floors.length; j++){
+                        document.getElementById('id_floor_select').innerHTML += '<option value="'+ floors[j]["pk"] +'">'+ floors[j]["fields"]["name_floor"] +'</option>'
+                    }
+
+                }
+            })
+        }else{
+            console.log('Close')
+            house_object.classList.add('has-select-error');
+            house_object.classList.remove('has-select-success');
+
+            section_wait.classList.remove('has-select-success', 'has-select-wait', 'has-select-error');
+            floor_wait.classList.remove('has-select-success', 'has-select-wait', 'has-select-error');
+            appartament_wait.classList.remove('has-select-success', 'has-select-wait', 'has-select-error');
+            document.getElementById('id_section_select').setAttribute('disabled', '');
+            document.getElementById('id_section_select').options[0].selected = true;
+            document.getElementById('id_floor_select').setAttribute('disabled', '');
+            document.getElementById('id_floor_select').options[0].selected = true;
+            document.getElementById('id_appartament_select').setAttribute('disabled', '');
+            document.getElementById('id_appartament_select').options[0].selected = true;
+            document.getElementById('id_house_select').setAttribute('value', '')
+        }
+    })
+
+
+    $('#id_section_select').on('change', function (){
+        let section_select = $('#id_section_select').find('option:selected').val()
+        let section_object = $('#id_section_select')[0]
+        section_object.classList.remove('has-select-wait')
+        console.log(section_select)
+        if(section_select != ''){
+            console.log('Work section')
+            section_object.classList.add('has-select-success');
+            section_object.classList.remove('has-select-error');
+        }else{
+            console.log('its zero')
+            section_object.classList.add('has-select-error');
+            section_object.classList.remove('has-select-success');
+        }
+        appartament()
+    })
+    $('#id_floor_select').on('change', function (){
+        let floor_select = $('#id_floor_select').find('option:selected').val()
+        let floor_object = $('#id_floor_select')[0]
+        floor_object.classList.remove('has-select-wait');
+        console.log(floor_select)
+        if(floor_select != ''){
+            console.log('Work section')
+            floor_object.classList.add('has-select-success');
+            floor_object.classList.remove('has-select-error');
+        }else{
+            console.log('its zero')
+            floor_object.classList.add('has-select-error');
+            floor_object.classList.remove('has-select-success');
+        }
+        appartament()
+    })
+
+
+
+
+    function appartament() {
+        let appartament = document.getElementById('id_appartament_select')
+        let house_select = $('#id_house_select').find('option:selected').val()
+        let section_select = $('#id_section_select').find('option:selected').val()
+        let floor_select = $('#id_floor_select').find('option:selected').val()
+        console.log('Appartament', house_select, section_select, floor_select)
+        if (house_select != '' && section_select != '' && floor_select != '') {
+            appartament.removeAttribute('disabled');
+            appartament.classList.add('has-select-error')
+            $.get({
+                url: '{% url 'filter_message_appartament' %}',
+                data: {
+                    'house_id': house_select,
+                    'section_id': section_select,
+                    'floor_id': floor_select
+                },
+                success: function (response){
+                    let appartaments = JSON.parse(response['appartaments'])
+                    document.getElementById('id_appartament_select').innerText = '';
+                    document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть...</option>';
+                    for (let i=0; i<appartaments.length; i++){
+                        document.getElementById('id_appartament_select').innerHTML += '<option value="'+ appartaments[i]["pk"] +'">'+ appartaments[i]["fields"]["number_appartament"] +'</option>'
+                    }
+                }
+            })
+
+        }else{
+            appartament.setAttribute('disabled', '')
+            appartament.options[0].selected = true;
+            appartament.classList.remove('has-select-wait', 'has-select-success', 'has-select-error')
+        }
+    }
+
+
+
+    </script>
+{% endblock %}

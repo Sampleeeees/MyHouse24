@@ -1,0 +1,225 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+{% block title %} Про нас {% endblock %}
+{% block content %}
+    <section class="content-header">
+        <h1>Редагування сторінки</h1>
+        <ul class="breadcrumb"><li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li class="active">Редагування сторінки</li>
+        </ul>
+    </section>
+    <section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Редагування сторнки "Про нас"</h3>
+                </div>
+                <div class="box-body">
+                    <form id="w0" action="{% url 'aboutUs'%}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <h3 class="page-header font-weight-normal">Інформація</h3>
+                       <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group field-websiteaboutform-abouttitle">
+                                    <label for="{{ form.title.id_for_label }}">Назва</label>
+                                    {{ form.title }}
+                                    <div class="help-block"></div>
+                                </div>
+                                <div>
+                                    {{ form.short_text }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h4>Фото директора</h4>
+                                {% if aboutus.image_director %}
+                                    <img height="250" width="310" id="DirectorImage" src="{{ aboutus.image_director.url }}" alt="">
+                                {% else %}
+                                    <img height="250" width="310" id="DirectorImage" src="{% static 'dist/img/glide.jpeg' %}" alt="">
+                                {% endif %}
+                                <div class="form-group field-websiteaboutform-imagefile">
+                                    <label class="control-label" for="{{ form.image_derictor.id_for_label }}">Рекомендований розмір: (250x310)</label>
+                                    {{ form.image_director }}
+                                    <div class="help-block"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% if formset_image %}
+                        <div class="row site-about-gallery">
+                        {{ formset_image.management_form }}
+                            <div class="col-xs-12">
+                               <h3 class="page-header">Фотогалерея</h3>
+                            </div>
+                            {% for img in formset_image %}
+                                <div class="d-none">
+                                {{ img }}
+                                </div>
+                            <div class="col-xs-4 col-sm-2 text-center">
+                                {% if img %}
+                                    <img class="margin-bottom-15 img-thumbnail" src="{{ img.instance.image.url }}" alt="">
+                                {% else %}
+                                    <img class="margin-bottom-15 img-thumbnail" src="{% static 'dist/img/glide.jpeg' %}" alt="">
+                                {% endif %}
+                            <div class="form-group margin-bottom-15">
+                                <a href="{% url 'delete-image' pk=img.instance.id %}" ><i class="fa fa-trash text-red" aria-hidden="true"></i></a>
+                            </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group" id="new_image">
+                                {{ formset_image.empty_form.image}}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <h3 class="page-header font-weight-normal">Додаткова інформація</h3>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group field-websiteaboutform-abouttitle2">
+                                <label for="{{ form.title_sec.id_for_label }}"></label>
+                                {{ form.title_sec }}
+                                </div>
+
+                                <div>
+                                    {{ form.short_text_sec }}
+                                </div>
+                    </div>
+
+                       {% if formset_image2 %}
+                        <div class="row site-about-gallery">
+                        {{ formset_image2.management_form }}
+                            <div class="col-xs-12">
+                               <h3 class="page-header">Додаткова фотогалерея</h3>
+                            </div>
+                            {% for img in formset_image2 %}
+                                <div class="d-none">
+                                {{ img }}
+                                </div>
+                            <div class="col-xs-4 col-sm-2 text-center">
+                                {% if img %}
+                                    <img class="margin-bottom-15 img-thumbnail" src="{{ img.instance.image.url }}" alt="">
+                                {% else %}
+                                    <img class="margin-bottom-15 img-thumbnail" src="{% static 'dist/img/glide.jpeg' %}" alt="">
+                                {% endif %}
+                            <div class="form-group margin-bottom-15">
+                                <a href="{% url 'delete-image' img.instance.id %}" data-confirm="Видалити?" title="Видалити"><i class="fa fa-trash text-red" aria-hidden="true"></i></a>
+                            </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group" id="new_extra_image">
+                                {{ formset_image2.empty_form.image}}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if formset_document %}
+                    <div class="row site-about-documents">
+                        {{ formset_document.management_form }}
+                        <div class="col-xs-12">
+                            <h3 class="page-header">Документи</h3>
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <div id="form-document-rows">
+                                {% for document in formset_document %}
+                                    <div class="d-none">
+                                        {{ document }}
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="{% url 'delete-document' document.instance.id %}" class="pull-right text-red" data-confirm="Удалить?"><i class="fa fa-trash"></i></a>
+                                        <img height="42px" width="32px" class="fa fa-3x pull-left" src="{% static 'dist/img/successfile.png' %}" alt="">
+                                        <label for="{{ document.document.id_for_label }}">PDF, JPG(макс. розмір 20MB)</label>
+                                        {{ document.document }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="{{ document.text.id_for_label }}">Назва документу</label>
+                                        {{ document.text }}
+                                    </div>
+                                {% endfor %}
+                                <div class="d-none" id="empty-document-form">
+                                    <div class="d-none">
+                                        {{ formset_document.empty_form }}
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="{% url 'aboutUs' %}" class="pull-right text-red" data-confirm="Удалить?"><i class="fa fa-trash"></i></a>
+                                        <img height="42px" width="32px" class="fa fa-3x pull-left" src="{% static 'dist/img/fileupload.png' %}" alt="">
+                                        <label for="{{ formset_document.empty_form.document.id_for_label }}">PDF, JPG(макс. розмір 20MB)</label>
+                                        {{ formset_document.empty_form.document }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="{{ formset_document.empty_form.text.id_for_label }}">Назва документу</label>
+                                        {{ formset_document.empty_form.text }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-success margin-bottom-15 form-row-add-websitedocument-btn" onclick="add_new_document()">
+                                    Додати документ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3 class="page-header">Налаштування SEO</h3>
+                                <div class="form-group field-websiteaboutform-aboutmetatitle">
+                                    <label class="control-label" for="{{ seo.title_seo.id_for_label }}">Title</label>
+                                    {{ seo.title_seo }}
+                                    <div class="help-block"></div>
+                                </div>
+                                <div class="form-group field-websiteaboutform-aboutmetadescription">
+                                  <label class="control-label" for="{{ seo.description_seo.id_for_label }}">Description</label>
+                                    {{ seo.description_seo }}
+                                    <div class="help-block"></div>
+                                    </div>
+                                <div class="form-group field-websiteaboutform-aboutmetakeywords">
+                                    <label class="control-label" for="{{ seo.keywords_seo.id_for_label }}">Keywords</label>
+                                    {{ seo.keywords_seo }}
+                                    <div class="help-block"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 text-center">
+                                <div class="form-group">
+                                    <a href="/admin/website/about" class="btn btn-default">Відмінити</a>
+                                    <button type="submit" class="btn btn-success">Зберегти</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>            </div>
+            </div>
+        </div>
+</div>
+
+    </section>
+    <script>
+        $(document).ready(function (){
+            $('#editor').summernote({
+                height: 200,
+                resize: false,
+            })
+
+            $('#editor1').summernote({
+                height: 200,
+                resize: false,
+            })
+        $('.btn-success').click(function () {
+            let text = $('#editor').summernote().text()
+            $('#editor').summernote().text(text)
+
+
+        })
+        })
+
+
+    </script>
+{% endblock %}

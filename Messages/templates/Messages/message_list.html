@@ -1,0 +1,153 @@
+{# Базовий шаблон #}
+{% extends 'Appartament/base.html' %}
+
+{# Загружаємо статику #}
+{% load static %}
+
+{# Назва сторінки #}
+{% block title %}{% endblock %}
+
+{# Вміст сторінки #}
+{% block content %}
+    <section class="content-header" style="font-size: 12px;">
+        <h3>Повідомлення</h3>
+        <ul class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li class="active">Повідомлення</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="pull-right margin-bottom">
+                    <a class="btn btn-success mt-2" style="font-size: 12px;" href="{% url 'message_create' %}">Відправити повідомлення</a>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title"></h3>
+                <div class="box-tools pull-right">
+                    <div class="has-feedback">
+                        <form action="" method="get">
+                            <input type="text" id="search_text" name="search" class="form-control h-50"  placeholder="Пошук">
+                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                    <div class="table-responsive mailbox-messages">
+                        <table class="table table-light table-hover table-striped linkedRow">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 80px; min-width: 80px">
+                                        <input type="checkbox" class="selectAll select-on-check-all form-check-input mt-2" style="position: relative;" name="selection_all" id="selectAll" value="1">
+                                        <a class="btn btn-default btn-sm" id="delete-selected" title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+                                    </svg></a>
+                                    </th>
+                                    <th style="min-width: 200px">Отримувачі</th>
+                                    <th>Текст</th>
+                                    <th style="width: 135px; min-width: 135px">Дата</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+    $(document).ready(function (){
+        $('#selectAll').click(function() {
+            // Отримуємо стан чекбокса заголовка
+            var isChecked = $(this).prop('checked');
+
+            // Встановлюємо стан всіх інших чекбоксів відповідно до стану чекбокса заголовка
+            $('.item-checkbox').prop('checked', isChecked);
+          });
+
+          // Обробник події натискання на чекбокси рядків
+          $('.item-checkbox').click(function() {
+            var totalRows = $('.item-checkbox').length;
+            var checkedRows = $('.item-checkbox:checked').length;
+
+            // Оновлюємо стан чекбокса заголовка в залежності від стану чекбоксів рядків
+            $('#selectAll').prop('checked', checkedRows === totalRows);
+          });
+
+
+          $('#delete-selected').click(function() {
+            var selectedItems = [];
+            $('.item-checkbox:checked').each(function() {
+              selectedItems.push($(this).val());  // Зберігаємо обрані значення
+            });
+            check_value('{% url "delete_selected_message" %}')
+
+            // Виклик AJAX-запиту на сервер для видалення обраних значень
+            $.ajax({
+              url: '{% url "delete_selected_message" %}',  // URL для вашого views.py
+              method: 'POST',
+              data: {
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                selectedItems: selectedItems  // Передаємо обрані значення на сервер
+              },
+              success: function(response) {
+                // Обробка успішної відповіді
+                console.log('Обрані значення успішно видалені');
+              },
+              error: function(xhr, textStatus, error) {
+                // Обробка помилки
+                console.log('Помилка при видаленні обраних значень:', error);
+              }
+            });
+          });
+
+                let dataTable = $('.linkedRow').DataTable({
+                'serverSide': true,
+                'searching': false,
+                'autoWidth': false,
+                'ordering': true,
+                'lengthChange': false,
+                'ajax': {
+                    'url': "{% url 'message_dataTable_list' %}",
+                    'type': 'GET',
+                    'data': function(d) {
+                        d.search_text = $('#search_text').val()
+                    }
+                },
+                'columns': [
+                        {'data': null, 'className': 'text-center', 'orderable': false, 'render': function (data){return `<input type="checkbox" style="position: relative;" class="item-checkbox form-check-input m-0" value="${data.id}">`}},
+                        {'data': 'user', 'className': 'sortable', 'orderable': true},
+                        {'data': 'text', 'className': 'sortable', 'orderable': true},
+                        {'data': 'date', 'className': 'sortable', 'orderable': true},
+                    ],
+                'createdRow': function(row, data, dataIndex) {
+                        $(row).attr('data-href', `/admin/messages/message_detail/${data.id}`); // Replace 'your-data-url' with your actual data URL
+                        $(row).attr('data-key', `${data.id}`); // Replace 'your-data-url' with your actual data URL
+                    },
+                'language': {
+                    'lengthMenu': '_MENU_ записів на сторінку',
+                    'zeroRecords': 'Нічого не знайдено',
+                    'info': 'Показано _START_ - _END_ з _TOTAL_ записів',
+                    'infoEmpty': 'Показано 0 записів',
+                    'infoFiltered': '(знайдено з _MAX_ записів)',
+                    'pagingType': 'full_numbers',
+                    'paginate': {
+                        'first': 'Перша',
+                        'last': 'Остання',
+                        "next": "&raquo;",
+                        "previous": "&laquo;"
+                    },
+                },
+            });
+
+        $('#search_text').keyup(function() {
+             dataTable.draw();
+         });
+    })
+    </script>
+{% endblock %}
