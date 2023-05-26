@@ -117,6 +117,54 @@ class TarrifCreate(CreateView):
             context['formset_service_price'].save()
         return super().form_valid(form=form)
 
+
+class TarrifCopyView(CreateView):
+    model = Tarrif
+    form_class = TarrifForm
+    template_name = 'Tarrif_and_services/tarrifCopy.html'
+    success_url = reverse_lazy('tarrifList')
+
+    def get_initial(self):
+        # Отримання початкових значень для форми копіювання тарифу
+        tarrif = Tarrif.objects.get(pk=self.kwargs['pk'])
+        initial = {
+            'name_tarrif': tarrif.name_tarrif,  # Замініть field1 на реальні поля моделі Tarrif, які потрібно скопіювати
+            'description_tarrif': tarrif.description_tarrif,
+            # Додайте інші поля моделі, які потрібно скопіювати
+        }
+        return initial
+
+    def get_context_data(self, **kwargs):
+        context = super(TarrifCopyView, self).get_context_data(**kwargs)
+        context['pk'] = self.kwargs['pk']
+        ServiceForTarrifFormset = modelformset_factory(
+            ServiceforTariif, form=ServiceforTariifForm, extra=0, can_delete=True
+        )
+        if self.request.POST:
+            context['formset_service_price'] = ServiceForTarrifFormset(
+                self.request.POST, prefix='service-amount', queryset=ServiceforTariif.objects.none()
+            )
+        else:
+            tarrif = Tarrif.objects.get(pk=self.kwargs['pk'])
+            context['formset_service_price'] = ServiceForTarrifFormset(
+                prefix='service-amount', queryset=ServiceforTariif.objects.filter(tarrif_id=tarrif.id)
+            )
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        tarrif = form.save(commit=False)
+        tarrif.published = timezone.now()
+        tarrif.save()
+        if context['formset_service_price'].is_valid():
+            for service in context['formset_service_price']:
+                servi = service.save(commit=False)
+                servi.tarrif_id = tarrif.id
+                servi.save()
+            context['formset_service_price'].save()
+        return super().form_valid(form)
+
+
 class TarrifUpdate(UpdateView):
     model = Tarrif
     template_name = 'Tarrif_and_services/tarrifUpdate.html'
@@ -157,6 +205,9 @@ class TarrifDetail(DeleteView):
         context['formset_service_price'] = ServiceForTarrifFormset(prefix='service-amount', queryset=ServiceforTariif.objects.filter(tarrif_id=context['object'].id))
         context['service_list'] = ServiceforTariif.objects.filter(tarrif_id=context['object'].id)
         return context
+
+
+
 
 class ArticleList(ListView):
     model = Article

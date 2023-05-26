@@ -1,11 +1,14 @@
 import json
-
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
 from django.core.serializers import serialize
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import View, ListView, DeleteView, DetailView, UpdateView, CreateView
+from Tarrif_and_services.models import ServiceforTariif
+from Master_application.models import MatsterApplication
+from Personal_book.models import PersonalBook
+from Receipt.models import Receipt
 from Front_pages.models import *
 from .models import *
 from .forms import AppartamentForm
@@ -19,6 +22,8 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.db.models import Q
+from Statement.models import Statement
+from User.models import User
 
 UserModel = get_user_model()
 
@@ -30,7 +35,15 @@ class BaseView(View):
         general = GeneralPage.objects.first()
         contact = Contacts.objects.first()
 
-        return render(request, 'Appartament/base.html')
+        users = User.objects.all()
+        print('USERS:', users)
+        context = {
+            'users': users,
+            'user_count': User.objects.all().count()
+        }
+
+
+        return render(request, 'Appartament/base.html', context=context)
 
 
 class AppartamentList(ListView):
@@ -55,6 +68,25 @@ class AppartamentCreate(CreateView):
     form_class = AppartamentForm
     success_url = reverse_lazy('appartament_list')
 
+    def form_valid(self, form):
+        if self.request.POST.get('action_save'):
+            form.save()
+            return redirect('appartament_list')
+        elif self.request.POST.get('action_save_add'):
+            form.save()
+            return redirect('appartament_create')
+        return super().form_valid(form=form)
+
+class AppartamentUpdate(UpdateView):
+    model = Appartament
+    template_name = 'Appartament/appartament_update.html'
+    form_class = AppartamentForm
+    success_url = reverse_lazy('appartament_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(AppartamentUpdate, self).get_context_data(**kwargs)
+        context['personals'] = Appartament.objects.filter(personalbook__PersonalBook__ownerAppartemnt_id__isnull=False)
+        return context
     def form_valid(self, form):
         if self.request.POST.get('action_save'):
             form.save()
@@ -292,15 +324,28 @@ def appartament_list(request):
     data = []
 
     for flat in flats:
-        data.append({
-            'id': flat.id,
-            'number': flat.number_appartament,
-            'home': flat.house.name_home,
-            'section': flat.section.name_section,
-            'floor': flat.floor.name_floor,
-            'owner': flat.owner.get_full_name(),
-            'residual': ''
-        })
+        try:
+            statement = Statement.objects.filter(ownerAppartemnt=flat.owner.id,
+                                                 personal_book__appartament_id=flat.id).first()
+            data.append({
+                'id': flat.id,
+                'number': flat.number_appartament,
+                'home': flat.house.name_home,
+                'section': flat.section.name_section,
+                'floor': flat.floor.name_floor,
+                'owner': flat.owner.get_full_name(),
+                'residual': statement.amount if statement else ''
+            })
+        except Statement.DoesNotExist:
+            data.append({
+                'id': flat.id,
+                'number': flat.number_appartament,
+                'home': flat.house.name_home,
+                'section': flat.section.name_section,
+                'floor': flat.floor.name_floor,
+                'owner': flat.owner.get_full_name(),
+                'residual': ''
+            })
 
     response = {
         'draw': request.GET.get('draw'),
@@ -310,3 +355,66 @@ def appartament_list(request):
     }
 
     return JsonResponse(response)
+
+
+def Statistic(request):
+    statements = Statement.objects.all()
+
+    # Створення словника для передачі у контекст
+    data = {}
+    income = 0
+    expense = 0
+    for statement in statements:
+        month = statement.date_published.strftime('%B')  # Отримання назви місяця
+        if statement.amount > 0:
+            income += statement.amount
+        else:
+            expense += -statement.amount
+        data[month] = {
+            'income': income,
+            'expense': expense
+        }
+
+    plus = Statement.objects.filter(amount__gt=0)
+    total_plus = 0
+    for stat_plus in plus:
+        total_plus += stat_plus.amount
+
+    minus = Statement.objects.filter(amount__lt=0)
+    total_minus = 0
+    for stat_minus in minus:
+        total_minus -= stat_minus.amount
+
+    receipts = Receipt.objects.all()
+    total_receipt = 0
+    for receipt in receipts:
+        services = ServiceforTariif.objects.filter(tarrif_id=receipt.tarrif.id)
+        for cina in services:
+            total_receipt += cina.price * cina.consum
+
+    flat_total = 0
+    for flat in Appartament.objects.all():
+        try:
+            stat = Statement.objects.get(ownerAppartemnt=flat.owner.id, personal_book__appartament_id=flat.id)
+            flat_total += stat.amount
+        except Statement.DoesNotExist:
+            flat_total += 0
+
+
+    context = {
+        'house_count': House.objects.all().count(),
+        'active_owners': User.objects.filter(appartament__isnull=False, status='1000').count(),
+        'masters_application': MatsterApplication.objects.filter(status='В роботі').count(),\
+        'flats': Appartament.objects.all().count(),
+        'personals': PersonalBook.objects.all().count(),
+        'masters': MatsterApplication.objects.all().count(),
+        'data': json.dumps(data),
+        'total': total_plus - total_minus,
+        'total_receipt': total_receipt,
+        'flat_total': flat_total
+    }
+    return render(request, 'Appartament/general.html', context=context)
+
+
+
+

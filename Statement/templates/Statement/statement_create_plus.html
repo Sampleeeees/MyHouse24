@@ -1,0 +1,161 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <h1>Нова прихідна ведомість </h1>
+        <ul class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="{% url 'articleList' %}">Платежі</a></li>
+            <li class="active">Нова прихідна ведомість</li>
+        </ul>
+    </section>
+    <section class="content">
+
+
+        <form id="w0" action="" method="post">
+            {% csrf_token %}
+            <div class="row mt-2">
+                <div class="col-xs-12 col-md-7 col-lg-6">
+                    <div class="page-header-spec">
+                        <div class="form-group required">
+                            <div class="input-group">
+                                    №
+                                {{ form.uid }}
+                            </div>
+                        </div>
+                        <span class="label-mid">от</span>
+                        <div class="form-group required">
+                            <div id="" class="input-group  date">
+                               {{ form.date_published }}
+                            </div>
+                            {% if form.errors %}
+                               {{ form.errors }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-sm-offset-6">
+                            {{ form.status_perfom }}<span class="ml-2 text-bold"> Проведений</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+
+                            <div class="form-group">
+                                <label for="user_id">Власник квартири</label>
+                                {{ form.ownerAppartemnt }}
+                               </div>
+                            <div class="form-group field-accounttransaction-account_id">
+                                <label class="control-label" for="accounttransaction-account_id">Особистий рахунок</label>
+                                {{ form.personal_book }}
+                                <div class="help-block"></div>
+                            </div>
+
+                            <div class="form-group field-accounttransaction-transaction_purpose_id">
+                                <label class="control-label" for="accounttransaction-transaction_purpose_id">Стаття</label>
+                                {{ form.article }}
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group field-accounttransaction-amount required">
+                                <label class="control-label" for="accounttransaction-amount">Сума</label>
+                                {{ form.amount }}
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <input type="hidden" id="accounttransaction-status" name="AccountTransaction[status]" value="10">
+                            <input type="hidden" id="accounttransaction-invoice_id" name="AccountTransaction[invoice_id]">
+
+                            <div class="form-group field-accounttransaction-user_admin_id">
+                                <label class="control-label" for="accounttransaction-user_admin_id">Менеджер</label>
+                                {{ form.user_manager }}
+
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            <div class="form-group">
+                                <a href="{% url 'StatementCreatePlus' %}" class="btn btn-default margin-bottom-15">Відмінити</a>
+                                <input type="submit" class="btn btn-success margin-bottom-15" name="action_save" value="Зберегти">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group field-accounttransaction-description">
+                                <label class="control-label" for="accounttransaction-description">Коментарій</label>
+                                {{ form.comment }}
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+    <script>
+    $(document).ready(function (){
+    $('#datepicker').datepicker({
+                  format: 'dd.mm.yyyy', // Формат дати
+                  language: 'uk', // Мова (українська)
+                  autoclose: true, // Автоматичне закривання після вибору дати
+                  todayHighlight: true // Підсвітка поточної дати
+                });
+
+    $('#id_ownerAppartemnt').change(function (){
+        if($('#id_ownerAppartemnt').find('option:selected').val() !== ''){
+            document.getElementById('id_ownerAppartemnt').classList.add('has-select-success')
+            document.getElementById('id_ownerAppartemnt').classList.remove('has-select-wait')
+            document.getElementById('id_ownerAppartemnt').classList.remove('has-select-error')
+        }else{
+            document.getElementById('id_ownerAppartemnt').classList.remove('has-select-success')
+            document.getElementById('id_ownerAppartemnt').classList.add('has-select-error')
+        }
+    })
+
+        $('#id_personal_book').change(function (){
+            console.log($('#id_personal_book').value)
+        if($('#id_personal_book').find('option:selected').val() !== ''){
+            document.getElementById('id_personal_book').classList.add('has-select-success')
+            document.getElementById('id_personal_book').classList.remove('has-select-wait')
+            document.getElementById('id_personal_book').classList.remove('has-select-error')
+        }else{
+            document.getElementById('id_personal_book').classList.remove('has-select-success')
+            document.getElementById('id_personal_book').classList.add('has-select-error')
+        }
+    })
+
+        $('#id_article').change(function (){
+        if($('#id_article').find('option:selected').val() !== ''){
+            document.getElementById('id_article').classList.add('has-select-success')
+            document.getElementById('id_article').classList.remove('has-select-wait')
+            document.getElementById('id_article').classList.remove('has-select-error')
+        }else{
+            document.getElementById('id_article').classList.remove('has-select-success')
+            document.getElementById('id_article').classList.add('has-select-error')
+        }
+    })
+
+        $('#id_user_manager').change(function (){
+        if($('#id_user_manager').find('option:selected').val() !== ''){
+            document.getElementById('id_user_manager').classList.add('has-select-success')
+            document.getElementById('id_user_manager').classList.remove('has-select-wait')
+            document.getElementById('id_user_manager').classList.remove('has-select-error')
+        }else{
+            document.getElementById('id_user_manager').classList.remove('has-select-success')
+            document.getElementById('id_user_manager').classList.add('has-select-error')
+        }
+    })
+    })
+    </script>
+{% endblock %}

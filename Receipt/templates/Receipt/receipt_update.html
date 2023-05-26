@@ -1,0 +1,661 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <section class="content-header" style="font-size: 12px;">
+        <h1>Нова квитанція</h1>
+        <ul class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="{% url 'ReceiptList' %}">Квитанції</a></li>
+            <li class="active">Нова квитанція</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+        <div class="invoice-create">
+
+
+            <form id="invoice-form" action="{% url 'ReceiptUpdate' pk=object.id %}" method="post">
+                {% csrf_token %}
+                <div class="row mt-2">
+                    <div class="col-xs-12 col-md-7 col-lg-6">
+                        <div class="page-header-spec">
+                            <div class="form-group field-invoice-uid required">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        №
+                                    </div>
+                                    {{ form.uid }}
+                                </div>
+                            </div>
+                            <span class="label-mid">від</span>
+                            <div class="form-group field-invoice-uid_date">
+                                {{ form.date }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-5 col-lg-6">
+                        <div class="btn-group pull-right margin-bottom">
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Оберіть дію <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a id="insert_service" class="insert_service text-decoration-none dropdown-item set-tariff-services">Виставити всі послуги згідно тарифу</a></li>
+                                <li><a class="add_meter_data text-decoration-none dropdown-item add-counters">Додати показання лічильників</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-body">
+                        <input type="hidden" id="invoice-id" name="Invoice[id]">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-group">
+                                    <label for="house_id">Будинок</label>
+                                    {{ form.house }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="section_id">Секція</label>
+                                    {{ form.section }}</div>
+                                <div class="form-group field-invoice-flat_id required">
+                                    <label class="control-label" for="invoice-flat_id">Квартира</label>
+                                    {{ form.appartament }}
+
+                                    <div class="help-block"></div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-group field-invoice-is_checked">
+
+                                    <label for="">
+                                        {{ form.confirm }}
+                                        Проведена</label>
+
+
+                                    <div class="help-block"></div>
+                                </div>
+                                <div class="form-group field-invoice-status required">
+                                    <label class="control-label" for="invoice-status">Статус</label>
+                                    {{ form.status_pay }}
+
+                                    <div class="help-block"></div>
+                                </div>
+                                <div class="form-group field-invoice-tariff_id required">
+                                    <label class="control-label" for="invoice-tariff_id">Тариф</label>
+                                    {{ form.tarrif }}
+
+                                    <div class="help-block"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group field-invoice-period_start">
+                                            <label class="control-label" for="invoice-period_start">Період з</label>
+                                            {{ form.start_date }}
+
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group field-invoice-period_end">
+                                            <label class="control-label" for="invoice-period_end">Період по</label>
+                                            {{ form.end_date }}
+
+                                            <div class="help-block"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="form-group">
+                                    <label for="account_uid">Особовий рахунок</label>
+                                    {{ form.personal_book }}
+                                </div>
+
+                                <p><b>Власник:</b> <span id="user-fullname">не обраний</span></p>
+                                <p><b>Телефон:</b> <span id="user-phone">не обранй</span></p>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                            </div>
+                        </div>
+                        {{ form.errors }}
+                        <div class="row" style="font-size: 12px;">
+                            <div class="col-xs-12">
+                                <div class="table-responsive no-padding">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th style="min-width: 200px;">Послуга</th>
+                                            <th style="min-width: 180px;">Розхід</th>
+                                            <th style="min-width: 120px;">Од. вим.</th>
+                                            <th style="min-width: 180px;">Ціна за од., грн.</th>
+                                            <th style="min-width: 180px;">Вартість, грн.</th>
+                                            <th style="width: 40px; min-width: 40px;"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="form-receipt-service-rows">
+                                        <script>
+                                                             function select_measure(service_name){
+                    $.ajax({
+                        url: '{% url 'check_receipt_measure' %}',
+                        type: 'GET',
+                        data: {
+                            'service_id': service_name.options[service_name.selectedIndex].value
+                        },
+                        success: function (response){
+                            console.log('SELECT MEASURE WORK HERE')
+                            let div_parrent = service_name.parentElement.parentElement.id.replace(/[^+\d]/g, '')
+                            console.log(div_parrent)
+                            console.log(document.getElementById('receipt_measure-'+div_parrent))
+                            let current_service = JSON.parse(response['measure'])
+                            let all_measure = JSON.parse(response['all_measure'])
+                            let price = JSON.parse(response['price'])
+                            console.log(current_service)
+                            console.log(price)
+                            if(service_name.options[service_name.selectedIndex].value === ''){
+                                document.getElementById('receipt_measure-' + div_parrent).options[0].setAttribute('selected', '')
+                            }else {
+                                for (let i = 0; i < document.getElementById('receipt_measure-' + div_parrent).options.length; i++) {
+                                    if (document.getElementById('receipt_measure-' + div_parrent).options[i].value === current_service[0]['pk'].toString()) {
+                                        document.getElementById('receipt_measure-' + div_parrent).options[i].setAttribute('selected', '')
+                                        for(let j=0; j<price.length;j++){
+                                        if(current_service[0]['pk'] === price[j]['fields']['service']){
+                                            document.getElementById('id_receipt-service-'+div_parrent+'-price').setAttribute('value', price[j]['fields']['price'])
+                                        }}
+                                    }else{
+                                        document.getElementById('receipt_measure-' + div_parrent).options[i].removeAttribute('selected')
+                                    }
+                                }
+                            }
+                        }
+                    })
+                }
+                                        </script>
+                                        {% if formset_receipt_service %}
+                                            {{ formset_receipt_service.management_form }}
+                                                    {% for receipt in formset_receipt_service %}
+
+                                                        <tr id="{{ receipt.prefix }}" class="">
+                                                            <td>{{ receipt.service }}</td>
+                                                            <td><input type="text" id="{{ receipt.prefix }}-consum" onchange="multiplyAndSetPrice(this.id)"  value="{% if receipt.consum.value  == None %}0.00{% else %}{{ receipt.consum.value }}{% endif %}" class="form-control"></td>
+                                                            <td><select name="receipt_measure" class="form-select" id="receipt_measure-__prefix__">
+                                                                <option value="">Оберіть...</option>
+                                                                {% for measure in measures %}
+                                                                    <option value="{{ measure.id }}">{{ measure.name_measure }}</option>
+                                                                {% endfor %}
+                                                            </select></td>
+                                                            <td>{{ receipt.price }}</td>
+                                                            <td><input type="text" id="id_{{ receipt.prefix }}-minus-result" name="price" onkeyup="suma_receipt()" class="form-control"></td>
+                                                            <td>
+                                                    <span class="input-group-btn">
+                                                    <button type="button" onclick="delete_form_formset('{{ receipt.prefix }}')" class="btn btn-default form-row-remove-btn"><i class="fa fa-trash"></i></button>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                                    {% endfor %}
+                                            <tr id="empty-receipt-service-form" class="d-none">
+                                                <td>{{ formset_receipt_service.empty_form.service }}</td>
+                                                <td><input type="text" id="receipt-service-__prefix__-consum" onchange="multiplyAndSetPrice(this.id)" class="form-control"></td>
+                                                <td><select name="receipt_measure" class="form-select" id="receipt_measure-__prefix__">
+                                                    <option value="">Оберіть...</option>
+                                                    {% for measure in measures %}
+                                                        <option value="{{ measure.id }}">{{ measure.name_measure }}</option>
+                                                    {% endfor %}
+                                                </select></td>
+                                                <td>{{ formset_receipt_service.empty_form.price }}</td>
+                                                <td><input type="text" id="id_receipt-service-__prefix__-minus-result" name="price" onkeyup="suma_receipt()" class="form-control"></td>
+                                                <td>
+                                                    <span class="input-group-btn">
+                                                    <button type="button" onclick="delete_form_formset('{{ formset_receipt_service.empty_form.prefix }}')" class="btn btn-default form-row-remove-btn"><i class="fa fa-trash"></i></button>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                        <tfoot>
+                                            <td colspan="4" style="font-size: 12px;">
+                                                <button type="button" onclick="add_new_receipt_service()" class="btn btn-default btn-hover-change form-row-add-invoiceservice-btn">
+                                                    Додати послугу
+                                                </button>
+                                                <button type="button" class="insert_service btn btn-default">
+                                                    Встановити всі послуги згідно тарифу
+                                                </button>
+                                                <button type="button" class="add_meter_data btn btn-default add-counters">
+                                                    Додати показання лічильників
+                                                </button>
+                                            </td>
+                                            <td style="min-width: 180px;">
+                                                <div class="h4">
+                                                    Всього: <b><span id="price_total">0.00</span></b> грн
+                                                </div>
+                                            </td>
+                                            <td style="width: 40px; min-width: 40px;"></td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 text-right">
+                                <div class="form-group">
+                                    <a href="/admin/invoice/index" class="btn btn-default">Відмінити</a>
+                                    <button type="submit" class="btn btn-success">Зберегти</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Показання лічильників</h3>
+                        </div>
+
+                        <div id="counters" data-pjax-container="" data-pjax-push-state="" data-pjax-timeout="1000">
+                            <div id="w0" class="grid-view">
+                                <div class="box-body table-responsive no-padding">
+                                    <table class="table table-bordered table-hover table-striped table-nowrap">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 125px; min-width: 125px">№</th>
+                                            <th>Статус</th>
+                                            <th style="width: 125px; min-width: 125px">Дата</th>
+                                            <th style="width: 125px; min-width: 125px">Місяц</th>
+                                            <th style="min-width: 200px">Будинок</th>
+                                            <th style="min-width: 160px">Секція</th>
+                                            <th style="width: 110px; min-width: 110px">№ квартира</th>
+                                            <th>Счетчик</th>
+                                            <th style="width: 90px; min-width: 90px">Показання</th>
+                                            <th style="width: 90px; min-width: 90px">Од. вим.</th>
+                                        </tr>
+                                        <tr id="w0-filters" class="filter-hidden">
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>
+                                                <input type="hidden" id="filterMonthYear" name="CounterDataSearch[searchUidMonthYear]"><input type="hidden" id="filterFlatId" name="CounterDataSearch[flat_id]">
+                                            </td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="meters_data">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="box-footer clearfix">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+    <script>
+
+
+    function multiplyAndSetPrice(id) {
+        console.log('PREFIX:', id)
+  // Отримуємо значення в полі змінного рядка
+  let inputValue = parseFloat(document.getElementById(id).value);
+        console.log('inputValue', inputValue)
+  // Отримуємо значення в полі receipt-service-0-price
+  let priceValue = parseFloat(document.getElementById('id_receipt-service-'+id.replace(/\D/g, '')+'-price').value);
+        console.log('priceValue', priceValue)
+  // Обчислюємо результат множення
+        let resultValue = 0;
+        if(document.getElementById(id).value === ''){
+            resultValue = 0;
+            console.log(document.getElementById(id))
+        }else{
+            resultValue = inputValue * priceValue;
+        }
+        console.log('resultValue:', resultValue)
+  // Встановлюємо результат у поле 'price' змінного рядка
+        document.getElementById('id_receipt-service-'+id.replace(/\D/g, '')+'-minus-result').setAttribute('value', resultValue.toFixed(2));
+  suma_receipt()
+}
+
+    function suma_receipt(){
+                let priceInputs = document.getElementsByName('price');
+                let totalPrice = 0;
+
+                for (let i = 0; i < priceInputs.length; i++) {
+                  let priceValue = parseFloat(priceInputs[i].value);
+                  if (!isNaN(priceValue)) {
+                    totalPrice += priceValue;
+                    console.log("totalPrice", totalPrice);
+                  }
+                    document.getElementById('price_total').innerText = totalPrice.toFixed(2);
+                }
+            }
+
+    window.onload = function() {
+        {% for receipt in formset_receipt_service %}
+            multiplyAndSetPrice('{{ receipt.prefix }}-consum');
+        {% endfor %}
+    };
+
+             $(document).ready(function (){
+                 document.getElementById('id_section_select').removeAttribute('disabled')
+                 document.getElementById('id_appartament_select').removeAttribute('disabled')
+                document.getElementById('id_house_select').classList.remove('has-select-wait')
+                document.getElementById('id_section_select').classList.remove('has-select-wait')
+                document.getElementById('id_appartament_select').classList.remove('has-select-wait')
+                document.getElementById('id_status_pay').classList.remove('has-select-wait')
+                document.getElementById('id_tarrif').classList.remove('has-select-wait')
+                document.getElementById('id_house_select').classList.add('has-select-success')
+                document.getElementById('id_section_select').classList.add('has-select-success')
+                document.getElementById('id_appartament_select').classList.add('has-select-success')
+                document.getElementById('id_status_pay').classList.add('has-select-success')
+                document.getElementById('id_tarrif').classList.add('has-select-success')
+                document.getElementById('id_personal_book').classList.add('has-select-success')
+                $('#datepicker').datepicker({
+                  format: 'dd.mm.yyyy', // Формат дати
+                  language: 'uk', // Мова (українська)
+                  autoclose: true, // Автоматичне закривання після вибору дати
+                  todayHighlight: true // Підсвітка поточної дати
+                });
+
+                $('#datepicker1').datepicker({
+                  format: 'dd.mm.yyyy', // Формат дати
+                  language: 'uk', // Мова (українська)
+                  autoclose: true, // Автоматичне закривання після вибору дати
+                  todayHighlight: true // Підсвітка поточної дати
+                });
+
+                $('#datepicker2').datepicker({
+                  format: 'dd.mm.yyyy', // Формат дати
+                  language: 'uk', // Мова (українська)
+                  autoclose: true, // Автоматичне закривання після вибору дати
+                  todayHighlight: true // Підсвітка поточної дати
+                });
+
+             $('#id_status').change(function (){
+                 if($('#id_status').find('option:selected').val() !== ''){
+                     $('#id_status').classList.add('has-select-success')
+                     $('#id_status').classList.remove("has-select-error", 'has-select-wait')
+                 }else{
+                     $('#id_status').classList.add('has-select-error')
+                     $('#id_status').classList.remove('has-select-success', 'has-select-error')
+                 }
+             })
+             $("#id_house_select").on('change', (function (){
+        let house_id = $('#id_house_select').find('option:selected').val()
+        console.log(house_id)
+        if (house_id !== '') {
+            document.getElementById('id_section_select').removeAttribute('disabled');
+            document.getElementById('id_house_select').classList.add('has-select-success');
+            document.getElementById('id_section_select').classList.add('has-select-wait');
+            document.getElementById('id_house_select').classList.remove('has-select-wait', 'has-select-error');
+            document.getElementById('id_appartament_select').innerText = '';
+            document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть секцію...</option>';
+            console.log(document.getElementById('id_section_select'))
+            console.log('Hello')
+            $.get({
+                url: '{% url 'filter_house_receipt' %}',
+                data: {
+                    'house_id': house_id
+                },
+                success: function (response){
+                    console.log(JSON.parse(response['sections']));
+                    let sections = JSON.parse(response['sections']);
+                   //Створення select секцій від обраного дому
+                    document.getElementById('id_section_select').innerText = '';
+                    document.getElementById('id_section_select').innerHTML = '<option value="">Оберіть...</option>';
+                    for(let i=0; i<sections.length; i++){
+                        document.getElementById('id_section_select').innerHTML += '<option value="'+ sections[i]["pk"] +'">'+ sections[i]["fields"]["name_section"] +'</option>'
+                    }
+                    //****//
+                }
+            })
+        } else {
+            console.log('Bye');
+            document.getElementById('id_section_select').setAttribute('disabled', '');
+            console.log(document.getElementById('id_section_select').options[0])
+            document.getElementById('id_section_select').options[0].selected = true;
+            document.getElementById('id_section_select').innerText = '';
+            document.getElementById('id_section_select').innerHTML = '<option value="">Оберіть будинок...</option>';
+            document.getElementById('id_appartament_select').innerText = '';
+            document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть будинок...</option>';
+            document.getElementById('id_house_select').classList.add('has-select-error');
+            document.getElementById('id_house_select').classList.remove('has-select-wait', 'has-select-success');
+            document.getElementById('id_section_select').classList.remove('has-select-wait', 'has-select-error', 'has-select-success');
+        }
+    }))
+
+             $('#id_section_select').change(function() {
+                 let house_id = $('#id_house_select').find('option:selected').val();
+                let section_id = $('#id_section_select').find('option:selected').val();
+                if(section_id !== ''){
+                    $('#id_appartament_select')[0].removeAttribute('disabled')
+                    document.getElementById('id_appartament_select').innerText = '';
+                    document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть...</option>';
+                    document.getElementById('id_section_select').classList.add('has-select-success')
+                    document.getElementById('id_appartament_select').classList.add('has-select-wait')
+                    document.getElementById('id_section_select').classList.remove('has-select-wait', 'has-select-error')
+
+                    $.get({
+                    url: '{% url 'filter_appartament_receipt' %}',
+                    data: {
+                        'house_id': house_id,
+                        'section_id': section_id
+                    },
+                    success: function (response){
+                        console.log(JSON.parse(response['appartaments']));
+                        let appartaments = JSON.parse(response['appartaments']);
+                       //Створення select секцій від обраного дому
+                        document.getElementById('id_appartament_select').innerText = '';
+                        document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть...</option>';
+                        for(let i=0; i<appartaments.length; i++){
+                            document.getElementById('id_appartament_select').innerHTML += '<option value="'+ appartaments[i]["pk"] +'">№'+ appartaments[i]["fields"]["number_appartament"]+ ', ' + appartaments[i]['fields']['house'] +'</option>'
+                        }
+                        //****//
+                    }
+                })
+                }else{
+                    $('#id_appartament_select')[0].setAttribute('disabled', '')
+                    document.getElementById('id_appartament_select').innerText = '';
+                    document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть секцію...</option>';
+                    document.getElementById('id_section_select').classList.add('has-select-error')
+                    document.getElementById('id_section_select').classList.remove('has-select-wait', 'has-select-success')
+                    document.getElementById('id_appartament_select').classList.remove('has-select-success', 'has-select-error', 'has-select-wait')
+
+                }
+             })
+
+             $('#id_appartament_select').change(function (){
+                 document.getElementById('meters_data').innerHTML = ''
+                 if($('#id_appartament_select').find('option:selected').val() !== ''){
+                     document.getElementById('id_appartament_select').classList.add('has-select-success')
+                     document.getElementById('id_appartament_select').classList.remove('has-select-wait', 'has-select-error')
+                     $.get({
+                         url: "{% url 'appartament_detail_receipt' %}",
+                         data: {'flat_id': $('#id_appartament_select').find('option:selected').val()},
+                         success: function (response){
+                             console.log(response['owner'])
+                             let owner = JSON.parse(response['owner'])
+                             let personal = JSON.parse(response['personal'])
+                             let meters = JSON.parse(response['meters'])
+                             console.log('METERS_CHECK',meters)
+                             console.log(personal)
+                             document.getElementById('id_personal_book').setAttribute('value', `${personal[0]['fields']['uid']}`)
+                             document.getElementById('id_personal_book').classList.add('has-select-success')
+                             document.getElementById('user-fullname').innerHTML = '<a href="/admin/owner_appartament/update/'+owner[0]['pk']+'">'+owner[0]['fields']['first_name']+ ' ' +owner[0]['fields']['middle_name']+ ' ' +owner[0]['fields']['last_name'] + '</a>';
+                             document.getElementById('user-phone').innerText = '+38' + owner[0]['fields']['phone_number'];
+
+                             for (let i=0; i<meters.length; i++){
+                                 document.getElementById('meters_data').innerHTML += '<tr data-key="529">' +
+                                     '<td>'+ meters[i]["fields"]["uid"] +'</td>' +
+                                     '<td><small class="label '+ (meters[i]["fields"]["status"] === 'Нульове' ? 'label-primary' : (meters[i]["fields"]["status"] === 'Нове' ? 'label-warning' : (meters[i]["fields"]["status"] === 'Враховано' ? 'label-success' : ''))) +' text-bold rounded p-1">'+ meters[i]["fields"]["status"] +'</small></td>' +
+                                     '<td>'+ meters[i]["fields"]["date_published"] +'</td>' +
+                                     '<td>'+ 'January' +'</td>' +
+                                     '<td>'+ meters[i]["fields"]["house"] +'</td>' +
+                                     '<td>'+ meters[i]["fields"]["section"] +'</td>' +
+                                     '<td>'+ meters[i]["fields"]["appartament"] +'</td>' +
+                                     '<td><span class="not-set">'+ meters[i]["fields"]["meter"][1] +'</span></td>' +
+                                     '<td style="background-color: #DFD5; font-weight: normal"><span class="not-set">'+ (meters[i]["fields"]["meters_data"] !== '' ? meters[i]["fields"]["meters_data"] : '(не задано)') +'</span></td>' +
+                                     '<td style="background-color: #DFD5; font-weight: normal"><span class="not-set">'+ meters[i]["fields"]["meter"][0] +'</span></td>' +
+                                     '</tr>'
+                             }
+                         }
+                     })
+                 }else{
+                     document.getElementById('user-fullname').innerText = 'не обраний';
+                     document.getElementById('user-phone').innerText = 'не обраний';
+                     document.getElementById('id_appartament_select').classList.add('has-select-error')
+                     document.getElementById('id_appartament_select').classList.remove('has-select-wait', 'has-select-success')
+                     document.getElementById('id_personal_book').classList.remove('has-select-success', 'has-select-error', 'has-select-wait')
+                     document.getElementById('id_personal_book').setAttribute('value', '')
+
+                 }
+             })
+
+                 $("#id_status_pay").change(function (){
+                     if($('#id_status_pay').find('option:selected').val() !== ''){
+                         document.getElementById('id_status_pay').classList.add('has-select-success')
+                         document.getElementById('id_status_pay').classList.remove('has-select-wait', 'has-select-error')
+                     }else{
+                         document.getElementById('id_status_pay').classList.add('has-select-error')
+                         document.getElementById('id_status_pay').classList.remove('has-select-wait', 'has-select-success')
+                     }
+                 })
+
+                 $("#id_tarrif").change(function (){
+                     if($('#id_tarrif').find('option:selected').val() !== ''){
+                         document.getElementById('id_tarrif').classList.add('has-select-success')
+                         document.getElementById('id_tarrif').classList.remove('has-select-wait', 'has-select-error')
+                     }else{
+                         document.getElementById('id_tarrif').classList.add('has-select-error')
+                         document.getElementById('id_tarrif').classList.remove('has-select-wait', 'has-select-success')
+                     }
+                 })
+
+
+
+
+
+                 $('.insert_service').click(function (){
+                     console.log('INSERT')
+                     if ($('#id_tarrif').find('option:selected').val() !== ''){
+                         console.log('Tarrif nice')
+                             $.get({
+                                 url: '{% url "all_service_for_tarrif" %}',
+                                 data: {'tariff_id': $('#id_tarrif').find('option:selected').val()},
+                                 success: function (response){
+                                     console.log('HELLO ALL MEASURES IFJIOJF')
+                                     console.log(JSON.parse(response['tariffs']))
+                                     console.log(JSON.parse(response['services']))
+
+                                     let tariffs = JSON.parse(response['tariffs'])
+                                     let services = JSON.parse(response['services'])
+                                        $('#form-receipt-service-rows')[0].innerHTML = '{{ formset_receipt_service.management_form }}'+'<tr id="empty-receipt-service-form" class="d-none">'+
+                                                `<td> {{ formset_receipt_service.empty_form.service }} </td>`+
+                                                '<td>{{ formset_receipt_service.empty_form.consum }}</td>'+
+                                               '<td><select name="receipt_measure" class="form-select" id="receipt_measure-__prefix__">'+
+                                                    '<option value="">Оберіть...</option>'+
+                                                    '{% for measure in measures %}'+
+                                                        '<option value="{{ measure.id }}">{{ measure.name_measure }}</option>'+
+                                                    '{% endfor %}'+
+                                                '</select></td>'+
+                                                '<td>{{ formset_receipt_service.empty_form.price }}</td>'+
+                                                '<td><input type="text" id="id_receipt-service-__prefix__-minus-result" name="price" onkeyup="suma_receipt()" class="form-control"></td>'+
+                                                '<td>'+
+                                                    '<span class="input-group-btn">'+
+                                                    '<button type="button" onclick="delete_form_formset(`receipt-service-__prefix__`)" class="btn btn-default form-row-remove-btn"><i class="fa fa-trash"></i></button>'+
+                                                    '</span>'+
+                                                '</td>'+
+                                            '</tr>'
+                                        document.getElementById('id_receipt-service-TOTAL_FORMS').setAttribute('value', tariffs.length)
+                                    for(let j=0; j<tariffs.length;j++){
+                                        console.log('price', tariffs[j]["fields"]["price"])
+                                     $('#form-receipt-service-rows')[0].innerHTML += '<tr id="receipt-service-'+ j +'" class="">'+
+                                                '<td><select name="receipt-service-'+j+'-service" class="form-select" onchange="select_measure(this)" id="receipt-service-'+j+'-service">'+
+                                                  '<option value="" selected="">---------</option>'+
+
+                                                '</select></td>'+
+                                                '<td><input type="text" name="receipt-service-'+j+'-consum" onchange="multiplyAndSetPrice(this.id)" id="id_receipt-service-'+j+'-consum" class="form-control"></td>'+
+                                                '<td> <select name="receipt_measure" class="form-select" id="receipt_measure-'+j+'">'+
+                                                    '<option value="">Оберіть...</option>'+
+                                                    '{% for measure in measures %}'+
+                                                        '<option value="{{ measure.id }}">{{ measure.name_measure }}</option>'+
+                                                    '{% endfor %}'+
+                                                '</select>' +
+                                                '</td>'+
+                                               ' <td><input type="number" name="receipt-service-'+j+'-price" value="'+ tariffs[j]["fields"]["price"].toString() +'" class="form-control" id="id_receipt-service-'+j+'-price"></td>'+
+                                                '<td><input type="text" id="id_receipt-service-'+j+'-minus-result" name="price" onkeyup="suma_receipt()" class="form-control"></td>'+
+                                                '<td>'+
+                                                    '<span class="input-group-btn">'+
+                                                    `<button type="button" onclick="delete_form_formset('receipt-service-${j}')" class="btn btn-default form-row-remove-btn"><i class="fa fa-trash"></i></button>`+
+                                                    '</span>'+
+                                                '</td>'+
+                                            '</tr>'
+
+                                     for(let i=0; i<services.length;i++){
+                                       document.getElementById('receipt-service-'+j+'-service').innerHTML += `<option value="${services[i]['pk']}">${services[i]['fields']['service']}</option>n>`
+                                            console.log(document.getElementById('receipt-service-'+j+'-service').options[i].value, tariffs[j]['fields']['service'].toString())
+                                            if(document.getElementById('receipt-service-'+j+'-service').options[i].value === tariffs[j]['fields']['service'].toString()){
+                                                document.getElementById('receipt-service-'+j+'-service').options[i].setAttribute('selected', '')
+                                                select_measure(document.getElementById('receipt-service-'+j+'-service'))
+                                                console.log(document.getElementById('receipt-service-'+j+'-service').options[i])
+                                            }else{
+                                                document.getElementById('receipt-service-'+j+'-service').options[i].removeAttribute('selected')
+                                            }
+                                     }}
+                                 }
+                             })
+
+                     }
+                 })
+
+
+             $('.add_meter_data').click(function (){
+                 let receipt_formset = document.getElementById('id_receipt-service-TOTAL_FORMS').value
+                 let services_data = []
+                 let prices_data = []
+                 for(let i=0; i<receipt_formset; i++){
+                     let fieldName = 'receipt-service-' + i + '-service';
+                     let fieldValue = document.getElementsByName(fieldName)[0].value;
+                     services_data.push(fieldValue);
+                     prices_data.push(document.getElementById('id_receipt-service-'+i+'-minus-result').value)
+                 }
+                 console.log(services_data, prices_data)
+
+
+                 console.log('METERS DATA:', meters_data)
+                 $.get({
+                     url:'{% url "add_meter_data" %}',
+                     data: {
+                         house_id: $('#id_house_select').find('option:selected').val(),
+                         section_id: $('#id_section_select').find('option:selected').val(),
+                         appartament_id: $('#id_appartament_select').find('option:selected').val(),
+                         meter_id: JSON.stringify(services_data),
+                         price: JSON.stringify(prices_data)
+                     },
+                     success: function (){
+                         console.log('METERS DATA SUCCESS')
+                     }
+                 })
+             })
+
+
+         })
+    </script>
+{% endblock %}

@@ -11,6 +11,10 @@ from Personal_book.models import *
 from .forms import PersonalBookForm
 from openpyxl import Workbook
 from django.http import HttpResponse
+from Statement.models import Statement
+from Appartament.models import Appartament
+from Receipt.models import Receipt
+from Tarrif_and_services.models import ServiceforTariif
 # Create your views here.
 
 class PersonalList(ListView):
@@ -23,6 +27,37 @@ class PersonalList(ListView):
         context['houses'] = House.objects.all()
         context['owners'] = User.objects.filter(appartament__isnull=False).distinct()
         context['all_book'] = PersonalBook.objects.all().count()
+
+        plus = Statement.objects.filter(amount__gt=0)
+        total_plus = 0
+        for stat_plus in plus:
+            total_plus += stat_plus.amount
+
+        minus = Statement.objects.filter(amount__lt=0)
+        total_minus = 0
+        for stat_minus in minus:
+            total_minus -= stat_minus.amount
+
+        receipts = Receipt.objects.all()
+        total_receipt = 0
+        for receipt in receipts:
+            services = ServiceforTariif.objects.filter(tarrif_id=receipt.tarrif.id)
+            for cina in services:
+                total_receipt += cina.price * cina.consum
+
+        flat_total = 0
+        for flat in Appartament.objects.all():
+            try:
+                stat = Statement.objects.get(ownerAppartemnt=flat.owner.id, personal_book__appartament_id=flat.id)
+                flat_total += stat.amount
+            except Statement.DoesNotExist:
+                flat_total += 0
+
+        context['flat_total'] = flat_total
+        context['total_plus'] = total_plus
+        context['total_minus'] = -total_minus
+        context['total'] = total_plus - total_minus
+        context['total_receipt'] = total_receipt
         return context
 
 

@@ -1,0 +1,208 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <h1>Статистика</h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <h2 class="page-header">У вашому обслуговуванні</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="small-box bg-primary">
+                    <div class="inner">
+                        <h3>{{ house_count }}</h3>
+                        <p>Будинків</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-building"></i>
+                    </div>
+                    <a href="{% url 'house_list' %}" class="small-box-footer">
+                        Перейти в будинки <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>{{ active_owners }}</h3>
+                        <p>Активних власників</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <a href="{% url 'usersList' %}" class="small-box-footer">
+                        Перейти до власників <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>{{ masters_application }}</h3>
+                        <p>Заявок майстра в роботі</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-wrench"></i>
+                    </div>
+                    <a href="{% url 'master_list' %}" class="small-box-footer">
+                        Перейти в заявки <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="small-box bg-primary">
+                    <div class="inner">
+                        <h3>{{ flats }}</h3>
+                        <p>Квартир</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-key"></i>
+                    </div>
+                    <a href="{% url 'appartament_list' %}" class="small-box-footer">
+                        Перейти до квартир <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>{{ personals }}</h3>
+                        <p>Особистих рахунків</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-child"></i>
+                    </div>
+                    <a href="{% url 'PersonalList' %}" class="small-box-footer">
+                        Перейти до рахунків <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>{{ masters }}</h3>
+                        <p>Нових заявок майстра</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-user-plus"></i>
+                    </div>
+                    <a href="{% url 'master_list' %}" class="small-box-footer">
+                        Перейти до заявок <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-xs-12">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Графік погашення квитанцій, грн</h3>
+                    </div>
+                    <canvas id="chart"></canvas>
+                    <div class="box-body">
+                        <div class="chart">
+                            <canvas id="" style="height: 201px; width: 667px;" width="667" height="201"></canvas>
+                            <div id="barChart-legend" class="text-center">
+                                <ul class="bar-legend">
+                                    <li><span style="background-color:rgba(221, 75, 57, 1)"></span>Заборгованність</li>
+                                    <li>
+                                        <span style="background-color:rgba(0, 166, 90, 1)"></span>Погашення боргу
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-5 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-red"><i class="fa fa-money"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Борги по рахункам, грн</span>
+                        <span class="info-box-number">{{ total|floatformat:2 }}</span>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <span class="info-box-icon bg-blue"><i class="fa fa-money"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Баланс по рахункам, грн</span>
+                        <span class="info-box-number">{{ flat_total|floatformat:2 }}</span>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <span class="info-box-icon bg-green"><i class="fa fa-money"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Стан каси, грн</span>
+                        <span class="info-box-number">{{ total_receipt|floatformat:2 }}</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Графік приходів та розходів по касі, грн</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="chart">
+                            <canvas id="chartStatement" style="height: 230px; width: 1025px;" width="1025" height="230"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+      <script>
+      $(document).ready(function () {
+
+          // Отримання даних з контексту Django
+          const data = JSON.parse('{{ data|safe }}');
+
+          // Розбиття даних на місяці, приходи і розходи
+          const labels = Object.keys(data);
+          const incomes = Object.values(data).map(item => item.income);
+          const expenses = Object.values(data).map(item => item.expense);
+
+          console.log(data, incomes, expenses)
+
+          // Налаштування графіку
+          const config = {
+              type: 'bar',
+              data: {
+                  labels: labels,
+                  datasets: [{
+                      label: 'Приходи',
+                      data: incomes,
+                      backgroundColor: 'rgba(0, 166, 90, 1)',
+                      borderColor: 'rgba(0, 166, 90, 1)',
+                      borderWidth: 1
+                  }, {
+                      label: 'Розходи',
+                      data: expenses,
+                      backgroundColor: 'rgba(221, 75, 57, 1)',
+                      borderColor: 'rgba(221, 75, 57, 1)',
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      y: {
+                          beginAtZero: true
+                      }
+                  }
+              }
+          };
+
+          // Створення графіку
+          const chart = new Chart(document.getElementById('chartStatement'), config);
+      })
+    </script>
+{% endblock %}

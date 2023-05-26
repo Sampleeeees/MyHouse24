@@ -8,6 +8,7 @@ urlpatterns = [
     path('tarrif/create', views.TarrifCreate.as_view(), name='tarrifCreate'),
     path('tarrif/detail/<int:pk>', views.TarrifDetail.as_view(), name='tarrifDetail'),
     path('tarrif/update/<int:pk>', views.TarrifUpdate.as_view(), name='tarrifUpdate'),
+    path('tarrif/copy/<int:pk>', views.TarrifCopyView.as_view(), name='tarrifCopy'),
     path('tarrif/delete/<int:pk>', views.TarrifDelete.as_view(), name='tarrifDelete'),
     path('measure/delete/<int:pk>', views.MeasureDelete.as_view(), name='measureDelete'),
     path('service/delete/<int:pk>', views.ServiceDelete.as_view(), name='serviceDelete'),

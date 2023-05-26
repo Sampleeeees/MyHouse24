@@ -9,5 +9,7 @@ urlpatterns = [
 
     #filter
     path('filter_message', views.filter_message, name='filter_messages'),
+    path('message_dataTable_list', views.message_list, name='message_dataTable_list'),
+    path('delete_selected_message/', views.delete_selected_message, name='delete_selected_message'),
     path('filter_message_appartament', views.filter_appartament_message, name='filter_message_appartament')
 ]

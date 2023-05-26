@@ -20,7 +20,7 @@ class BlockAndServicesForm(ModelForm):
         widgets = {
             'image': forms.FileInput(attrs={'onchange': 'add_image(this, "img-block-__prefix__")'}),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control h-50'}),
+            'description': forms.Textarea(attrs={'class': 'form-control h-50 description-block'}),
         }
 
 class ServicesForm(ModelForm):
@@ -34,8 +34,8 @@ class GeneralPageForm(ModelForm):
         model = GeneralPage
         fields = ['title', 'short_text', 'image1', 'image2', 'image3']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'short_text': forms.Textarea(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control my-textarea'}),
+            'short_text': forms.Textarea(attrs={'class': 'form-control my-textarea','id' :"editor"}),
             'image1': forms.FileInput(attrs={'onchange': 'add_image(this, "image-1-page")'}),
             'image2': forms.FileInput(attrs={'onchange': 'add_image(this, "image-2-page")'}),
             'image3': forms.FileInput(attrs={'onchange': 'add_image(this, "image-3-page")'}),
@@ -48,8 +48,8 @@ class AboutUsForm(ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'title_sec': forms.TextInput(attrs={'class': 'form-control'}),
-            'short_text': forms.Textarea(attrs={'class': 'form-control'}),
-            'short_text_sec': forms.Textarea(attrs={'class': 'form-control'}),
+            'short_text': forms.Textarea(attrs={'class': 'form-control', 'id': 'editor'}),
+            'short_text_sec': forms.Textarea(attrs={'class': 'form-control', 'id': 'editor1'}),
             'image_director': forms.FileInput(attrs={'onchange': 'add_image(this, "DirectorImage")'})
         }
 
@@ -68,7 +68,7 @@ class ContactsForm(ModelForm):
         fields = ['title', 'short_text', 'link', 'fio', 'email', 'location', 'phone_number', 'code_card', 'address']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'short_text': forms.Textarea(attrs={'class': 'form-control'}),
+            'short_text': forms.Textarea(attrs={'class': 'form-control' , 'id': 'editor'}),
             'fio': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
             'link': forms.URLInput(attrs={'class': 'form-control'}),
@@ -84,7 +84,7 @@ class PageTarrifForm(ModelForm):
         fields = ['title', 'description']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control'})
+            'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'editor'})
         }
 class TarrifFormForm(ModelForm):
     class Meta:

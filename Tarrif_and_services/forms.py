@@ -32,10 +32,11 @@ class MeasureForm(ModelForm):
 class ServiceforTariifForm(ModelForm):
     class Meta:
         model = ServiceforTariif
-        fields = ['tarrif', 'service', 'price']
+        fields = ['tarrif', 'service', 'price', 'consum']
         widgets = {
             'service': forms.Select(attrs={'class': 'form-select', 'onchange': 'select_measure(this)', 'id': 'service_select'}),
-            'price': forms.NumberInput(attrs={'class': 'form-control'})
+            'price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'consum': forms.TextInput(attrs={'class': 'form-control', 'onchange': "multiplyAndSetPrice(this.id)"})
         }
 
 

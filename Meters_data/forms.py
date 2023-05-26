@@ -24,13 +24,12 @@ class MeterForm(ModelForm):
         model = MetersData
         fields = ['uid', 'meter', 'meters_data', 'date_published', 'status', 'house', 'appartament', 'section']
         widgets = {
-            'uid': forms.NumberInput(attrs={'class': 'form-control'}),
+            'uid': forms.NumberInput(attrs={'class': 'form-control', 'onkeyup': 'check_text(this)'}),
             'house': forms.Select(attrs={'class': 'form-select has-select-wait', 'id': 'id_house_select'}),
             'appartament': forms.Select(attrs={'class': 'form-select', 'disabled': '', 'title': 'Спочатку оберіть будинок та секцію', 'id': 'id_appartament_select'}),
             'section': forms.Select(attrs={'class': 'form-select', 'disabled': '', 'title': 'Спочатку оберіть будинок', 'id': 'id_section_select' }),
             'meter': forms.Select(attrs={'class': 'form-select has-select-wait'}),
-            'meters_data': forms.TextInput(attrs={'class': 'form-control'}),
+            'meters_data': forms.TextInput(attrs={'class': 'form-control', 'onkeyup': 'check_text(this)'}),
             'status': forms.Select(attrs={'class': 'form-select has-select-wait'}),
-            'date_published': forms.DateInput(attrs={'class': 'form-control'})
-
+            'date_published': forms.DateInput(attrs={'class': 'form-control', 'id': 'datepicker', 'autocomplete': 'off'})
         }

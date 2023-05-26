@@ -25,8 +25,12 @@ class Service(models.Model):
     def __str__(self):
         return self.service
 
+    def natural_key(self):
+        return [self.measure.name_measure, self.service]
+
 
 class ServiceforTariif(models.Model):
     service = models.ForeignKey(Service, verbose_name='Послуга', blank=True, on_delete=models.CASCADE)
     price = models.IntegerField(blank=True, null=True)
     tarrif = models.ForeignKey(Tarrif, verbose_name='Тариф', blank=True, on_delete=models.CASCADE)
+    consum = models.IntegerField(blank=True, null=True)

@@ -8,20 +8,58 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="icon" type="image/png" href="{% static 'dist/img/favicon.png' %}">
-    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
-    <link rel="icon" type="image/png" href="{% static 'dist/css/dataTables.bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/fontawesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
     <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" safe>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.bootstrap5.min.css" safe>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" safe>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" safe integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="{% static 'dist/css/style.css' %}" rel="stylesheet" type="text/css">
-<!-- AdminLTE App -->
-<script src="{% static 'dist/js/adminlte.js' %}"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.bootstrap5.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker@3.1.0/daterangepicker.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-timepicker/jquery.timepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-timepicker@0.5.2/dist/css/bootstrap-timepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="{% static 'dist/css/style.css' %}">
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="{% static 'dist/js/jquery-ui.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'dist/js/adminlte.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.2/chart.min.js" integrity="sha512-fYE9wAJg2PYbpJPxyGcuzDSiMuWJiw58rKa9MWQICkAqEO+xeJ5hg5qPihF8kqa7tbgJxsmgY0Yp51+IMrSEVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'plugins/bootstrap/js/Chart.min.js'%}"></script>
+    <script src="{% static 'plugins/bootstrap/js/moment.js' %}"></script>
+    <script src="{% static 'dist/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'dist/js/dataTables.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/locales/bootstrap-datepicker.ua.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-timepicker@0.5.2/dist/js/bootstrap-timepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker@3.1.0/daterangepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+    <script src="{% static 'dist/js/main.js' %}"></script>
+
+
+
+
+
 
 
 
@@ -54,29 +92,34 @@
                 <li class="dropdown notifications-menu m-2">
                     <a href="#" class="dropdown-toggle text-dark" style="text-decoration: none;" data-toggle="dropdown">
                         <i class="fa fa-child fa-lg " style="color: black; height: 5px;"></i>
-                        <span class="label label-warning">53</span>
+                        <span class="label label-warning rounded text-bold" style="position: absolute; top: -10px; right: 10px; font-size: 10px; width: 10px; text-align: center">{{ user_count }}</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">Новых пользователей: 53</li>
+                        <li class="header">Нових користувачів: {{ user_count }}</li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
+                                {% for user in users %}
                                 <li>
-                                    <a href="/admin/user/215">
-                                        test12345@gmail.com <!--<i class="fa fa-angle-right pull-right" aria-hidden="true"></i>-->
+                                    <a href="{% url 'userDetail' pk=user.id %}">
+                                        {{ user.email }} <!--<i class="fa fa-angle-right pull-right" aria-hidden="true"></i>-->
                                     </a>
                                 </li>
+                                {% endfor %}
                             </ul>
                         </li>
-                        <li style="text-align: center; font-size: 14px;"><a href="" class="text-decoration-none w-100 a_footer" >Перейти в раздел пользователей</a></li>
+                        <li style="text-align: center; font-size: 14px;"><a href="" class="text-decoration-none w-100 a_footer" >Перейти в разділ користувачів</a></li>
 
                         </ul>
                     </li>
                     <!-- User Account -->
                     <li class="dropdown user user-menu m-2">
                         <a href="#" style="text-decoration: none;" class="dropdown-toggle text-dark" data-toggle="dropdown">
-                            <!--<img src="/admin/dist/img/user2-160x160.jpg" class="user-image" alt="Elon Musk">-->
+                            {% if request.user.logo %}
+                            <img src="{{ request.user.logo.url }}" class="user-image" alt="Elon Musk">
+                            {% else %}
                             <i class="fa fa-user-circle text-purple" ></i>
+                            {% endif %}
                             <span class="hidden-xs text-dark bg-white">{{ request.user.first_name }}</span>
                         </a>
                         <ul class="dropdown-menu">
@@ -84,14 +127,14 @@
                             <li class="user-header">
                                 <!--<img src="/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="Elon Musk">-->
                                 <span><i class="fa fa-user-circle text-purple bg-gray-light img-circle"></i></span>
-                                <p class="text-white">{{ request.user.first_name }}{% if request.user.role %}({{ request.user.role }}){% else %}{% endif %}</p>
+                                <p class="text-white">{{ request.user.first_name }}{% if request.user.role %}({{ request.user.role.name }}){% else %}{% endif %}</p>
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
                                     <a class="btn btn-default btn-flat" href="{% url 'userUpdate' request.user.id %}">Профіль</a>                                </div>
                                 <div class="pull-right">
-                                    <a class="btn btn-default btn-flat" href="/admin/site/logout" data-method="post">Вихід</a>                                </div>
+                                    <a class="btn btn-default btn-flat" href="{% url 'logout' %}" data-method="post">Вихід</a>                                </div>
                             </li>
                         </ul>
                     </li>
@@ -115,7 +158,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="" class="nav-link w-100">
+            <a href="{% url 'statistic' %}" class="nav-link w-100">
                 <svg height="20px" width="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
                 </svg>
@@ -123,7 +166,7 @@
             </a>
           </li>
           <li class="nav-item">
-              <a href="" class="nav-link w-100">
+              <a href="{% url 'StatementList' %}" class="nav-link w-100">
                   <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
                   </svg>
@@ -131,7 +174,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a href="" class="nav-link w-100">
+              <a href="{% url 'ReceiptList' %}" class="nav-link w-100">
                   <svg height="20px" width="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
                   </svg>
@@ -224,7 +267,7 @@
                     <p class="opacity-50 font-weight-normal ml-2 p">Послуги</p></a>
               </li>
               <li class="nav-item">
-                <a href="" class="nav-link w-100 m-0 pt-0 pb-1">
+                <a href="{% url 'pageTarrif' %}" class="nav-link w-100 m-0 pt-0 pb-1">
                     <svg width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-1">
   <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
 </svg>
@@ -315,35 +358,6 @@
 <!-- ./wrapper -->
 </body>
 <!-- jQuery -->
-<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" safe></script>
-<script src="{% static 'dist/js/jquery-ui.js' %}"></script>
-<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
-<script src="{% static 'dist/js/main.js' %}"></script>
-<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
-<!-- Bootstrap 4 -->
-<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<!-- AdminLTE App -->
-<script src="{% static 'dist/js/adminlte.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.2/chart.min.js " safe integrity="sha512-fYE9wAJg2PYbpJPxyGcuzDSiMuWJiw58rKa9MWQICkAqEO+xeJ5hg5qPihF8kqa7tbgJxsmgY0Yp51+IMrSEVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="{% static 'plugins/bootstrap/js/Chart.min.js'%}"> </script>
-<script src="{% static 'plugins/bootstrap/js/moment.js' %}"></script>
-<script src="{% static 'dist/js/dataTables.bootstrap.min.js' %}"></script>
-<script src="{% static 'dist/js/dataTables.min.js' %}"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" safe></script>
-
-<!--JS DataTable-->
-<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js" safe></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js" safe></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js" safe></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.bootstrap5.min.js" safe></script>
-
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" safe></script>
-<script src = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js" safe></script>
-<script src = "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" safe></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js" safe></script>
-
 <!-- Script -->
 
 </html>

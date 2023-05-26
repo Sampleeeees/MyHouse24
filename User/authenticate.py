@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db.models import Q
 
 from .models import User
@@ -9,7 +10,12 @@ class EmailAuthBackend(object):
     """
     def authenticate(self, nickname=None, password=None):
         try:
-            user = User.objects.get(Q(email=nickname) | Q(id=nickname))
+            User = get_user_model()
+            if nickname.isdigit():  # перевірка, чи `nickname` містить числове значення
+                user = User.objects.get(uid=nickname)
+            else:
+                user = User.objects.get(email=nickname)
+
             if user.check_password(password):
                 return user
             return None

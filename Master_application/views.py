@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
@@ -20,7 +22,7 @@ class MasterList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MasterList, self).get_context_data(**kwargs)
         context['owners'] = User.objects.all()
-        context['masters'] = User.objects.filter(role__user__isnull=False)
+        context['masters'] = User.objects.filter(role__user__isnull=False).distinct()
         return context
 
 class MasterCreate(CreateView):
@@ -85,7 +87,12 @@ def master_appartament_list(request):
         query &= Q(id__icontains=search_master_num)
 
     if search_master_time:
-        query &= Q(Q(date_master__icontains=search_master_time) | Q(time_master__icontains=search_master_time))
+        start = datetime.strptime(search_master_time[0:10], '%d.%m.%Y').date()
+        end = datetime.strptime(search_master_time[13:23], '%d.%m.%Y').date()
+        print()
+        print('date:', start, '+', end)
+        print()
+        query &= Q(date_master__gte=start.strftime('%Y-%m-%d'), date_master__lte=end.strftime('%Y-%m-%d'))
 
     if search_master_type:
         query &= Q(typeMaster__name=search_master_type)
@@ -121,7 +128,7 @@ def master_appartament_list(request):
     for master in masters:
         data.append({
             'id': master.id,
-            'time': master.time_master,
+            'time': f'{master.date_master.strftime("%d.%m.%Y")}-{master.time_master.strftime("%H:%M")}',
             'type': master.typeMaster.name,
             'description': master.description_problem,
             'flat': master.appartament.number_appartament,

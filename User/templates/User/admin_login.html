@@ -29,7 +29,7 @@
 <body class="login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="http://myhouse24.avada-media.ua/">
+        <a href="{% url 'FrontGeneral' %}">
             <img src="http://myhouse24.avada-media.ua/logo.svg" alt="logo">
         </a>
     </div>
@@ -42,7 +42,11 @@
             <div class="tab-pane active" id="tab_1">
                 <div class="login-box-body">
 
-
+                    {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error}}
+                    </div>
+                    {% endif %}
 
                     <p class="login-box-msg">Вхід в особистий кабінет</p>
 

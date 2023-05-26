@@ -41,12 +41,12 @@
                     <thead>
                         <tr>
                             <th style="width: 110px; min-width: 110px">ID</th>
-                            <th><a href="/admin/user/index?sort=searchFullname" data-sort="searchFullname">ФИО</a></th>
+                            <th>ФИО</th>
                             <th style="width: 140px; min-width: 140px">Телефон</th><th style="width: 140px; min-width: 140px">Email</th>
                             <th style="min-width: 250px">Дом</th>
                             <th style="min-width: 300px">Квартира</th>
                             <th style="width: 110px; min-width: 110px">
-                                <a href="/admin/user/index?sort=searchCreatedDate" data-sort="searchCreatedDate">Добавлен</a>
+                                Добавлен
                             </th>
                             <th>Статус</th>
                             <th style="width: 80px; min-width: 80px">Есть долг</th>
@@ -85,15 +85,6 @@
 
                     </tbody>
                 </table>
-            </div>
-            <div class="box-footer clearfix">
-                <ul class="pagination pagination-sm no-margin pull-right">
-                    <li class="prev disabled"><span>«</span></li>
-                    <li class="active"><a href="/admin/user/index?page=1&amp;per-page=50" data-page="0">1</a></li>
-                    <li><a href="/admin/user/index?page=2&amp;per-page=50" data-page="1">2</a></li>
-                    <li><a href="/admin/user/index?page=3&amp;per-page=50" data-page="2">3</a></li>
-                    <li class="next"><a href="/admin/user/index?page=2&amp;per-page=50" data-page="1">»</a></li>
-                </ul>
             </div>
             </div>
             <div class="box-footer">
@@ -160,7 +151,7 @@
                             if(data === 'Активний'){
                              return '<small class="label label-success p-1 rounded text-bold">'+data+'</small>'
                             }else if(data === 'Новий'){
-                                return '<small class="label label-wa rning p-1 rounded text-bold">'+data+'</small>'
+                                return '<small class="label label-warning p-1 rounded text-bold">'+data+'</small>'
                             }else if(data === 'Відключений'){
                                 return '<small class="label label-danger p-1 rounded text-bold">'+data+'</small>'
                             }else{
@@ -184,6 +175,10 @@
                                     </div>`;
                           }}
                     ],
+            'createdRow': function(row, data, dataIndex) {
+                    $(row).attr('data-href', `/admin/account-transaction/${data.id}`); // Replace 'your-data-url' with your actual data URL
+                    $(row).attr('data-key', `${data.id}`); // Replace 'your-data-url' with your actual data URL
+                },
                 'language': {
                     'lengthMenu': '_MENU_ записів на сторінку',
                     'zeroRecords': 'Нічого не знайдено',

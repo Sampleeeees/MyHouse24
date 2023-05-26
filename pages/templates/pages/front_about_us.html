@@ -1,0 +1,102 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ol class="breadcrumb">
+                        <li><a href="/">Главная</a></li>
+                        <li class="active">О нас</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box clearfix">
+                        <div class="page-header">
+                            <h1>{{ about.title }}</h1>
+                            <img width="250px;" height="250px;" src="{{ about.image_director.url }}" class="img-responsive imgFloatRight" alt="">
+                            {{ about.short_text|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="gallery g1 mt-5">
+        <div class="container">
+            <div class="row">
+                {% for image in images %}
+                <div class="col-xs-12 col-sm-6 col-md-3 item" data-src="">
+                    <a href="{{ image.image.url }}" download="" class="big">
+                        <img width="150px" height="150px" src="{{ image.image.url }}" alt="" class="img-responsive-gallery img-thumbnail">
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="about mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box clearfix">
+                        <div class="page-header">
+                            <h3>{{ about.title_sec }}</h3>
+                        </div>
+                        {{ about.short_text_sec }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="documents mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="page-header">
+                            <h3>Документы</h3>
+                        </div>
+                        <br class="border border-1 border-success">
+                        {% for doc in documents %}
+                        <div class="media mt-4 d-flex">
+                            <div class="media-left">
+                                <div class="media-object">
+                                    <svg width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">{{ doc.text }}</h4>
+                                <a href="{{ doc.document.url }}" class="text-decoration-none"  download=""><svg width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                </svg>
+                                 Скачать</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+  $('.img-responsive-gallery').css({
+    'width': '250px',
+    'height': '250px',
+    'object-fit': 'cover'
+  });
+});
+
+    </script>
+{% endblock %}

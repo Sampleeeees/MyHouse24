@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('', include('pages.urls')),
     path('adminer/', admin.site.urls),
     path('admin/pages/', include('Front_pages.urls')),
     path('admin/', include('Appartament.urls')),
@@ -28,7 +29,9 @@ urlpatterns = [
     path('admin/messages/', include('Messages.urls')),
     path('admin/master_appliactions/', include('Master_application.urls')),
     path('admin/meter_data/', include('Meters_data.urls')),
-    path('admin/personal_book/', include('Personal_book.urls'))
+    path('admin/personal_book/', include('Personal_book.urls')),
+    path('admin/receipts/', include('Receipt.urls')),
+    path('admin/statement/', include('Statement.urls'))
 ]
 
 if bool(settings.DEBUG):

@@ -93,6 +93,10 @@
                                 </div>`;
                       }}
                 ],
+                'createdRow': function(row, data, dataIndex) {
+                    $(row).attr('data-href', `/admin/house/detail/${data.id}`); // Replace 'your-data-url' with your actual data URL
+                    $(row).attr('data-key', `${data.id}`); // Replace 'your-data-url' with your actual data URL
+                },
                 'language': {
                     'lengthMenu': '_MENU_ записів на сторінку',
                     'zeroRecords': 'Нічого не знайдено',

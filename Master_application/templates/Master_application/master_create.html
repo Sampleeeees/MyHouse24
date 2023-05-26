@@ -28,43 +28,9 @@
                         <span class="label-mid">от</span>
                         <div class="form-group field-masterrequest-time_request has-success">
 
-                            <div class="input-group bootstrap-timepicker">
-                                <div class="bootstrap-timepicker-widget dropdown-menu">
-                                    <table>
-                                        <tbody>
-                                        <tr>
-                                            <td>
-                                                <a href="#" data-action="incrementHour"><i class="glyphicon glyphicon-chevron-up"></i></a>
-                                            </td>
-                                            <td class="separator">&nbsp;</td>
-                                            <td>
-                                                <a href="#" data-action="incrementMinute"><i class="glyphicon glyphicon-chevron-up"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="bootstrap-timepicker-hour">21</span></td>
-                                            <td class="separator">:</td>
-                                            <td><span class="bootstrap-timepicker-minute">30</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a href="#" data-action="decrementHour"><i class="glyphicon glyphicon-chevron-down"></i></a>
-                                            </td>
-                                            <td class="separator"></td>
-                                            <td>
-                                                <a href="#" data-action="decrementMinute"><i class="glyphicon glyphicon-chevron-down"></i></a>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <input type="text" id="masterrequest-time_request" class="form-control" name="MasterRequest[time_request]" aria-invalid="false">
-
-
-                                    <svg width="33px" height="33px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-
+                            <div class="input-group bootstrap-timepicker timepicker">
+                              {{ form.time_master }}
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                             </div>
                         </div>
                     </div>
@@ -206,6 +172,26 @@
         </form>
     </section>
     <script>
+    $(document).ready(function (){
+
+        $('#datepicker').datepicker({
+                  format: 'dd.mm.yyyy', // Формат дати
+                  language: 'uk', // Мова (українська)
+                  autoclose: true, // Автоматичне закривання після вибору дати
+                  todayHighlight: true // Підсвітка поточної дати
+                });
+
+        $('#timepicker').timepicker({
+          timeFormat: 'HH:mm', // Формат часу у 24-годинному форматі
+            showMeridian: false, // Вимкнути AM/PM
+            step: 15, // Крок хвилин
+          icons: {
+            up: 'glyphicon glyphicon-chevron-up',
+            down: 'glyphicon glyphicon-chevron-down'
+          }
+        });
+
+
     $('#id_ownerAppartament').on('change', function (){
         let appartament = $('#id_appartament')[0];
         let ownerAppart = $('#id_ownerAppartament')[0];
@@ -286,6 +272,7 @@
             name_master.classList.add('has-select-error')
         }
     })
+        })
 
 
     </script>

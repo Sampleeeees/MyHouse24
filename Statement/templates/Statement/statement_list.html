@@ -1,0 +1,286 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <section class="content-header" style="font-size: 12px;">
+        <h1>Каса</h1>
+        <ul class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li class="active">Каса</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px">
+        <div class="row">
+            <div class="col-xs-12 col-lg-9">
+
+                <div class="row mt-2">
+                    <div class="col-xs-12 col-md-4">
+                        <div class="small-box bg-green overflow-hidden">
+                            <div class="inner">
+                                <h3>{{ total|floatformat:2 }} грн</h3>
+                                <p>Стан каси</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <div class="small-box bg-blue overflow-hidden">
+                            <div class="inner">
+                                <h3>{{ flat_total|floatformat:2 }} грн</h3>
+                                <p>Баланс по рахункам</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <div class="small-box bg-red overflow-hidden">
+                            <div class="inner">
+                                <h3>{{ total_receipt|floatformat:2 }} грн</h3>
+                                <p>Борги по рахункам</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-lg-3">
+                <div class="btn-group pull-right margin-bottom">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Оберіть дію <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="text-decoration-none dropdown-item" href="{% url 'StatementCreatePlus' %}">Стоврити прихід</a></li>
+                        <li><a class="text-decoration-none dropdown-item" href="{% url 'StatementCreateMinus' %}">Створити розхід</a></li>
+                        <li><a class="text-decoration-none dropdown-item" href="">Вигрузити в Excel</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"></h3>
+                        <div class="box-tools">
+                            <a href="" class="btn btn-default btn-sm">
+                                <span class="hidden-xs">Очистити</span><i class="fa fa-eraser visible-xs" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="w0" class="grid-view">
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-bordered table-hover table-striped linkedRow">
+                                <thead>
+                                <tr>
+                                    <th style="width: 125px; min-width: 125px">№</th>
+                                    <th style="width: 125px; min-width: 125px">
+                                        <a href="" data-sort="searchUidDate">Дата</a>
+                                    </th>
+                                    <th style="width: 120px; min-width: 120px">Статус</th>
+                                    <th>Тип платежа</th>
+                                    <th style="min-width: 200px">Власник</th>
+                                    <th style="min-width: 160px">Особистий рахунок</th>
+                                    <th>Прихід/розхід</th>
+                                    <th style="width: 110px; min-width: 110px">Сума (грн)</th>
+                                    <th style="width: 80px; min-width: 80px">&nbsp;</th>
+                                </tr>
+                                <tr id="w0-filters" class="filters">
+                                    <td><input type="text" class="form-control" name="statement_num" id="statement_num">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="statement_date" class="form-control" name="statement_date">
+                                    </td>
+                                    <td>
+                                        <select id="statement_status" class="form-control" name="statement_status">
+                                            <option value=""></option>
+                                            <option value="Проведений">Проведений</option>
+                                            <option value="Не проведений">Не проведений</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select id="statement_type" class="form-control" name="statement_type">
+                                            <option value=""></option>
+                                            {% for article in articles %}
+                                                <option value="{{ article.id }}">{{ article.name_article }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select id="statement_owner" class="form-control" name="statement_owner">
+                                            <option value=""></option>
+                                            {% for owner in owners %}
+                                                <option value="{{ owner.id }}">{{ owner.get_full_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="statement_personal" id="statement_personal">
+                                    </td>
+                                    <td>
+                                        <select id="statement_check" class="form-control" name="statement_check">
+                                            <option value=""></option>
+                                            <option value="Прихід">Прихід</option>
+                                            <option value="Розхід">Розхід</option>
+                                        </select>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="box-footer clearfix">
+
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div>Проведений прихід: <span class="text-bold">{{ total_plus|floatformat:2 }}</span></div>
+                        <div>Проведений розхід: <span class="text-bold">{{ total_minus|floatformat:2 }}</span></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+             $(document).ready(function () {
+
+         $('#statement_status').select2({
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#statement_type').select2({
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#statement_owner').select2({
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#statement_check').select2({
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+
+
+        let dataTable = $('.linkedRow').DataTable({
+                'serverSide': true,
+                'searching': false,
+                'autoWidth': false,
+                'ordering': true,
+                'lengthChange': false,
+                'ajax': {
+                    'url': "{% url 'statement_list_dataTable' %}",
+                    'type': 'GET',
+                    'data': function(d) {
+                        d.statement_num = $('#statement_num').val();
+                        d.statement_date = $('#statement_date').val();
+                        d.statement_status = $('#statement_status').val();
+                        d.statement_type = $('#statement_type').val();
+                        d.statement_owner = $('#statement_owner').val();
+                        d.statement_personal = $('#statement_personal').val();
+                        d.statement_check = $('#statement_check').val();
+                    }
+                },
+                'columns': [
+                        {'data': 'num', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if(data != ''){
+                                return data
+                            }else{
+                                return '(не вказано)'
+                            }
+                            }},
+                        {'data': 'date', 'className': 'sortable', 'orderable': true},
+                        {'data': 'status', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if(data === true){
+                                return 'Проведений'
+                            }else{
+                                return 'Не проведений'
+                            }
+                            }},
+                        {'data': 'type', 'className': 'sortable', 'orderable': true},
+                        {'data': 'owner', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if(data !== ''){
+                                return data
+                            }else{
+                                return '(не вказано)'
+                            }
+                            }},
+                        {'data': 'personal', 'className': 'sortable', 'orderable': true},
+                        {'data': 'check', 'className': 'sortable', 'orderable': true},
+                        {'data': 'amount', 'className': 'sortable', 'orderable': true, 'render': function (data, type, row){
+                            var value = parseFloat(data);
+                            var classToApply = '';
+
+                            if (value > 0) {
+                                classToApply = 'text-success';
+                            } else if (value < 0) {
+                                classToApply = 'text-danger';
+                            }
+
+                            return '<span class="' + classToApply + '">' + value.toFixed(2) + '</span>';
+                            }},
+                        {'data': null, 'orderable': false, 'searchable': false, 'render': function(data, type, row, meta) {
+                            // Додаткові іконки для видалення та редагування
+                            return `<div class="btn-group">\
+                                      <a class="btn btn-default btn-sm" href="admin/statement/update_plus/${data.id}" title="Редагувавти" data-toggle="tooltip"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">\
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>\
+                                    </svg></a>\
+                                      <a class="btn btn-default btn-sm" onclick="check_value('/admin/statement/delete/${data.id}')" title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+                                    </svg></a>
+                                    </div>`;
+                          }}
+                    ],
+            'createdRow': function(row, data, dataIndex) {
+                    $(row).attr('data-href', `/admin/account-transaction/${data.id}`); // Replace 'your-data-url' with your actual data URL
+                    $(row).attr('data-key', `${data.id}`); // Replace 'your-data-url' with your actual data URL
+                },
+                'language': {
+                    'lengthMenu': '_MENU_ записів на сторінку',
+                    'zeroRecords': 'Нічого не знайдено',
+                    'info': 'Показано _START_ - _END_ з _TOTAL_ записів',
+                    'infoEmpty': 'Показано 0 записів',
+                    'infoFiltered': '(знайдено з _MAX_ записів)',
+                    'pagingType': 'full_numbers',
+                    'paginate': {
+                        'first': 'Перша',
+                        'last': 'Остання',
+                        "next": "&raquo;",
+                        "previous": "&laquo;"
+                    },
+                },
+            });
+
+
+
+         $('#statement_num, #statement_personal').keyup(function() {
+             dataTable.draw();
+         });
+
+         $('#statement_status, #statement_type, #statement_owner, #statement_check').on('change', function (){
+             dataTable.draw();
+         })
+    });
+    </script>
+{% endblock %}

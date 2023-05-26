@@ -1,5 +1,8 @@
 import datetime
 import datetime
+
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -70,6 +73,44 @@ class MessageDelete(DeleteView):
     def get(self, request, *args, **kwargs):
         return self.delete(self, request, *args, **kwargs)
 
+def message_list(request):
+    messages = Message.objects.all()
+
+    search_text = request.GET.get('search_text')
+
+    query = Q()
+
+    if search_text:
+        query |= Q(title_mess__icontains=search_text)
+        query |= Q(user_send__icontains=search_text)
+
+    messages = messages.filter(query)
+
+    start = int(request.GET.get('start', 0))
+    length = int(request.GET.get('length', 10))
+
+    paginator = Paginator(messages, length)
+    messages = paginator.get_page(start // length + 1)
+
+    data = []
+
+    for message in messages:
+        data.append({
+            'id': message.id,
+            'user': message.user_send,
+            'text': message.title_mess,
+            'date': message.date_send.strftime("%d.%m.%Y")
+        })
+
+    response = {
+        'draw': request.GET.get('draw'),
+        'recordsTotal': Message.objects.all().count(),
+        'recordsFiltered': messages.paginator.count,
+        'data': data
+    }
+
+    return JsonResponse(response)
+
 
 def filter_message(request):
     if request.GET.get('house_id') != '' and request.GET.get('house_id') is not None:
@@ -88,4 +129,13 @@ def filter_appartament_message(request):
         return JsonResponse({'appartaments': appartaments}, status=200)
     else:
         return JsonResponse({'appartaments': 0}, status=200)
+
+
+def delete_selected_message(request):
+    message_items = request.POST.getlist('selectedItems[]')
+
+    for item_id in message_items:
+        Message.objects.filter(id=item_id).delete()
+
+    return redirect('message_list')
 

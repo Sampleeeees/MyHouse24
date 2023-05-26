@@ -93,6 +93,13 @@
     </section>
     <script>
     $(document).ready(function (){
+        $('#datepicker').datepicker({
+                  format: 'dd.mm.yyyy', // Формат дати
+                  language: 'uk', // Мова (українська)
+                  autoclose: true, // Автоматичне закривання після вибору дати
+                  todayHighlight: true // Підсвітка поточної дати
+                });
+
         $('#id_status')[0][0].setAttribute('value', '');
         $('#id_meter')[0][0].setAttribute('value', '');
 

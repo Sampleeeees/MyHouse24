@@ -1,0 +1,244 @@
+{% extends 'Appartament/base.html' %}
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <h1>Новий показаник </h1>
+        <ul class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li><a href="/admin/counter-data/counters">Лічильники</a></li>
+            <li class="active">Новий показник</li>
+        </ul>
+    </section>
+    <section class="content">
+
+
+        <form id="w0" action="{% url 'Meter_data_copy' pk=pk %}" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-xs-12 col-md-7 col-lg-6">
+                    <div class="page-header-spec">
+                        <div class="form-group field-counterdata-uid required">
+                            <div class="input-group mt-2">
+                                <div class="input-group-addon" style="align-self: center;">
+                                    №
+                                </div>
+                                {{ form.uid }}
+                            </div>
+                        </div>
+                        <span class="label-mid">від</span>
+                        <div class="form-group field-counterdata-uid_date mt-2">
+                            {{ form.date_published }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body">
+                    <input type="hidden" id="counterdata-id" name="CounterData[id]">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="form-group">
+                                <label for="{{ form.house.id_for_label }}">Будинок</label>
+                                {{ form.house }}
+                                </div>
+                            <div class="form-group">
+                                <label for="{{ form.section.id_for_label }}">Секція</label>
+                                {{ form.section }}</div>
+                            <div class="form-group required">
+                                <label class="control-label" for="{{ form.appartament.id_for_label }}">Квартира</label>
+                                {{ form.appartament }}
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="{{ form.meter.id_for_label }}">Лічильник</label>
+                                {{ form.meter }}
+
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label" for="counterdata-status">Статус</label>
+                                {{ form.status }}
+
+                                <div class="help-block"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="{{ form.meters_data.id_for_label }}">Показник лічильника</label>
+                                {{ form.meters_data }}
+
+                                <div class="help-block"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% if form.errors %}
+                            {{ form.errors }}
+                        {% endif %}
+                        <div class="col-xs-12 text-right">
+                            <div class="form-group">
+                                <a href="{% url 'Meter_data_copy' pk=pk %}" class="btn btn-default margin-bottom-15">Відмінити</a>
+                                <input type="submit" class="btn btn-success margin-bottom-15" name="action_save" value="Зберегти">
+                                <input type="submit" class="btn btn-success margin-bottom-15 bg-green-active" name="action_save_add" value="Зберегти та додати новий показник">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+    <script>
+    $(document).ready(function (){
+        $('#datepicker').datepicker({
+                  format: 'dd.mm.yyyy', // Формат дати
+                  language: 'uk', // Мова (українська)
+                  autoclose: true, // Автоматичне закривання після вибору дати
+                  todayHighlight: true // Підсвітка поточної дати
+                });
+        document.getElementById('id_section_select').removeAttribute('disabled')
+        document.getElementById('id_appartament_select').removeAttribute('disabled')
+        document.getElementById('id_meter').removeAttribute('disabled')
+        document.getElementById('id_section_select').classList.add('has-select-success')
+        document.getElementById('id_appartament_select').classList.add('has-select-success')
+        document.getElementById('id_status').classList.add('has-select-success')
+        document.getElementById('id_meter').classList.add('has-select-success')
+        document.getElementById('id_house_select').classList.remove('has-select-wait')
+        document.getElementById('id_meter').classList.remove('has-select-wait')
+        document.getElementById('id_status').classList.remove('has-select-wait')
+        document.getElementById('id_house_select').classList.add('has-select-success')
+
+        $('#id_status')[0][0].setAttribute('value', '');
+        $('#id_meter')[0][0].setAttribute('value', '');
+
+        $('#id_meter').change(function (){
+            if($('#id_meter').find('option:selected').val() !== ''){
+                     $('#id_meter')[0].classList.add('has-select-success')
+                     $('#id_meter')[0].classList.remove("has-select-error", 'has-select-wait')
+                 }else{
+                     $('#id_meter')[0].classList.add('has-select-error')
+                     $('#id_meter')[0].classList.remove('has-select-success', 'has-select-error')
+                 }
+        })
+             $('#id_status').change(function (){
+                 if($('#id_status').find('option:selected').val() !== ''){
+                     $('#id_status')[0].classList.add('has-select-success')
+                     $('#id_status')[0].classList.remove("has-select-error", 'has-select-wait')
+                 }else{
+                     $('#id_status')[0].classList.add('has-select-error')
+                     $('#id_status')[0].classList.remove('has-select-success', 'has-select-error')
+                 }
+             })
+             $("#id_house_select").on('change', (function (){
+        let house_id = $('#id_house_select').find('option:selected').val()
+        console.log(house_id)
+        if (house_id !== '') {
+            document.getElementById('id_section_select').removeAttribute('disabled');
+            document.getElementById('id_house_select').classList.add('has-select-success');
+            document.getElementById('id_section_select').classList.add('has-select-wait');
+            document.getElementById('id_house_select').classList.remove('has-select-wait', 'has-select-error');
+            document.getElementById('id_appartament_select').innerText = '';
+            document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть секцію...</option>';
+            console.log(document.getElementById('id_section_select'))
+            console.log('Hello')
+            $.get({
+                url: '{% url 'filter_house_personal' %}',
+                data: {
+                    'house_id': house_id
+                },
+                success: function (response){
+                    console.log(JSON.parse(response['sections']));
+                    let sections = JSON.parse(response['sections']);
+                   //Створення select секцій від обраного дому
+                    document.getElementById('id_section_select').innerText = '';
+                    document.getElementById('id_section_select').innerHTML = '<option value="">Оберіть...</option>';
+                    for(let i=0; i<sections.length; i++){
+                        document.getElementById('id_section_select').innerHTML += '<option value="'+ sections[i]["pk"] +'">'+ sections[i]["fields"]["name_section"] +'</option>'
+                    }
+                    //****//
+                }
+            })
+        } else {
+            console.log('Bye');
+            document.getElementById('id_section_select').setAttribute('disabled', '');
+            console.log(document.getElementById('id_section_select').options[0])
+            document.getElementById('id_section_select').options[0].selected = true;
+            document.getElementById('id_section_select').innerText = '';
+            document.getElementById('id_section_select').innerHTML = '<option value="">Оберіть будинок...</option>';
+            document.getElementById('id_appartament_select').innerText = '';
+            document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть будинок...</option>';
+            document.getElementById('id_house_select').classList.add('has-select-error');
+            document.getElementById('id_house_select').classList.remove('has-select-wait', 'has-select-success');
+            document.getElementById('id_section_select').classList.remove('has-select-wait', 'has-select-error', 'has-select-success');
+        }
+    }))
+
+             $('#id_section_select').change(function() {
+                 let house_id = $('#id_house_select').find('option:selected').val();
+                let section_id = $('#id_section_select').find('option:selected').val();
+                if(section_id !== ''){
+                    $('#id_appartament_select')[0].removeAttribute('disabled')
+                    document.getElementById('id_appartament_select').innerText = '';
+                    document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть...</option>';
+                    document.getElementById('id_section_select').classList.add('has-select-success')
+                    document.getElementById('id_appartament_select').classList.add('has-select-wait')
+                    document.getElementById('id_section_select').classList.remove('has-select-wait', 'has-select-error')
+
+                    $.get({
+                    url: '{% url 'filter_appartament_personal' %}',
+                    data: {
+                        'house_id': house_id,
+                        'section_id': section_id
+                    },
+                    success: function (response){
+                        console.log(JSON.parse(response['appartaments']));
+                        let appartaments = JSON.parse(response['appartaments']);
+                       //Створення select секцій від обраного дому
+                        document.getElementById('id_appartament_select').innerText = '';
+                        document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть...</option>';
+                        for(let i=0; i<appartaments.length; i++){
+                            document.getElementById('id_appartament_select').innerHTML += '<option value="'+ appartaments[i]["pk"] +'">№'+ appartaments[i]["fields"]["number_appartament"]+ ', ' + appartaments[i]['fields']['house'] +'</option>'
+                        }
+                        //****//
+                    }
+                })
+                }else{
+                    $('#id_appartament_select')[0].setAttribute('disabled', '')
+                    document.getElementById('id_appartament_select').innerText = '';
+                    document.getElementById('id_appartament_select').innerHTML = '<option value="">Оберіть секцію...</option>';
+                    document.getElementById('id_section_select').classList.add('has-select-error')
+                    document.getElementById('id_section_select').classList.remove('has-select-wait', 'has-select-success')
+                    document.getElementById('id_appartament_select').classList.remove('has-select-success', 'has-select-error', 'has-select-wait')
+
+                }
+             })
+
+             $('#id_appartament_select').change(function (){
+                 if($('#id_appartament_select').find('option:selected').val() !== ''){
+                     document.getElementById('id_appartament_select').classList.add('has-select-success')
+                     document.getElementById('id_appartament_select').classList.remove('has-select-wait', 'has-select-error')
+                     $.get({
+                         url: "{% url 'personal_appartament_detail' %}",
+                         data: {'flat_id': $('#id_appartament_select').find('option:selected').val()},
+                         success: function (response){
+                             console.log(response['owner'])
+                             let owner = JSON.parse(response['owner'])
+                             console.log(owner[0]['fields'])
+                             document.getElementById('user-fullname').innerHTML = '<a href="/admin/owner_appartament/update/'+owner[0]['pk']+'">'+owner[0]['fields']['first_name']+owner[0]['fields']['middle_name']+owner[0]['fields']['last_name'] + '</a>';
+                             document.getElementById('user-phone').innerText = '+38' + owner[0]['fields']['phone_number'];
+                         }
+                     })
+                 }else{
+                     document.getElementById('user-fullname').innerText = 'не обраний';
+                     document.getElementById('user-phone').innerText = 'не обраний';
+                     document.getElementById('id_appartament_select').classList.add('has-select-error')
+                     document.getElementById('id_appartament_select').classList.remove('has-select-wait', 'has-select-success')
+
+                 }
+             })
+         })
+    </script>
+{% endblock %}

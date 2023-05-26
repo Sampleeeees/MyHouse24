@@ -35,15 +35,9 @@
                             <table class="table table-bordered table-hover table-striped linkedRow">
                                 <thead>
                                 <tr>
-                                    <th style="width: 100px; min-width: 100px">
-                                        <a class="desc" href="/admin/master-request/index?sort=id" data-sort="id">№ заявки</a>
-                                    </th>
-                                    <th style="width: 135px; min-width: 135px">
-                                        <a href="/admin/master-request/index?sort=searchDateRequest" data-sort="searchDateRequest">Зручний час</a>
-                                    </th>
-                                    <th style="min-width: 125px">
-                                        <a href="/admin/master-request/index?sort=type" data-sort="type">Тип майстра</a>
-                                    </th>
+                                    <th style="width: 100px; min-width: 100px">№ заявки</th>
+                                    <th style="width: 135px; min-width: 135px">Зручний час</th>
+                                    <th style="min-width: 125px">Тип майстра</th>
                                     <th style="min-width: 250px">Опис</th>
                                     <th style="min-width: 100px">Квартира</th>
                                     <th style="min-width: 200px">Власник</th>
@@ -109,8 +103,28 @@
     </section>
     <script>
     $(document).ready(function (){
+         $('#master_time').daterangepicker({
+            opens: 'left',
+            autoUpdateInput: false, // Встановити autoUpdateInput в false
+            locale: {
+              format: 'DD.MM.YYYY'
+            }
+          });
+
+          // Подія apply.daterangepicker для оновлення значення в полі
+          $('#master_time').on('apply.daterangepicker', function(ev, picker) {
+              dataTable.draw()
+            $(this).val(picker.startDate.format('DD.MM.YYYY') + ' - ' + picker.endDate.format('DD.MM.YYYY'));
+          });
+
+          // Подія cancel.daterangepicker для очищення значення поля
+          $('#master_time').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+          });
+
 
         $('#master_type').select2({
+            minimumResultsForSearch: Infinity,
             placeholder: '',
             theme: 'classic',
             allowClear: true
@@ -129,6 +143,7 @@
         });
 
         $('#master_status').select2({
+            minimumResultsForSearch: Infinity,
             placeholder: '',
             theme: 'classic',
             allowClear: true

@@ -10,7 +10,7 @@ from Gallery.forms import ImageForm, GalleryForm
 
 
 def base(request):
-    return render(request, 'Front_pages/base.html')
+    return render(request, 'Front_pages/../pages/templates/base.html')
 # Create your views here.
 
 class GeneralUpdate(UpdateView):
@@ -63,7 +63,7 @@ class AboutUsUpdate(UpdateView):
         context = super().get_context_data(**kwargs)
         ImageFormset = modelformset_factory(Image, form=ImageForm, extra=0, can_delete=True)
         DocumentFormset = modelformset_factory(Document, form=DocumentForm, extra=0, can_delete=True)
-        context['aboutUsOther'] = AboutUs.objects.get(pk=5)
+        context['aboutUsOther'] = AboutUs.objects.first()
         if self.request.POST:
             context['formset_image'] = ImageFormset(self.request.POST, self.request.FILES, prefix='general', queryset=Image.objects.filter(gallery=context['aboutus'].gallery.id))
             context['formset_image2'] = ImageFormset(self.request.POST, self.request.FILES, prefix='extra', queryset=Image.objects.filter(gallery=context['aboutUsOther'].gallery.id))

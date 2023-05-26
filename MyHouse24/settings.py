@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'Statement.apps.StatementConfig',
     'Tarrif_and_services.apps.TarrifAndServicesConfig',
     'User.apps.UserConfig',
+    'pages.apps.PagesConfig',
     'openpyxl'
 ]
 
@@ -81,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Appartament.context_processors.base'
             ],
         },
     },
@@ -131,8 +133,7 @@ AUTH_USER_MODEL = 'User.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uk-ua'
 
 TIME_ZONE = 'UTC'
 
@@ -141,6 +142,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+DATE_INPUT_FORMATS = ['%d.%m.%Y']
 
 
 # Static files (CSS, JavaScript, Images)
@@ -167,7 +170,7 @@ LOCALE_PATHS = (
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'rubetsdima2004@gmail.com'
-EMAIL_HOST_PASSWORD = 'gheslkacgwwucmwa'
+EMAIL_HOST_PASSWORD = 'Rubetsdima1304004'
 EMAIL_PORT = 587
 
 # Default primary key field type

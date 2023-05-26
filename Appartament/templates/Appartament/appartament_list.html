@@ -34,11 +34,11 @@
                     <table class="table table-light table-bordered table-hover table-striped linkedRow">
                         <thead>
                         <tr>
-                            <th style="width: 120px; min-width: 120px"><a href="/admin/flat/index?sort=flat" class="text-decoration-none" data-sort="flat">№ квартири</a></th>
-                            <th style="min-width: 200px"><a href="/admin/flat/index?sort=house_id" class="text-decoration-none" data-sort="house_id">Будинок</a></th>
-                            <th style="width: 160px; min-width: 65px"><a href="/admin/flat/index?sort=section_id" class="text-decoration-none" data-sort="section_id">Секція</a></th>
-                            <th style="width: 160px; min-width: 65px"><a href="/admin/flat/index?sort=floor_id" class="text-decoration-none" data-sort="floor_id">Поверх</a></th>
-                            <th style="min-width: 200px"><a href="/admin/flat/index?sort=user_id" class="text-decoration-none" data-sort="user_id">Власник</a></th>
+                            <th style="width: 120px; min-width: 120px">№ квартири</th>
+                            <th style="min-width: 200px">Будинок</th>
+                            <th style="width: 160px; min-width: 65px">Секція</th>
+                            <th style="width: 160px; min-width: 65px">Поверх</th>
+                            <th style="min-width: 200px">Власник</th>
                             <th style="width: 120px; min-width: 120px">Залишок (грн)</th>
                             <th style="width: 80px; min-width: 80px">&nbsp;</th>
                         </tr>
@@ -210,7 +210,7 @@
                         {'data': null, 'orderable': false, 'searchable': false, 'render': function(data, type, row, meta) {
                             // Додаткові іконки для видалення та редагування
                             return `<div class="btn-group">\
-                                      <a class="btn btn-default btn-sm" href="appartament/update/${data.id}" title="Редагувавти" data-toggle="tooltip"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">\
+                                      <a class="btn btn-default btn-sm" href="/admin/appartament/update/${data.id}" title="Редагувавти" data-toggle="tooltip"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">\
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>\
                                     </svg></a>\
                                       <a class="btn btn-default btn-sm" onclick="check_value('/admin/appartament/delete/${data.id}')" title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

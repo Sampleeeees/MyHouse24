@@ -3,4 +3,344 @@
 
 {% block title %}{% endblock %}
 
-{% block content %}{% endblock %}
+{% block content %}
+    <section class="content-header" style="font-size: 12px;">
+        <h1>Квитанції на оплату </h1>
+        <ul class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-home"></i>Головна</a></li>
+            <li class="active">Квитанції на оплату</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+
+        <div class="row mt-2">
+            <div class="col-xs-12 col-lg-9">
+                <div class="row">
+                    <div class="col-xs-12 col-md-4">
+                        <div class="small-box bg-green overflow-hidden">
+                            <div class="inner">
+                                <h3>{{ total|floatformat:2 }} грн</h3>
+                                <p>Стан каси</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <div class="small-box bg-blue overflow-hidden">
+                            <div class="inner">
+                                <h3>{{ flat_total|floatformat:2 }} грн</h3>
+                                <p>Баланс по рахункам</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <div class="small-box bg-red overflow-hidden">
+                            <div class="inner">
+                                <h3>{{ total_receipt|floatformat:2 }} грн</h3>
+                                <p>Борги по рахункам</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-lg-3">
+                <div class="btn-group pull-right margin-bottom">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Оберіть дію <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="text-decoration-none dropdown-item" href="{% url 'ReceiptCreate' %}">Створити спільну квитанцію</a></li>
+                        <li><a id="delete-selected" class="text-decoration-none dropdown-item">Видалити</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"></h3>
+                        <div class="box-tools">
+                            <a href="/" class="btn btn-default btn-sm">
+                                <span class="hidden-xs">Очистити</span><i class="fa fa-eraser visible-xs" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="w0" class="grid-view">
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-bordered table-hover table-striped linkedRow">
+                                <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 10px; min-width: 10px">
+                                        <input type="checkbox" class="select-on-check-all form-check-input m-0" style="position: relative;" name="selection_all" id="selectAll" value="1">
+                                    </th>
+                                    <th style="width: 125px; min-width: 125px">№ квитанції</th>
+                                    <th style="width: 100px; min-width: 100px">Статус</th>
+                                    <th style="width: 125px; min-width: 125px">
+                                        <a href="" data-sort="searchUidDate">Дата</a>
+                                    </th>
+                                    <th style="width: 135px; min-width: 135px">
+                                        <a href="" data-sort="period_end">Місяць</a>
+                                    </th>
+                                    <th>Квартира</th>
+                                    <th style="min-width: 200px">Власник</th>
+                                    <th style="width: 120px; min-width: 120px">Проведена</th>
+                                    <th style="width: 100px; min-width: 100px">Сума (грн)</th>
+                                    <th style="width: 114px; min-width: 114px">&nbsp;</th>
+                                </tr>
+                                <tr id="w0-filters" class="filters">
+                                    <td>&nbsp;</td>
+                                    <td><input type="text" class="form-control" name="receipt_num" id="receipt_num"></td>
+                                    <td>
+                                        <select name="receipt_status" id="receipt_status">
+                                            <option value=""></option>
+                                            <option value="Оплачена">Оплачена</option>
+                                            <option value="Частково оплачена">Частково оплачена</option>
+                                            <option value="Неоплачена">Неоплачена</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="receipt_date" class="form-control" name="receipt_date">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="receipt_month" class="form-control" name="receipt_month">
+                                    </td>
+                                    <td><input type="text" class="form-control" name="receipt_flat" id="receipt_flat"></td>
+                                    <td>
+                                        <select name="receipt_owner" id="receipt_owner">
+                                            <option value=""></option>
+                                            {% for owner in owners %}
+                                                <option value="{{ owner.id }}">{{ owner.get_full_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select id="receipt_confirm" class="form-control" name="receipt_confirm">
+                                            <option value=""></option>
+                                            <option value="Проведена">Проведена</option>
+                                            <option value="Не проведена">Не проведена</option>
+                                        </select>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="box-footer clearfix">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <script>
+         $(document).ready(function () {
+
+             //SELECT2 для статусу
+         $('#receipt_status').select2({
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+
+         //SELECT2 для власника
+         $('#receipt_owner').select2({
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+
+         //SELECT2 для підтвердження
+         $('#receipt_confirm').select2({
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#selectAll').click(function() {
+            // Отримуємо стан чекбокса заголовка
+            var isChecked = $(this).prop('checked');
+
+            // Встановлюємо стан всіх інших чекбоксів відповідно до стану чекбокса заголовка
+            $('.item-checkbox').prop('checked', isChecked);
+          });
+
+          // Обробник події натискання на чекбокси рядків
+          $('.item-checkbox').click(function() {
+            var totalRows = $('.item-checkbox').length;
+            var checkedRows = $('.item-checkbox:checked').length;
+
+            // Оновлюємо стан чекбокса заголовка в залежності від стану чекбоксів рядків
+            $('#selectAll').prop('checked', checkedRows === totalRows);
+          });
+
+
+          $('#delete-selected').click(function() {
+            var selectedItems = [];
+            $('.item-checkbox:checked').each(function() {
+              selectedItems.push($(this).val());  // Зберігаємо обрані значення
+            });
+            check_value('{% url "delete_selected_receipt" %}')
+
+            // Виклик AJAX-запиту на сервер для видалення обраних значень
+            $.ajax({
+              url: '{% url "delete_selected_receipt" %}',  // URL для вашого views.py
+              method: 'POST',
+              data: {
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                selectedItems: selectedItems  // Передаємо обрані значення на сервер
+              },
+              success: function(response) {
+                // Обробка успішної відповіді
+                console.log('Обрані значення успішно видалені');
+              },
+              error: function(xhr, textStatus, error) {
+                // Обробка помилки
+                console.log('Помилка при видаленні обраних значень:', error);
+              }
+            });
+          });
+
+
+
+         //DataTable
+        let dataTable = $('.linkedRow').DataTable({
+                'serverSide': true,
+                'searching': false,
+                'autoWidth': false,
+                'ordering': true,
+                'lengthChange': false,
+                'ajax': {
+                    'url': "{% url 'receipt_list_dataTable' %}",
+                    'type': 'GET',
+                    'data': function(d) {
+                        d.num_receipt = $('#receipt_num').val();
+                        d.status_receipt = $('#receipt_status').val();
+                        d.date_receipt = $('#receipt_date').val();
+                        d.month_receipt = $('#receipt_month').val();
+                        d.flat_receipt = $('#receipt_flat').val();
+                        d.owner_receipt = $('#receipt_owner').val();
+                        d.confirm_receipt = $('#receipt_confirm').val();
+                    }
+                },
+                'columns': [
+                        {'data': null, 'className': 'text-center', 'render': function (data){return `<input type="checkbox" style="position: relative;" class="item-checkbox form-check-input m-0" value="${data.id}"> `}},
+                        {'data': 'num', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if(data != ''){
+                                return data
+                            }else{
+                                return '(не вказано)'
+                            }
+                            }},
+                        {'data': 'status', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if (data === 'Оплачена'){
+                                return '<small class="label label-success p-1 rounded text-bold">' + data + '</small>'
+                            }else if (data === 'Частково оплачена'){
+                                return '<small class="label label-warning p-1 rounded text-bold">' + data + '</small>'
+                            }else if (data === 'Неоплачена'){
+                                return '<small class="label label-danger p-1 rounded text-bold">' + data + '</small>'
+                            }
+                            }},
+                        {'data': 'date', 'className': 'sortable', 'orderable': true},
+                        {'data': 'month', 'className': 'sortable', 'orderable': true},
+                        {'data': 'flat', 'className': 'sortable', 'orderable': true},
+                        {'data': 'owner', 'className': 'sortable', 'orderable': true},
+                        {'data': 'confirm', 'className': 'sortable', 'orderable': true, 'render': function (data){if (data === true){
+                            return 'Проведена'
+                            }else{
+                            return 'Не проведена'
+                            }}},
+                        {'data': 'suma', 'className': 'sortable', 'orderable': true, 'render': function (data){return data.toFixed(2) + ' грн'}},
+                        {'data': null, 'orderable': false, 'searchable': false, 'render': function(data, type, row, meta) {
+                            // Додаткові іконки для видалення та редагування
+                            return `<div class="btn-group">\
+                                      <a class="btn btn-default btn-sm" href="update/${data.id}" title="Редагувавти" data-toggle="tooltip"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">\
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>\
+                                    </svg></a>\
+                                      <a class="btn btn-default btn-sm" onclick="check_value('/admin/receipts/delete/${data.id}')" title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?"><svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+                                    </svg></a>
+                                    </div>`;
+                          }}
+                    ],
+                'createdRow': function(row, data, dataIndex) {
+                        $(row).attr('data-href', `/admin/account-transaction/${data.id}`); // Replace 'your-data-url' with your actual data URL
+                        $(row).attr('data-key', `${data.id}`); // Replace 'your-data-url' with your actual data URL
+                    },
+                'language': {
+                    'lengthMenu': '_MENU_ записів на сторінку',
+                    'zeroRecords': 'Нічого не знайдено',
+                    'info': 'Показано _START_ - _END_ з _TOTAL_ записів',
+                    'infoEmpty': 'Показано 0 записів',
+                    'infoFiltered': '(знайдено з _MAX_ записів)',
+                    'pagingType': 'full_numbers',
+                    'paginate': {
+                        'first': 'Перша',
+                        'last': 'Остання',
+                        "next": "&raquo;",
+                        "previous": "&laquo;"
+                    },
+                },
+            });
+
+
+
+         $('#receipt_num, #receipt_flat').keyup(function() {
+             dataTable.draw();
+         });
+
+         $('#receipt_status, #receipt_owner, #receipt_confirm').on('change', function (){
+             dataTable.draw();
+         })
+
+         $('#receipt_date').daterangepicker({
+            opens: 'left',
+            autoUpdateInput: false, // Встановити autoUpdateInput в false
+            locale: {
+              format: 'DD.MM.YYYY'
+            }
+          });
+
+          // Подія apply.daterangepicker для оновлення значення в полі
+          $('#receipt_date').on('apply.daterangepicker', function(ev, picker) {
+              dataTable.draw()
+            $(this).val(picker.startDate.format('DD.MM.YYYY') + ' - ' + picker.endDate.format('DD.MM.YYYY'));
+          });
+
+          // Подія cancel.daterangepicker для очищення значення поля
+          $('#receipt_date').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+          });
+
+          $('#receipt_month').datepicker({
+                autoclose: true,
+                minViewMode: 1,
+                format: 'mm.yyyy',
+                language: 'ua'
+            }).on('changeDate', function(selected){
+                    startDate = new Date(selected.date.valueOf());
+                    startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+                    $('.to').datepicker('setStartDate', startDate);
+                });
+
+});
+
+    </script>
+{% endblock %}

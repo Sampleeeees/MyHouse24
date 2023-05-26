@@ -1,0 +1,252 @@
+{% extends 'Appartament/base.html' %}
+{% block title %}{% endblock %}
+
+{% block content %}
+    <section class="content-header" style="font-size: 12px;">
+        <h1>Показання лічильників</h1>
+        <ul class="breadcrumb">
+            <li><a href="{% url 'statistic' %}"><i class="fa fa-home"></i>Голвона</a></li>
+            <li><a href="{% url 'meter_data_list' %}">Счетчики</a></li>
+            <li class="active">Показання лічильників, кв.111111111</li>
+        </ul>
+    </section>
+    <section class="content" style="font-size: 12px;">
+
+        <div class="row">
+
+            <div class="col-xs-12">
+
+                <div class="pull-right margin-bottom">
+                    <a class="btn btn-success" href="{% url 'Meter_data_create' %}">Додати показник</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"></h3>
+                        <div class="box-tools">
+                            <a href="" class="btn btn-default btn-sm">
+                                <span class="hidden-xs">Очистить</span><i class="fa fa-eraser visible-xs" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="w0" class="grid-view">
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-bordered table-hover table-striped linkedRow">
+                                <thead>
+                                <tr>
+                                    <th style="min-width: 80px">№</th>
+                                    <th style="min-width: 150px">Статус</th>
+                                    <th style="min-width: 100px">Дата</th>
+                                    <th style="min-width: 100px">Місяць</th>
+                                    <th style="min-width: 200px">Будинок</th>
+                                    <th style="min-width: 160px">Секція</th>
+                                    <th style="width: 110px; min-width: 110px">
+                                        <a href="/admin/counter-data/counters?sort=-searchFlat" data-sort="-searchFlat">№ квартири</a>
+                                    </th>
+                                    <th style="min-width: 150px">Счетчик</th>
+                                    <th style="width: 90px; min-width: 90px">Поточні показання</th>
+                                    <th style="width: 90px; min-width: 90px">Од. вим.</th>
+                                    <th style="width: 55px; min-width: 55px">&nbsp;</th>
+                                </tr>
+                                <tr id="w0-filters" class="filters">
+                                    <td><input type="text" class="form-control" id="meter_uid"></td>
+                                    <td><select class="form-select" name="meter_status" id="meter_status">
+                                        <option value=""></option>
+                                        <option value="Нове">Нове</option>
+                                        <option value="Враховано"> Враховано</option>
+                                        <option value="Враховано та заплачено">Враховано та заплачено</option>
+                                        <option value="Нульове">Нульове</option>
+                                    </select></td>
+                                    <td><input type="text" id="meter_date" class="form-control"></td>
+                                    <td><input type="text" id="meter_month" class="form-control"></td>
+                                    <td>
+                                        <select name="meter_house" class="w-100" id="meter_house">
+                                            <option value=""></option>
+                                            {% for house in houses %}
+                                                <option value="{{ house.id }}">{{ house.name_home }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="meter_section" class="w-100" id="meter_section"></select>
+                                        <option value=""></option>
+                                    </td>
+                                    <td><input type="text" id="meter_flat" class="form-control" name="meter_flat">
+                                    </td>
+                                    <td>
+                                        <select name="meter_meter" class="w-100" id="meter_meter">
+                                            <option value=""></option>
+                                            {% for meter in meters %}
+                                                <option value="{{ meter.id }}">{{ meter.service }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+    $(document).ready(function () {
+        let URL = new URLSearchParams(window.location.search);
+        let meter_id = URL.get('meter_id');
+        let flat_num = URL.get('flat_number');
+
+        console.log(meter_id, flat_num);
+
+        $("#meter_meter").val(meter_id);
+        $("#meter_flat").val(flat_num);
+
+
+
+        $('#meter_status').select2({
+            minimumResultsForSearch: Infinity,
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#meter_house').select2({
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#meter_section').select2({
+             placeholder: 'Оберіть будинок',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#meter_meter').select2({
+             placeholder: '',
+             theme:'classic',
+             allowClear: true
+         });
+
+         $('#meter_house').on('change', function (){
+             if ($('#meter_house').find('option:selected').val() === '') {
+                 $('#meter_section')[0].setAttribute('disabled', '');
+                 $('#meter_section')[0].options[0].selected = true;
+
+             } else {
+                 $.get({
+                url: '{% url 'filter_house_meter' %}',
+                data: {
+                    'house_id': $('#meter_house').find('option:selected').val()
+                },
+                success: function (response){
+                    console.log(JSON.parse(response['sections']));
+                    let sections = JSON.parse(response['sections']);
+                    //Створення select секцій від обраного дому
+                    document.getElementById('meter_section').innerText = '';
+                    document.getElementById('meter_section').innerHTML = '<option value="">Оберіть...</option>';
+                    for(let i=0; i<sections.length; i++){
+                        document.getElementById('meter_section').innerHTML += '<option value="'+ sections[i]["pk"] +'">'+ sections[i]["fields"]["name_section"] +'</option>'
+                    }
+                    //****//
+
+                }
+            })
+                 $('#meter_section')[0].removeAttribute('disabled', 'data-placeholder');
+             }
+         })
+
+        let dataTable = $('.linkedRow').DataTable({
+                'serverSide': true,
+                'searching': false,
+                'autoWidth': false,
+                'ordering': true,
+                'lengthChange': false,
+                'ajax': {
+                    'url': "{% url 'meter_data_sort' %}",
+                    'type': 'GET',
+                    'data': function(d) {
+                        d.meter_uid = $('#meter_uid').val();
+                        d.meter_status = $('#meter_status').val();
+                        d.meter_date = $('#meter_date').val();
+                        d.meter_month = $('#meter_month').val();
+                        d.meter_home = $('#meter_house').val();
+                        d.meter_section = $('#meter_section').val();
+                        d.meter_flat_num = $('#meter_flat').val();
+                        d.meter_meter = $('#meter_meter').val();
+                    }
+                },
+                'columns': [
+                        {'data': 'uid', 'className': 'sortable', 'orderable': true},
+                        {'data': 'status', 'className': 'sortable', 'orderable': true, 'render': function (data){
+                            if(data === 'Нульове'){
+                                return '<small class="label label-primary rounded p-1 text-white text-bold">'+data+'</small>'
+                            }else if(data === 'Враховано'){
+                                return '<small class="label label-success rounded p-1 text-white text-bold">'+data+'</small>'
+                            }else if(data === 'Враховано та заплачено'){
+                                return '<small class="label label-success rounded p-1 text-white text-bold">'+data+'</small>'
+                            }else if(data === 'Нове'){
+                                return '<small class="label label-warning rounded p-1 text-white text-bold">'+data+'</small>'
+                            }else{
+                                return 'не вказано'
+                            }
+                            }},
+                        {'data': 'date', 'className': 'sortable', 'orderable': true},
+                        {'data': 'month', 'className': 'sortable', 'orderable': true},
+                        {'data': 'home', 'className': 'sortable', 'orderable': true},
+                        {'data': 'section', 'className': 'sortable', 'orderable': true},
+                        {'data': 'flat', 'className': 'sortable', 'orderable': true},
+                        {'data': 'meter', 'className': 'sortable', 'orderable': true},
+                        {'data': 'ost', 'className': 'sortable', 'orderable': true},
+                        {'data': 'measure', 'className': 'sortable', 'orderable': true},
+                        {'data': null, 'orderable': false, 'searchable': false, 'render': function(data, type, row, meta) {
+                            // Додаткові іконки для видалення та редагування
+                            return `<div class="btn-group">\
+                                      <a class="btn btn-default btn-sm" href="/admin/meter_data/update/${data.id}" title="Редагувавти" data-toggle="tooltip">
+                                        <svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path>
+                                        </svg></a>\
+                                      <a class="btn btn-default btn-sm" onclick="check_value('/admin/meter_data/delete/${data.id}')" title="Видалити" data-toggle="tooltip" data-pjax="0" data-method="post" data-confirm="Вы уверены, что хотите удалить этот элемент?">
+                                        <svg width="17px" height="17px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+                                    </svg>
+                                        </a>
+                                    </div>`;
+                          }}
+                    ],
+                'language': {
+                    'lengthMenu': '_MENU_ записів на сторінку',
+                    'zeroRecords': 'Нічого не знайдено',
+                    'info': 'Показано _START_ - _END_ з _TOTAL_ записів',
+                    'infoEmpty': 'Показано 0 записів',
+                    'infoFiltered': '(знайдено з _MAX_ записів)',
+                    'pagingType': 'full_numbers',
+                    'paginate': {
+                        'first': 'Перша',
+                        'last': 'Остання',
+                        "next": "&raquo;",
+                        "previous": "&laquo;"
+                    },
+                },
+            });
+
+
+
+         $('#meter_flat, #meter_uid').keyup(function() {
+             dataTable.draw();
+         });
+
+         $('#meter_house, #meter_section, #meter_meter, #meter_status').on('change', function (){
+             dataTable.draw();
+         })
+    });
+    </script>
+{% endblock %}

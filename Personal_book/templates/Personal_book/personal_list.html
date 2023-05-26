@@ -19,7 +19,7 @@
                     <div class="col-xs-12 col-md-4">
                         <div class="small-box bg-green overflow-hidden">
                             <div class="inner">
-                                <h3>111 603.94 грн</h3>
+                                <h3>{{ total|floatformat:2 }} грн</h3>
                                 <p>Стан каси</p>
                             </div>
                             <div class="icon">
@@ -30,7 +30,7 @@
                     <div class="col-xs-12 col-md-4">
                         <div class="small-box bg-blue overflow-hidden">
                             <div class="inner">
-                                <h3>3 127 337.62 грн</h3>
+                                <h3>{{ flat_total|floatformat:2 }} грн</h3>
                                 <p>Баланс по рахункам</p>
                             </div>
                             <div class="icon">
@@ -41,7 +41,7 @@
                     <div class="col-xs-12 col-md-4">
                         <div class="small-box bg-red overflow-hidden">
                             <div class="inner">
-                                <h3>100 699 223.99 грн</h3>
+                                <h3>{{ total_receipt|floatformat:2 }} грн</h3>
                                 <p>Борги по рахункам</p>
                             </div>
                             <div class="icon">

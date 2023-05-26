@@ -25,3 +25,6 @@ class Floor(models.Model):
 class Section(models.Model):
     name_section = models.CharField(max_length=100)
     house = models.ForeignKey(House, verbose_name='Будинок', blank=True, null=True, on_delete=models.CASCADE)
+
+    def natural_key(self):
+        return self.name_section

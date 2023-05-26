@@ -18,8 +18,8 @@
             <div class="row mt-2">
                 <div class="col-xs-12 col-md-7 col-lg-6">
                     <div class="page-header-spec">
-                        <div class="form-group field-masterrequest-date_request ">
-                            <div id="masterrequest-date_request-kvdate" class="input-group  date">
+                        <div class="form-group field-masterrequest-date_request has-success">
+                            <div id="masterrequest-date_request-kvdate " class="input-group  date">
                                {{ form.date_master }}
                                 <svg width="33px" height="33px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
@@ -31,43 +31,9 @@
                         <span class="label-mid">от</span>
                         <div class="form-group field-masterrequest-time_request has-success">
 
-                            <div class="input-group bootstrap-timepicker">
-                                <div class="bootstrap-timepicker-widget dropdown-menu">
-                                    <table>
-                                        <tbody>
-                                        <tr>
-                                            <td>
-                                                <a href="#" data-action="incrementHour"><i class="glyphicon glyphicon-chevron-up"></i></a>
-                                            </td>
-                                            <td class="separator">&nbsp;</td>
-                                            <td>
-                                                <a href="#" data-action="incrementMinute"><i class="glyphicon glyphicon-chevron-up"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="bootstrap-timepicker-hour">21</span></td>
-                                            <td class="separator">:</td>
-                                            <td><span class="bootstrap-timepicker-minute">30</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a href="#" data-action="decrementHour"><i class="glyphicon glyphicon-chevron-down"></i></a>
-                                            </td>
-                                            <td class="separator"></td>
-                                            <td>
-                                                <a href="#" data-action="decrementMinute"><i class="glyphicon glyphicon-chevron-down"></i></a>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <input type="text" id="masterrequest-time_request" class="form-control" name="MasterRequest[time_request]" aria-invalid="false">
-
-
-                                    <svg width="33px" height="33px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-
+                            <div class="input-group bootstrap-timepicker timepicker">
+                              {{ form.time_master }}
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                             </div>
                         </div>
                     </div>
@@ -92,7 +58,7 @@
                         <div class="clearfix"></div>
 
                         <div class="col-xs-12 col-sm-6">
-                            <div class="form-group field-{{ form.description_problem.name }} required">
+                            <div class="form-group field-{{ form.description_problem.name }} has-success required">
                                 <label class="control-label" for="{{ form.description_problem.id_for_label }}">Опис проблеми</label>
                                {{ form.description_problem }}
                                 <div class="help-block"></div>
@@ -123,7 +89,7 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
-                            <div class="form-group field-{{ form.comment.name }}">
+                            <div class="form-group field-{{ form.comment.name }} has-success">
                                 <label class="control-label" for="{{ form.comment.id_for_label }}">Коментар</label>
                                 <ul class="wysihtml5-toolbar" style="">
                                     <li class="dropdown">
@@ -209,6 +175,15 @@
         </form>
     </section>
     <script>
+    $(document).ready(function (){
+        document.getElementById('id_appartament').classList.add('has-select-success')
+        document.getElementById('id_ownerAppartament').classList.add('has-select-success')
+        document.getElementById('id_typeMaster').classList.add('has-select-success')
+        document.getElementById('id_name_master').classList.add('has-select-success')
+        document.getElementById('id_ownerAppartament').classList.remove('has-select-wait')
+        document.getElementById('id_typeMaster').classList.remove('has-select-wait')
+        document.getElementById('id_name_master').classList.remove('has-select-wait')
+        document.getElementById('id_appartament').removeAttribute('disabled')
     $('#id_ownerAppartament').on('change', function (){
         let appartament = $('#id_appartament')[0];
         let ownerAppart = $('#id_ownerAppartament')[0];
@@ -288,6 +263,7 @@
             name_master.classList.remove('has-select-success', 'has-select-wait')
             name_master.classList.add('has-select-error')
         }
+    })
     })
 
 

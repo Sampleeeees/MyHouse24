@@ -3,10 +3,12 @@ from . import views
 
 urlpatterns = [
     path('', views.BaseView.as_view(), name='base_admin'),
+    path('statistics/', views.Statistic, name='statistic'),
     path('appartaments/', views.AppartamentList.as_view(), name='appartament_list'),
     path('appartament/detail/<int:pk>', views.AppartamentDetail.as_view(), name='appartament_detail'),
     path('appartament/create', views.AppartamentCreate.as_view(), name='appartament_create'),
     path('appartament/delete/<int:pk>', views.AppartamentDelete.as_view(), name='appartament_delete'),
+    path('appartament/update/<int:pk>', views.AppartamentUpdate.as_view(), name='appartament_update'),
     path('owner_appartaments', views.OwnerAppartamentsList.as_view(), name="ownerAppartamentsList"),
     path('owner_appartament/create_owner', views.AddOwnerAppartamentCreate.as_view(), name="add_owner_appartament"),
     path('onwer_appartament/send_invite', views.SendInviteOwnerAppartament.as_view(), name='send_invite_owner'),
