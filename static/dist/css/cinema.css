@@ -1,0 +1,266 @@
+
+
+p{
+    margin: 0;
+}
+
+/*body{*/
+/*    background: url("/static/dist/img/back1.jpeg");*/
+/*}*/
+
+hr{
+    margin: 0;
+    padding: 0;
+    width:100%;
+    z-index: 0;
+}
+
+/* ---------Container --------*/
+.container{
+    max-width: 1200px;
+
+}
+/* ---------Header--------*/
+.header-row{
+    padding: 10px 0;
+}
+.bg-header{
+    background-color: #b6d4fe;
+    padding: 0 15px;
+}
+
+.col-center{
+    align-content: center;
+}
+
+.carousel-banner{
+    height: 720px;
+}
+
+.image-icon{
+    height: 120px;
+    width: 120px;
+
+}
+
+.dropdown-menu{
+    background: #000000;
+
+}
+
+.text-white{
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.iconimg{
+    height: 30px;
+    width: 30px;
+}
+
+.link-padd{
+    padding: 5px 10px;
+    border: solid #1a1e21 1px;
+    margin-bottom: 2px;
+    margin-right: 5px;
+
+}
+
+.search{
+    height: 25px;
+    width: 25px;
+}
+
+.form-header{
+    height: 35px;
+    border-radius: 5px 0 0 5px;
+    width: 250px;
+    box-shadow:  #1a1e21;
+}
+
+
+
+.btn-s{
+    padding: 0 10px;
+    border-radius: 0 5px 5px 0;
+}
+
+.btn-s:hover{
+    background-color: #6f42c1;
+}
+
+
+.main{
+    background-color: #ffffff;
+
+}
+
+.nav-link{
+    border-radius: 8px;
+}
+
+
+.text-white:hover{
+    background-color: #6f42c1;
+    border-radius: 8px;
+
+}
+
+.text-white::before {
+    background-color: #6f42c1;
+    border-radius: 8px;
+}
+
+/*------------------------------AFISHA-------------------*/
+.logo-afisha{
+    height: 180px;
+    width: 100px;
+}
+
+
+
+
+
+
+/*------------------------------/AFISHA------------------*/
+
+.name-film{
+    padding: 5px
+}
+
+.item-film{
+    padding: 15px;
+}
+
+.logo-film{
+    height: 350px;
+    width: 230px;
+}
+
+.bg-film{
+    background-color: #1a1e21;
+}
+
+.footer-bg{
+    background-color: #6f42c1;
+}
+
+.hr-radius{
+    border-radius: 15px;
+}
+
+
+
+/*------------------------Timetable-------------------*/
+
+
+
+/*-------------------------/Timetable-----------------*/
+/*------------------------Cinemas-------------------*/
+.cinema-img{
+    height: 250px;
+    width: 250px;
+}
+
+.btn-cn{
+    text-decoration: none;
+    color: #000000;
+    font-weight: 700;
+
+}
+
+.btn-cn:hover{
+    color: #6f42c1;
+}
+
+/*-------------------------/Cinemas-----------------*/
+
+
+/*------------------------Add-------------------*/
+.adds{
+    height: 100%;
+}
+
+.add-img{
+    width:200px;
+    align-items: center;
+}
+
+
+/*-------------------------/Add----------------*/
+
+/*------------------------Vip-------------------*/
+
+
+
+/*------------------------/Vip-------------------*/
+
+.login-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/*----------footer-----------*/
+
+.footer-icon{
+    width: 200px;
+    height: auto;
+}
+
+.btn-ft{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.btn-ft:hover{
+    color: #000000;
+}
+
+.foo{
+    position: relative;
+}
+
+.rozklad:hover{
+    color: white !important;
+    background: mediumpurple !important;
+}
+
+.delete-image{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);;
+}
+
+.carousel-cinema-banner{
+    height: 450px;
+}
+
+.session_decorate{
+    text-decoration: none
+}
+
+@media (max-width: 1580px) {
+    .add-img {
+        width: 150px;
+    }
+}
+
+@media (max-width: 1480px) {
+    .add-img {
+        width: 100px;
+    }
+}
+
+@media (max-width: 1380px) {
+    .adds {
+        display: none;
+    }
+}
+
+@media (max-width: 750px) {
+    .col-hide{
+        display: none;
+    }
+}
+
