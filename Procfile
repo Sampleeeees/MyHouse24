@@ -1,0 +1,1 @@
+web gunicorn MyHouse24.wsgi:application --log-file -
