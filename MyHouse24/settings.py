@@ -58,7 +58,9 @@ INSTALLED_APPS = [
     'Tarrif_and_services.apps.TarrifAndServicesConfig',
     'User.apps.UserConfig',
     'pages.apps.PagesConfig',
-    'openpyxl'
+    'openpyxl',
+    'django_heroku',
+    'dj_database_url'
 ]
 
 MIDDLEWARE = [
