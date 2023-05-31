@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-import django_heroku
-import dj_database_url
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -59,8 +57,7 @@ INSTALLED_APPS = [
     'User.apps.UserConfig',
     'pages.apps.PagesConfig',
     'openpyxl',
-    'django_heroku',
-    'dj_database_url'
+
 ]
 
 MIDDLEWARE = [
@@ -178,4 +175,3 @@ EMAIL_PORT = 587
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-django_heroku.settings(locals())

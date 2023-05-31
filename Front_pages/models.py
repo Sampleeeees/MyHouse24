@@ -11,11 +11,11 @@ class SeoBlock(models.Model):
 
 
 class GeneralPage(models.Model):
-    title = models.CharField(max_length=70)
-    short_text = models.CharField(max_length=270)
-    image1 = models.ImageField(upload_to='GeneralPage/image')
-    image2 = models.ImageField(upload_to='GeneralPage/image')
-    image3 = models.ImageField(upload_to='GeneralPage/image')
+    title = models.CharField(max_length=100)
+    short_text = models.CharField(max_length=1000)
+    image1 = models.ImageField(upload_to='GeneralPage/image', blank=True)
+    image2 = models.ImageField(upload_to='GeneralPage/image', blank=True)
+    image3 = models.ImageField(upload_to='GeneralPage/image', blank=True)
     seo = models.ForeignKey(SeoBlock, verbose_name='СЕО Блок', on_delete=models.CASCADE, blank=True, null=True)
 
 class Services(models.Model):
@@ -26,9 +26,9 @@ class Services(models.Model):
         return reverse('services')
 
 class BlockAndServices(models.Model):
-    image = models.ImageField(upload_to='blockAndServices')
-    title = models.CharField(max_length=50, blank=True)
-    description = models.CharField(max_length=250, blank=True)
+    image = models.ImageField(upload_to='blockAndServices', blank=True)
+    title = models.CharField(max_length=100, blank=True)
+    description = models.CharField(max_length=1000, blank=True)
     generalPage = models.ForeignKey(GeneralPage, verbose_name='ГоловнаСторінка', blank=True, null=True, on_delete=models.CASCADE)
     services = models.ForeignKey(Services, verbose_name='Послуги', blank=True, null=True, on_delete=models.CASCADE)
 
@@ -38,8 +38,8 @@ class BlockAndServices(models.Model):
 class AboutUs(models.Model):
     title = models.CharField(max_length=70)
     title_sec = models.CharField(max_length=70, blank=True)
-    short_text = models.CharField(max_length=200)
-    short_text_sec = models.CharField(max_length=200, blank=True)
+    short_text = models.CharField(max_length=1000)
+    short_text_sec = models.CharField(max_length=1000, blank=True)
     image_director = models.ImageField(upload_to='aboutUs/', blank=True, null=True)
     gallery = models.ForeignKey(Gallery, verbose_name='Галерея', on_delete=models.CASCADE, blank=True, null=True)
     seo = models.ForeignKey(SeoBlock, verbose_name='СЕО Блок', on_delete=models.CASCADE, blank=True, null=True)
@@ -49,7 +49,7 @@ class AboutUs(models.Model):
 
 class Contacts(models.Model):
     title = models.CharField(max_length=50)
-    short_text = models.CharField(max_length=50)
+    short_text = models.CharField(max_length=1000)
     link = models.URLField()
     fio = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
@@ -69,7 +69,7 @@ class Document(models.Model):
 
 class PageTarrif(models.Model):
     title = models.CharField(max_length=120)
-    description = models.CharField(max_length=320)
+    description = models.CharField(max_length=1000)
     seo = models.ForeignKey(SeoBlock, verbose_name='СЕО Блок', on_delete=models.CASCADE, blank=True, null=True)
 
     def get_absolute_url(self):

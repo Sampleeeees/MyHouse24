@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile.prod
     command: gunicorn MyHouse24.wsgi:application --bind 0.0.0.0:8080
     volumes:
-      - static_volume:/MyHouse24/static
-      - media_volume:/MyHouse24/media
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/media
     ports:
       - "8080:8080"
     env_file:
@@ -24,8 +24,8 @@ services:
   nginx:
     build: ./nginx
     volumes:
-      - static_volume:/MyHouse24/static
-      - media_volume:/MyHouse24/media
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/media
     ports:
       - "80:80"
     depends_on:

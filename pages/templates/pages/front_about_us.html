@@ -1,5 +1,5 @@
 {% extends 'pages/base.html' %}
-
+{% load static %}
 {% block title %}{% endblock %}
 
 {% block content %}
@@ -22,7 +22,11 @@
                     <div class="box clearfix">
                         <div class="page-header">
                             <h1>{{ about.title }}</h1>
+                            {% if about.image_director %}
                             <img width="250px;" height="250px;" src="{{ about.image_director.url }}" class="img-responsive imgFloatRight" alt="">
+                            {% else %}
+                            <img width="250px;" height="250px;" src="{% static 'dist/img/glide1.jpeg' %}" class="img-responsive imgFloatRight" alt="">
+                            {% endif %}
                             {{ about.short_text|safe }}
                         </div>
                     </div>
